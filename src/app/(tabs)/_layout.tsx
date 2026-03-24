@@ -4,26 +4,8 @@ import React from "react";
 import { Platform, useColorScheme } from "react-native";
 import { Text } from "tamagui";
 
+import { TAB_ICONS, TAB_LABELS } from "@/constants/navigation";
 import { useAuth } from "@/lib/auth";
-
-type IoniconName = React.ComponentProps<typeof Ionicons>["name"];
-
-const TAB_ICONS: Record<
-  string,
-  { active: IoniconName; inactive: IoniconName }
-> = {
-  index: { active: "home", inactive: "home-outline" },
-  transaksi: { active: "receipt", inactive: "receipt-outline" },
-  inventori: { active: "cube", inactive: "cube-outline" },
-  pengaturan: { active: "settings", inactive: "settings-outline" },
-};
-
-const TAB_LABELS: Record<string, string> = {
-  index: "Home",
-  transaksi: "Transaksi",
-  inventori: "Inventori",
-  pengaturan: "Pengaturan",
-};
 
 export default function TabsLayout() {
   const { isLoggedIn } = useAuth();

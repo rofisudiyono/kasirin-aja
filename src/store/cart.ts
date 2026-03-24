@@ -1,10 +1,11 @@
+import type { ProductCategory } from "@/types";
 import { atom } from "jotai";
 
 export interface CartItem {
   cartId: string;
   productId: string;
   productName: string;
-  category: "Makanan" | "Minuman" | "Snack";
+  category: ProductCategory;
   variantLabel?: string;
   note?: string;
   quantity: number;

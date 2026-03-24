@@ -6,144 +6,20 @@ import { Separator, XStack, YStack } from "tamagui";
 
 import {
   AppButton,
+  CategoryBadge,
   FilterChip,
   IconButton,
   PageHeader,
   SearchBar,
   ShadowCard,
-  StatsRow,
+  StockBadge,
   TextBodyLg,
   TextBodySm,
   TextCaption,
   TextMicro,
 } from "@/components";
-
-type StockStatus = "normal" | "low" | "empty" | "inactive";
-type CategoryFilter = "Semua" | "Makanan" | "Minuman" | "Snack";
-type SortOption = "Nama A-Z" | "Stok" | "Terbaru";
-
-interface Product {
-  id: string;
-  name: string;
-  category: "Makanan" | "Minuman" | "Snack";
-  sku: string;
-  price: string;
-  stock: number;
-  stockStatus: StockStatus;
-  hasVariant?: boolean;
-  isNew?: boolean;
-}
-
-const products: Product[] = [
-  {
-    id: "1",
-    name: "Kopi Susu",
-    category: "Minuman",
-    sku: "KPS-001",
-    price: "Rp 15.000 - Rp 25....",
-    stock: 85,
-    stockStatus: "normal",
-    hasVariant: true,
-  },
-  {
-    id: "2",
-    name: "Nasi Goreng",
-    category: "Makanan",
-    sku: "NSG-009",
-    price: "Rp 25.000",
-    stock: 4,
-    stockStatus: "low",
-  },
-  {
-    id: "3",
-    name: "Es Teh Manis",
-    category: "Minuman",
-    sku: "ETM-014",
-    price: "Rp 8.000",
-    stock: 0,
-    stockStatus: "empty",
-  },
-  {
-    id: "4",
-    name: "Kentang Goreng",
-    category: "Snack",
-    sku: "KTG-022",
-    price: "Rp 12.000",
-    stock: 30,
-    stockStatus: "normal",
-  },
-  {
-    id: "5",
-    name: "Ayam Bakar",
-    category: "Makanan",
-    sku: "AYB-030",
-    price: "Rp 28.000",
-    stock: 0,
-    stockStatus: "inactive",
-    isNew: true,
-  },
-];
-
-const CATEGORY_COLORS: Record<string, { bg: string; color: string }> = {
-  Makanan: { bg: "#FFEDD5", color: "#EA580C" },
-  Minuman: { bg: "#DCFCE7", color: "#16A34A" },
-  Snack: { bg: "#FEF3C7", color: "#D97706" },
-};
-
-const CATEGORY_ICONS: Record<
-  string,
-  React.ComponentProps<typeof Ionicons>["name"]
-> = {
-  Makanan: "restaurant-outline",
-  Minuman: "water-outline",
-  Snack: "pizza-outline",
-};
-
-const STOCK_BADGE: Record<
-  string,
-  { bg: string; color: string; label: string } | null
-> = {
-  empty: { bg: "#FEE2E2", color: "#DC2626", label: "Habis" },
-  low: { bg: "#FEF3C7", color: "#D97706", label: "Tipis" },
-  inactive: { bg: "#F3F4F6", color: "#6B7280", label: "Nonaktif" },
-  normal: null,
-};
-
-function CategoryBadge({ category }: { category: string }) {
-  const style = CATEGORY_COLORS[category] ?? {
-    bg: "#F3F4F6",
-    color: "#6B7280",
-  };
-  return (
-    <YStack
-      backgroundColor={style.bg}
-      borderRadius={20}
-      paddingHorizontal={8}
-      paddingVertical={3}
-    >
-      <TextCaption fontWeight="600" color={style.color}>
-        {category}
-      </TextCaption>
-    </YStack>
-  );
-}
-
-function StockBadge({ stockStatus }: { stockStatus: StockStatus }) {
-  const badge = STOCK_BADGE[stockStatus];
-  if (!badge) return null;
-  return (
-    <YStack
-      backgroundColor={badge.bg}
-      borderRadius={20}
-      paddingHorizontal={8}
-      paddingVertical={3}
-    >
-      <TextCaption fontWeight="600" color={badge.color}>
-        {badge.label}
-      </TextCaption>
-    </YStack>
-  );
-}
+import { products } from "@/data/inventory";
+import type { CategoryFilter, SortOption } from "@/types";
 
 export default function InventoriPage() {
   const [categoryFilter, setCategoryFilter] = useState<CategoryFilter>("Semua");

@@ -14,53 +14,17 @@ import {
   StatusBadge,
   TextBodyLg,
   TextBodySm,
-  type TxStatus,
 } from "@/components";
-
-type FilterTab = "Semua" | "Lunas" | "Void";
-
-const transactions = [
-  {
-    id: "#TRX-0024",
-    time: "14:32 WIB",
-    table: "Meja 3",
-    items: "Kopi Susu x2, Nasi Goreng x1",
-    amount: "Rp 88.800",
-    status: "Lunas" as TxStatus,
-  },
-  {
-    id: "#TRX-0023",
-    time: "14:10 WIB",
-    table: "Meja 1",
-    items: "Ayam Geprek x1, Es Jeruk x1",
-    amount: "Rp 45.000",
-    status: "Void" as TxStatus,
-  },
-  {
-    id: "#TRX-0022",
-    time: "13:15 WIB",
-    table: "Tanpa nama pelanggan",
-    items: "Mie Ayam x1, Teh Manis x1",
-    amount: "Rp 32.000",
-    status: "Lunas" as TxStatus,
-  },
-  {
-    id: "#TRX-0021",
-    time: "12:48 WIB",
-    table: "Take Away",
-    items: "Kopi Hitam x1, Roti Bakar x1",
-    amount: "Rp 28.000",
-    status: "Refund" as TxStatus,
-  },
-];
+import { transactionListMock } from "@/data/transactions";
+import type { FilterTab } from "@/types";
 
 export default function TransaksiPage() {
   const [activeFilter, setActiveFilter] = useState<FilterTab>("Semua");
 
   const filtered =
     activeFilter === "Semua"
-      ? transactions
-      : transactions.filter((t) => t.status === activeFilter);
+      ? transactionListMock
+      : transactionListMock.filter((t) => t.status === activeFilter);
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#F8FAFF" }}>
@@ -84,14 +48,16 @@ export default function TransaksiPage() {
           {/* ── Filters ── */}
           <XStack alignItems="center" gap="$2">
             <XStack flex={1} gap="$2">
-              {(["Semua", "Lunas", "Void"] as FilterTab[]).map((f) => (
-                <FilterChip
-                  key={f}
-                  label={f}
-                  active={activeFilter === f}
-                  onPress={() => setActiveFilter(f)}
-                />
-              ))}
+              {(["Semua", "Lunas", "Void", "Refund"] as FilterTab[]).map(
+                (f) => (
+                  <FilterChip
+                    key={f}
+                    label={f}
+                    active={activeFilter === f}
+                    onPress={() => setActiveFilter(f)}
+                  />
+                ),
+              )}
             </XStack>
             <TouchableOpacity>
               <XStack
