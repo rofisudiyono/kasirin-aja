@@ -2,23 +2,19 @@ import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useSetAtom } from "jotai";
 import React from "react";
-import {
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { XStack, YStack } from "tamagui";
 
 import {
+  BarcodePlaceholder,
+  DottedSeparator,
   TextBody,
   TextBodyLg,
   TextBodySm,
   TextCaption,
   TextH2,
-  TextH3,
-} from "@/components";
+} from "@/components/index";
 import { cartAtom } from "@/store/cart";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -31,8 +27,18 @@ function getCurrentDateTime() {
   const now = new Date();
   const days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
   const months = [
-    "Jan", "Feb", "Mar", "Apr", "Mei", "Jun",
-    "Jul", "Agu", "Sep", "Okt", "Nov", "Des",
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "Mei",
+    "Jun",
+    "Jul",
+    "Agu",
+    "Sep",
+    "Okt",
+    "Nov",
+    "Des",
   ];
   const day = days[now.getDay()];
   const date = now.getDate();
@@ -47,70 +53,6 @@ function generateOrderNumber() {
   const num = Math.floor(Math.random() * 9999) + 1;
   return `#TRX-${num.toString().padStart(4, "0")}`;
 }
-
-// ─── Barcode Placeholder ──────────────────────────────────────────────────────
-
-function BarcodePlaceholder() {
-  const bars = [
-    3, 1, 2, 1, 3, 2, 1, 1, 3, 1, 2, 3, 1, 1, 2, 1, 3, 1, 2, 1,
-    1, 3, 2, 1, 1, 2, 3, 1, 2, 1, 3, 1, 1, 2, 1, 3, 2, 1, 3, 1,
-  ];
-  return (
-    <View style={barcodeStyles.container}>
-      {bars.map((width, index) => (
-        <View
-          key={index}
-          style={[
-            barcodeStyles.bar,
-            {
-              width,
-              backgroundColor: index % 2 === 0 ? "#111827" : "transparent",
-            },
-          ]}
-        />
-      ))}
-    </View>
-  );
-}
-
-const barcodeStyles = StyleSheet.create({
-  container: {
-    flexDirection: "row",
-    height: 50,
-    alignItems: "stretch",
-    justifyContent: "center",
-  },
-  bar: {
-    height: "100%",
-  },
-});
-
-// ─── Dotted Separator ─────────────────────────────────────────────────────────
-
-function DottedSeparator() {
-  return (
-    <View style={receiptStyles.dottedLine}>
-      {Array.from({ length: 40 }).map((_, i) => (
-        <View key={i} style={receiptStyles.dot} />
-      ))}
-    </View>
-  );
-}
-
-const receiptStyles = StyleSheet.create({
-  dottedLine: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    paddingHorizontal: 4,
-    marginVertical: 12,
-  },
-  dot: {
-    width: 4,
-    height: 1,
-    backgroundColor: "#D1D5DB",
-    borderRadius: 1,
-  },
-});
 
 // ─── Mock Data ────────────────────────────────────────────────────────────────
 
@@ -207,10 +149,10 @@ export default function PembayaranSuksesPage() {
             {/* Order info */}
             <YStack gap={8}>
               <XStack justifyContent="space-between">
-                <TextBodySm color="$colorSecondary" fontFamily="$mono">
+                <TextBodySm color="$colorSecondary" fontFamily="$body">
                   No. Order
                 </TextBodySm>
-                <TextBodySm fontWeight="700" fontFamily="$mono">
+                <TextBodySm fontWeight="700" fontFamily="$body">
                   {orderNumber}
                 </TextBodySm>
               </XStack>
@@ -318,7 +260,7 @@ export default function PembayaranSuksesPage() {
             {/* Barcode */}
             <YStack alignItems="center" gap={8} marginTop={20}>
               <BarcodePlaceholder />
-              <TextCaption color="$colorSecondary" fontFamily="$mono">
+              <TextCaption color="$colorSecondary" fontFamily="$body">
                 {orderNumber}
               </TextCaption>
             </YStack>
@@ -372,10 +314,7 @@ export default function PembayaranSuksesPage() {
           </TouchableOpacity>
 
           {/* Back to home */}
-          <TouchableOpacity
-            activeOpacity={0.7}
-            onPress={handleGoHome}
-          >
+          <TouchableOpacity activeOpacity={0.7} onPress={handleGoHome}>
             <TextBody
               fontWeight="600"
               color="#2563EB"

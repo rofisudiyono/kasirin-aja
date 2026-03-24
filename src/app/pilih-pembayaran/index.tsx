@@ -14,12 +14,12 @@ import { XStack, YStack } from "tamagui";
 
 import {
   PageHeader,
-  TextBody,
+  PaymentMethodCard,
+  QRCodePlaceholder,
   TextBodyLg,
   TextBodySm,
   TextCaption,
   TextH2,
-  TextH3,
 } from "@/components";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -42,141 +42,6 @@ function formatTimer(seconds: number) {
     .padStart(2, "0");
   const s = (seconds % 60).toString().padStart(2, "0");
   return `${m}:${s}`;
-}
-
-// ─── QR Code Placeholder ──────────────────────────────────────────────────────
-
-function QRCodePlaceholder() {
-  return (
-    <View style={qrStyles.container}>
-      {/* Finder pattern top-left */}
-      <View style={[qrStyles.finder, { top: 0, left: 0 }]}>
-        <View style={qrStyles.finderInner} />
-      </View>
-      {/* Finder pattern top-right */}
-      <View style={[qrStyles.finder, { top: 0, right: 0 }]}>
-        <View style={qrStyles.finderInner} />
-      </View>
-      {/* Finder pattern bottom-left */}
-      <View style={[qrStyles.finder, { bottom: 0, left: 0 }]}>
-        <View style={qrStyles.finderInner} />
-      </View>
-      {/* Data modules */}
-      <View style={qrStyles.dataArea}>
-        {Array.from({ length: 6 }).map((_, row) => (
-          <View key={row} style={qrStyles.dataRow}>
-            {Array.from({ length: 8 }).map((_, col) => {
-              const filled = (row * 3 + col * 7 + row * col) % 3 !== 0;
-              return (
-                <View
-                  key={col}
-                  style={[
-                    qrStyles.dataCell,
-                    filled && qrStyles.dataCellFilled,
-                  ]}
-                />
-              );
-            })}
-          </View>
-        ))}
-      </View>
-    </View>
-  );
-}
-
-const qrStyles = StyleSheet.create({
-  container: {
-    width: 180,
-    height: 180,
-    backgroundColor: "white",
-    borderRadius: 8,
-    padding: 12,
-    position: "relative",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  finder: {
-    position: "absolute",
-    width: 44,
-    height: 44,
-    borderWidth: 4,
-    borderColor: "#111827",
-    borderRadius: 4,
-    alignItems: "center",
-    justifyContent: "center",
-    margin: 12,
-  },
-  finderInner: {
-    width: 20,
-    height: 20,
-    backgroundColor: "#111827",
-    borderRadius: 2,
-  },
-  dataArea: {
-    gap: 3,
-    marginTop: 4,
-  },
-  dataRow: {
-    flexDirection: "row",
-    gap: 3,
-  },
-  dataCell: {
-    width: 10,
-    height: 10,
-    borderRadius: 1,
-    backgroundColor: "transparent",
-  },
-  dataCellFilled: {
-    backgroundColor: "#111827",
-  },
-});
-
-// ─── Payment Method Card ───────────────────────────────────────────────────────
-
-function PaymentMethodCard({
-  id,
-  icon,
-  iconBg,
-  iconColor,
-  title,
-  subtitle,
-  selected,
-  onPress,
-}: {
-  id: PaymentMethod;
-  icon: React.ComponentProps<typeof Ionicons>["name"];
-  iconBg: string;
-  iconColor: string;
-  title: string;
-  subtitle: string;
-  selected: boolean;
-  onPress: () => void;
-}) {
-  return (
-    <TouchableOpacity activeOpacity={0.8} onPress={onPress}>
-      <View
-        style={[
-          styles.methodCard,
-          selected && styles.methodCardSelected,
-        ]}
-      >
-        <View style={[styles.methodIcon, { backgroundColor: iconBg }]}>
-          <Ionicons name={icon} size={24} color={iconColor} />
-        </View>
-        <YStack flex={1} gap={2}>
-          <TextBodyLg fontWeight="700">{title}</TextBodyLg>
-          <TextCaption color="$colorSecondary">{subtitle}</TextCaption>
-        </YStack>
-        {selected ? (
-          <View style={styles.checkCircle}>
-            <Ionicons name="checkmark" size={16} color="white" />
-          </View>
-        ) : (
-          <Ionicons name="chevron-forward" size={18} color="#9CA3AF" />
-        )}
-      </View>
-    </TouchableOpacity>
-  );
 }
 
 // ─── Main Page ────────────────────────────────────────────────────────────────
@@ -267,7 +132,7 @@ export default function PilihPembayaranPage() {
             });
           },
         },
-      ]
+      ],
     );
   }
 
@@ -327,7 +192,6 @@ export default function PilihPembayaranPage() {
         contentContainerStyle={{ paddingBottom: 120 }}
       >
         <YStack paddingHorizontal={16} gap={12} paddingTop={4}>
-
           {/* Total Tagihan card */}
           <View style={styles.totalCard}>
             <TextCaption color="rgba(255,255,255,0.8)" marginBottom={6}>
@@ -421,11 +285,7 @@ export default function PilihPembayaranPage() {
             Proses Pembayaran
           </TextBodyLg>
         </TouchableOpacity>
-        <TextCaption
-          color="$colorSecondary"
-          textAlign="center"
-          marginTop={8}
-        >
+        <TextCaption color="$colorSecondary" textAlign="center" marginTop={8}>
           Pastikan pembayaran telah diterima
         </TextCaption>
       </View>
@@ -457,40 +317,6 @@ const styles = StyleSheet.create({
     height: 4,
     borderRadius: 2,
     backgroundColor: "rgba(255,255,255,0.6)",
-  },
-  methodCard: {
-    backgroundColor: "white",
-    borderRadius: 16,
-    padding: 16,
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 14,
-    borderWidth: 1.5,
-    borderColor: "transparent",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 6,
-    elevation: 2,
-  },
-  methodCardSelected: {
-    borderColor: "#2563EB",
-    backgroundColor: "#EFF6FF",
-  },
-  methodIcon: {
-    width: 48,
-    height: 48,
-    borderRadius: 14,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  checkCircle: {
-    width: 26,
-    height: 26,
-    borderRadius: 13,
-    backgroundColor: "#2563EB",
-    alignItems: "center",
-    justifyContent: "center",
   },
   qrisPanel: {
     backgroundColor: "white",

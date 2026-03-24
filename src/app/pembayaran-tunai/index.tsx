@@ -7,72 +7,19 @@ import { XStack, YStack } from "tamagui";
 
 import {
   AppButton,
+  NumpadButton,
   PageHeader,
+  SuggestionChip,
   TextBody,
   TextBodySm,
   TextCaption,
   TextH1,
-  TextH3,
-} from "@/components";
+} from "@/components/index";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
 function formatPrice(amount: number) {
   return `Rp ${amount.toLocaleString("id-ID").replace(/,/g, ".")}`;
-}
-
-// ─── Suggestion Chip ──────────────────────────────────────────────────────────
-
-function SuggestionChip({
-  amount,
-  selected,
-  onPress,
-}: {
-  amount: number;
-  selected: boolean;
-  onPress: () => void;
-}) {
-  return (
-    <TouchableOpacity activeOpacity={0.8} onPress={onPress}>
-      <View style={[styles.chip, selected && styles.chipSelected]}>
-        <TextBodySm fontWeight="600" color={selected ? "white" : "#2563EB"}>
-          {formatPrice(amount)}
-        </TextBodySm>
-      </View>
-    </TouchableOpacity>
-  );
-}
-
-// ─── Numpad Button ────────────────────────────────────────────────────────────
-
-function NumpadButton({
-  label,
-  onPress,
-  textColor = "#111827",
-  bgColor = "#F4F5F9",
-  isIcon = false,
-}: {
-  label: string;
-  onPress: () => void;
-  textColor?: string;
-  bgColor?: string;
-  isIcon?: boolean;
-}) {
-  return (
-    <TouchableOpacity
-      activeOpacity={0.7}
-      onPress={onPress}
-      style={[styles.numpadBtn, { backgroundColor: bgColor }]}
-    >
-      {isIcon ? (
-        <Ionicons name="backspace" size={22} color="#DC2626" />
-      ) : (
-        <TextH3 fontWeight="700" color={textColor} fontSize={20}>
-          {label}
-        </TextH3>
-      )}
-    </TouchableOpacity>
-  );
 }
 
 // ─── Main Page ────────────────────────────────────────────────────────────────
@@ -309,19 +256,6 @@ const styles = StyleSheet.create({
     gap: 10,
     flexDirection: "row",
   },
-  chip: {
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 24,
-    borderWidth: 1.5,
-    borderColor: "#2563EB",
-    backgroundColor: "white",
-    minWidth: 90,
-    alignItems: "center",
-  },
-  chipSelected: {
-    backgroundColor: "#2563EB",
-  },
   infoCard: {
     backgroundColor: "#EAF5ED",
     borderRadius: 16,
@@ -351,12 +285,6 @@ const styles = StyleSheet.create({
     height: 54,
     flexDirection: "row",
     gap: 8,
-  },
-  numpadBtn: {
-    flex: 1,
-    borderRadius: 14,
-    alignItems: "center",
-    justifyContent: "center",
   },
   bottomBar: {
     backgroundColor: "white",

@@ -1,7 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React from "react";
-import { ScrollView, Switch, TouchableOpacity } from "react-native";
+import { ScrollView, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Separator, XStack, YStack } from "tamagui";
 
@@ -9,98 +9,16 @@ import {
   AppButton,
   IconButton,
   SectionCard,
+  SettingRow,
   TextBodyLg,
   TextBodySm,
   TextCaption,
   TextH3,
   TextMicro,
-} from "@/components";
+} from "@/components/index";
 import { useAuth } from "@/lib/auth";
 
 type IoniconName = React.ComponentProps<typeof Ionicons>["name"];
-
-interface SettingRowProps {
-  iconName: IoniconName;
-  iconBg: string;
-  iconColor?: string;
-  title: string;
-  subtitle: string;
-  badge?: string;
-  badgeColor?: string;
-  badgeBg?: string;
-  value?: string;
-  hasToggle?: boolean;
-  toggleValue?: boolean;
-  onToggle?: (val: boolean) => void;
-  showChevron?: boolean;
-}
-
-function SettingRow({
-  iconName,
-  iconBg,
-  iconColor = "#374151",
-  title,
-  subtitle,
-  badge,
-  badgeColor,
-  badgeBg,
-  value,
-  hasToggle,
-  toggleValue,
-  onToggle,
-  showChevron = true,
-}: SettingRowProps) {
-  return (
-    <TouchableOpacity disabled={hasToggle}>
-      <XStack
-        paddingHorizontal="$4"
-        paddingVertical="$3"
-        alignItems="center"
-        gap="$3"
-      >
-        <YStack
-          width={40}
-          height={40}
-          borderRadius={10}
-          backgroundColor={iconBg}
-          alignItems="center"
-          justifyContent="center"
-        >
-          <Ionicons name={iconName} size={20} color={iconColor} />
-        </YStack>
-        <YStack flex={1} gap={2}>
-          <TextBodyLg fontWeight="600">{title}</TextBodyLg>
-          <TextBodySm color="$colorSecondary" numberOfLines={1}>
-            {subtitle}
-          </TextBodySm>
-        </YStack>
-        {badge && (
-          <YStack
-            backgroundColor={badgeBg ?? "#DCFCE7"}
-            borderRadius={20}
-            paddingHorizontal={10}
-            paddingVertical={4}
-          >
-            <TextBodySm fontWeight="700" color={badgeColor ?? "#16A34A"}>
-              {badge}
-            </TextBodySm>
-          </YStack>
-        )}
-        {value && <TextBodySm color="$colorSecondary">{value}</TextBodySm>}
-        {hasToggle && (
-          <Switch
-            value={toggleValue}
-            onValueChange={onToggle}
-            trackColor={{ true: "#2563EB", false: "#D1D5DB" }}
-          />
-        )}
-        {showChevron && !hasToggle && (
-          <Ionicons name="chevron-forward" size={16} color="#9CA3AF" />
-        )}
-      </XStack>
-    </TouchableOpacity>
-  );
-}
 
 export default function PengaturanPage() {
   const { logout } = useAuth();

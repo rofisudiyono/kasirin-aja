@@ -1,6 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
-import { useAtom } from "jotai";
 import { useRouter } from "expo-router";
+import { useAtom } from "jotai";
 import React, { useState } from "react";
 import {
   Dimensions,
@@ -18,11 +18,12 @@ import {
   FilterChip,
   IconButton,
   PageHeader,
+  ProductCard,
   TextBodyLg,
   TextBodySm,
   TextCaption,
   TextH3,
-} from "@/components";
+} from "@/components/index";
 import { cartAtom, CartItem as StoreCartItem } from "@/store/cart";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -160,98 +161,6 @@ const CARD_WIDTH = (SCREEN_WIDTH - 16 * 2 - 12) / 2;
 
 function formatPrice(amount: number) {
   return `Rp ${amount.toLocaleString("id-ID")}`;
-}
-
-// ─── Product Card ─────────────────────────────────────────────────────────────
-
-function ProductCard({
-  product,
-  onAdd,
-}: {
-  product: CatalogProduct;
-  onAdd: (product: CatalogProduct) => void;
-}) {
-  const isEmpty = product.stockStatus === "empty";
-  const isLow = product.stockStatus === "low";
-
-  return (
-    <View
-      style={[
-        styles.card,
-        { width: CARD_WIDTH },
-        isEmpty && { opacity: 0.85 },
-      ]}
-    >
-      {/* Image area */}
-      <View
-        style={[
-          styles.cardImageArea,
-          { backgroundColor: CATEGORY_BG[product.category] },
-          isEmpty && { opacity: 0.5 },
-        ]}
-      >
-        <Ionicons
-          name={CATEGORY_ICON[product.category]}
-          size={52}
-          color={CATEGORY_ICON_COLOR[product.category]}
-        />
-
-        {isLow && (
-          <View style={[styles.stockBadge, { backgroundColor: "#F59E0B" }]}>
-            <TextCaption fontWeight="700" color="white" fontSize={11}>
-              Stok Tipis
-            </TextCaption>
-          </View>
-        )}
-        {isEmpty && (
-          <View style={[styles.stockBadge, { backgroundColor: "#9CA3AF" }]}>
-            <TextCaption fontWeight="700" color="white" fontSize={11}>
-              Habis
-            </TextCaption>
-          </View>
-        )}
-      </View>
-
-      {/* Info area */}
-      <YStack padding={12} gap={8}>
-        <TextBodyLg
-          fontWeight="700"
-          numberOfLines={2}
-          lineHeight={20}
-          color={isEmpty ? "$colorTertiary" : "$color"}
-        >
-          {product.name}
-        </TextBodyLg>
-        <XStack alignItems="center" justifyContent="space-between">
-          <TextBodySm
-            fontWeight="700"
-            color={isEmpty ? "$colorTertiary" : "$primary"}
-          >
-            {formatPrice(product.basePrice)}
-          </TextBodySm>
-
-          <TouchableOpacity
-            onPress={() => !isEmpty && onAdd(product)}
-            disabled={isEmpty}
-            activeOpacity={0.7}
-          >
-            <View
-              style={[
-                styles.addButton,
-                { backgroundColor: isEmpty ? "#E5E7EB" : "#2563EB" },
-              ]}
-            >
-              <Ionicons
-                name="add"
-                size={20}
-                color={isEmpty ? "#9CA3AF" : "white"}
-              />
-            </View>
-          </TouchableOpacity>
-        </XStack>
-      </YStack>
-    </View>
-  );
 }
 
 // ─── Variant Bottom Sheet ─────────────────────────────────────────────────────
@@ -471,11 +380,10 @@ function VariantSheet({
 
 export default function TransaksiBaruPage() {
   const router = useRouter();
-  const [categoryFilter, setCategoryFilter] =
-    useState<CategoryFilter>("Semua");
+  const [categoryFilter, setCategoryFilter] = useState<CategoryFilter>("Semua");
   const [cart, setCart] = useAtom(cartAtom);
   const [variantProduct, setVariantProduct] = useState<CatalogProduct | null>(
-    null
+    null,
   );
   const [sheetVisible, setSheetVisible] = useState(false);
 
@@ -505,15 +413,15 @@ export default function TransaksiBaruPage() {
   function addToCart(item: Omit<CartItem, "cartId">) {
     const existing = cart.find(
       (c) =>
-        c.productId === item.productId && c.variantLabel === item.variantLabel
+        c.productId === item.productId && c.variantLabel === item.variantLabel,
     );
     if (existing) {
       setCart((prev) =>
         prev.map((c) =>
           c.cartId === existing.cartId
             ? { ...c, quantity: c.quantity + item.quantity }
-            : c
-        )
+            : c,
+        ),
       );
     } else {
       setCart((prev) => [
@@ -599,8 +507,14 @@ export default function TransaksiBaruPage() {
             {filtered.map((product) => (
               <ProductCard
                 key={product.id}
-                product={product}
-                onAdd={handleAddProduct}
+                name={product.name}
+                basePrice={product.basePrice}
+                categoryIcon={CATEGORY_ICON[product.category]}
+                categoryIconBg={CATEGORY_BG[product.category]}
+                categoryIconColor={CATEGORY_ICON_COLOR[product.category]}
+                stockStatus={product.stockStatus}
+                width={CARD_WIDTH}
+                onAdd={() => handleAddProduct(product)}
               />
             ))}
           </XStack>
@@ -620,7 +534,10 @@ export default function TransaksiBaruPage() {
                 {formatPrice(totalPrice)}
               </TextBodyLg>
             </YStack>
-            <TouchableOpacity activeOpacity={0.85} onPress={() => router.push("/keranjang")}>
+            <TouchableOpacity
+              activeOpacity={0.85}
+              onPress={() => router.push("/keranjang")}
+            >
               <View style={styles.cartBarButton}>
                 <TextBodyLg fontWeight="700" color="white">
                   Lihat Keranjang
@@ -649,36 +566,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#F8FAFF",
-  },
-  card: {
-    backgroundColor: "white",
-    borderRadius: 14,
-    overflow: "hidden",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.07,
-    shadowRadius: 8,
-    elevation: 2,
-  },
-  cardImageArea: {
-    height: 140,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  stockBadge: {
-    position: "absolute",
-    top: 8,
-    left: 8,
-    borderRadius: 20,
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-  },
-  addButton: {
-    width: 34,
-    height: 34,
-    borderRadius: 17,
-    alignItems: "center",
-    justifyContent: "center",
   },
   cartIconWrapper: {
     position: "relative",
