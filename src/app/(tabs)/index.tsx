@@ -1,4 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 import React from "react";
 import { ScrollView, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -25,6 +26,8 @@ const recentTransactions = [
 ];
 
 export default function HomePage() {
+  const router = useRouter();
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#F8FAFF" }}>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -120,6 +123,7 @@ export default function HomePage() {
             fullWidth
             title="Mulai Transaksi"
             icon={<Ionicons name="cart-outline" size={22} color="white" />}
+            onPress={() => router.push("/transaksi-baru")}
           />
 
           {/* ── Quick Actions ── */}
