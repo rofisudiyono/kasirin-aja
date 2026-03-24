@@ -11,7 +11,7 @@
  */
 import React from "react";
 import { ActivityIndicator } from "react-native";
-import { Text, XStack } from "tamagui";
+import { Button, Text } from "tamagui";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 export type AppButtonVariant =
@@ -22,7 +22,8 @@ export type AppButtonVariant =
   | "outline"
   | "outlineGray"
   | "ghost"
-  | "disabled";
+  | "disabled"
+  | "glass";
 
 export type AppButtonSize = "sm" | "md" | "lg";
 
@@ -35,6 +36,11 @@ export interface AppButtonProps {
   loading?: boolean;
   onPress?: () => void;
   children?: React.ReactNode;
+
+  // ─── Props Baru ───
+  title?: string;
+  icon?: React.ReactNode;
+  iconPosition?: "left" | "right";
 }
 
 // ─── Variant maps ─────────────────────────────────────────────────────────────
@@ -95,6 +101,12 @@ const variantStyles: Record<
     labelColor: "$colorTertiary",
     pressOpacity: 1,
   },
+  glass: {
+    bg: "rgba(255,255,255,0.15)",
+    border: "rgba(255,255,255,0.3)",
+    labelColor: "#FFFFFF",
+    pressOpacity: 0.7,
+  },
 };
 
 const sizeMap: Record<
@@ -116,6 +128,9 @@ export function AppButton({
   loading = false,
   onPress,
   children,
+  title,
+  icon,
+  iconPosition = "left",
 }: AppButtonProps) {
   const isDisabled = disabled || variant === "disabled";
   const resolvedVariant: AppButtonVariant = isDisabled ? "disabled" : variant;
@@ -128,9 +143,67 @@ export function AppButton({
       ? ("100%" as unknown as number)
       : undefined;
 
+  // Render logic agar kode lebih bersih
+  const renderContent = () => {
+    if (loading) {
+      return (
+        <ActivityIndicator
+          size="small"
+          color={
+            ["outline", "outlineGray", "ghost"].includes(variant)
+              ? undefined
+              : "#FFFFFF"
+          }
+        />
+      );
+    }
+
+    // Jika mode iconOnly aktif
+    if (iconOnly && icon) {
+      return icon;
+    }
+
+    // Jika menggunakan prop title dan/atau icon
+    if (title || icon) {
+      return (
+        <>
+          {iconPosition === "left" && icon}
+          {!!title && (
+            <Text
+              fontFamily="$body"
+              fontSize={dimensions.fontSize}
+              fontWeight="700" // Disesuaikan dengan kebutuhan Anda sebelumnya (semula 600)
+              color={styles.labelColor as any}
+              numberOfLines={1}
+            >
+              {title}
+            </Text>
+          )}
+          {iconPosition === "right" && icon}
+        </>
+      );
+    }
+
+    // Fallback ke children untuk backward compatibility
+    if (typeof children === "string") {
+      return (
+        <Text
+          fontFamily="$body"
+          fontSize={dimensions.fontSize}
+          fontWeight="600"
+          color={styles.labelColor as any}
+          numberOfLines={1}
+        >
+          {children}
+        </Text>
+      );
+    }
+
+    return children;
+  };
+
   return (
-    <XStack
-      accessibilityRole="button"
+    <Button
       onPress={isDisabled || loading ? undefined : onPress}
       backgroundColor={styles.bg as any}
       borderWidth={1}
@@ -141,37 +214,17 @@ export function AppButton({
       paddingHorizontal={iconOnly ? 0 : dimensions.paddingHorizontal}
       alignItems="center"
       justifyContent="center"
-      gap="$2"
+      flexDirection="row" // Pastikan icon dan text bersebelahan
+      gap="$2" // Menambahkan jarak antar icon dan text (default dari theme tamagui, biasanya 8px)
       opacity={isDisabled ? 0.7 : 1}
       pressStyle={
         !isDisabled && !loading ? { opacity: styles.pressOpacity } : {}
       }
       cursor={isDisabled ? "not-allowed" : "pointer"}
+      disabled={isDisabled}
+      unstyled
     >
-      {loading ? (
-        <ActivityIndicator
-          size="small"
-          color={
-            variant === "outline" ||
-            variant === "outlineGray" ||
-            variant === "ghost"
-              ? undefined
-              : "#FFFFFF"
-          }
-        />
-      ) : typeof children === "string" ? (
-        <Text
-          fontFamily="$body"
-          fontSize={dimensions.fontSize}
-          fontWeight="600"
-          color={styles.labelColor as any}
-          numberOfLines={1}
-        >
-          {children}
-        </Text>
-      ) : (
-        children
-      )}
-    </XStack>
+      {renderContent()}
+    </Button>
   );
 }

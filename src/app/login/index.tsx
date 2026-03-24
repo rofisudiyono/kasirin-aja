@@ -16,9 +16,7 @@ import {
   TextBodyLg,
   TextBodySm,
   TextCaption,
-  TextH2,
   TextH3,
-  TextMicro,
 } from "@/components";
 import { useAuth } from "@/lib/auth";
 
@@ -68,53 +66,6 @@ export default function LoginPage() {
             </TextH3>
             <TextBodySm color="$colorSecondary">
               Masuk untuk mulai transaksi hari ini
-            </TextBodySm>
-          </YStack>
-
-          {/* ── Illustration card ── */}
-          <YStack
-            marginHorizontal="$4"
-            borderRadius="$6"
-            backgroundColor="#DBEAFE"
-            padding="$5"
-            alignItems="center"
-            gap="$3"
-          >
-            <YStack
-              width={80}
-              height={80}
-              borderRadius={40}
-              backgroundColor="#BFDBFE"
-              alignItems="center"
-              justifyContent="center"
-            >
-              <Ionicons name="person" size={40} color="#2563EB" />
-            </YStack>
-
-            {/* Badge */}
-            <XStack
-              backgroundColor="#ECFDF5"
-              borderRadius="$full"
-              paddingHorizontal="$3"
-              paddingVertical={4}
-              gap={4}
-              alignItems="center"
-            >
-              <TextMicro color="#16A34A" fontWeight="600">
-                Login kasir • Siap buka shift
-              </TextMicro>
-            </XStack>
-
-            <TextH2 fontWeight="700" textAlign="center" lineHeight={28}>
-              Selamat datang{"\n"}kembali
-            </TextH2>
-            <TextBodySm
-              color="$colorSecondary"
-              textAlign="center"
-              lineHeight={20}
-            >
-              Masuk dengan email dan password untuk{"\n"}melanjutkan penjualan,
-              cek shift, dan{"\n"}mengakses fitur kasir dengan cepat.
             </TextBodySm>
           </YStack>
 
@@ -241,17 +192,15 @@ export default function LoginPage() {
             </XStack>
 
             {/* Login Button */}
+
             <AppButton
+              onPress={handleLogin}
               variant="primary"
               size="lg"
               fullWidth
-              onPress={handleLogin}
-            >
-              <Ionicons name="log-in-outline" size={18} color="white" />
-              <TextBodyLg fontWeight="700" color="white">
-                Masuk Sekarang
-              </TextBodyLg>
-            </AppButton>
+              title="Masuk Sekarang"
+              icon={<Ionicons name="log-in-outline" size={18} color="white" />}
+            />
 
             {/* Help + Shift info */}
             <XStack gap="$3">

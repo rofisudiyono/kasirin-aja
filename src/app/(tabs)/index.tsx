@@ -16,6 +16,7 @@ import {
   TextH3,
   type TxStatus,
 } from "@/components";
+import { ActionCardButton } from "@/components/atoms/ActionCardButton";
 
 const recentTransactions = [
   { id: "#0021", time: "10:12 WIB", amount: "Rp 120.000", status: "Lunas" },
@@ -105,30 +106,21 @@ export default function HomePage() {
               </YStack>
             </XStack>
 
-            <TouchableOpacity>
-              <YStack
-                backgroundColor="rgba(255,255,255,0.15)"
-                borderRadius={10}
-                height={44}
-                alignItems="center"
-                justifyContent="center"
-                borderWidth={1}
-                borderColor="rgba(255,255,255,0.3)"
-              >
-                <TextBodyLg fontWeight="600" color="white">
-                  Tutup Shift
-                </TextBodyLg>
-              </YStack>
-            </TouchableOpacity>
+            <AppButton
+              variant="glass"
+              title="Tutup Shift"
+              onPress={() => console.log("Tutup Shift ditekan")}
+            />
           </YStack>
 
           {/* ── Mulai Transaksi ── */}
-          <AppButton variant="primary" size="lg" fullWidth>
-            <Ionicons name="cart-outline" size={22} color="white" />
-            <TextH3 fontWeight="700" color="white">
-              Mulai Transaksi
-            </TextH3>
-          </AppButton>
+          <AppButton
+            variant="primary"
+            size="lg"
+            fullWidth
+            title="Mulai Transaksi"
+            icon={<Ionicons name="cart-outline" size={22} color="white" />}
+          />
 
           {/* ── Quick Actions ── */}
           <XStack gap="$3">
@@ -152,21 +144,13 @@ export default function HomePage() {
                 iconColor: "#16A34A",
               },
             ].map((item) => (
-              <TouchableOpacity key={item.label} style={{ flex: 1 }}>
-                <ShadowCard padding="$3" alignItems="center" gap="$2">
-                  <IconButton
-                    iconName={item.iconName}
-                    size={44}
-                    iconSize={22}
-                    bg={item.iconBg}
-                    iconColor={item.iconColor}
-                    disabled
-                  />
-                  <TextBodySm fontWeight="500" textAlign="center">
-                    {item.label}
-                  </TextBodySm>
-                </ShadowCard>
-              </TouchableOpacity>
+              <ActionCardButton
+                key={item.label}
+                label={item.label}
+                iconName={item.iconName}
+                iconBg={item.iconBg}
+                iconColor={item.iconColor}
+              />
             ))}
           </XStack>
 
