@@ -497,7 +497,16 @@ export default function KeranjangPage() {
             activeOpacity={0.85}
             style={[styles.payBtn, cart.length === 0 && { opacity: 0.5 }]}
             disabled={cart.length === 0}
-            onPress={() => Alert.alert("Lanjut Bayar", `Total: ${formatPrice(total)}`)}
+            onPress={() =>
+              router.push({
+                pathname: "/pilih-pembayaran",
+                params: {
+                  total: String(total),
+                  totalItems: String(totalItems),
+                  discount: String(discount),
+                },
+              })
+            }
           >
             <TextBodyLg fontWeight="700" color="white">
               Lanjut Bayar
