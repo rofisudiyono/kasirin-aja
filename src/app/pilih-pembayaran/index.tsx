@@ -21,28 +21,13 @@ import {
   TextCaption,
   TextH2,
 } from "@/components";
-
-// ─── Types ────────────────────────────────────────────────────────────────────
-
-type PaymentMethod = "tunai" | "qris" | "transfer" | "edc";
+import { paymentMethodOptions } from "@/data/payment.data";
+import type { PaymentMethod } from "@/types";
+import { formatPrice, formatTimer } from "@/utils";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
 const QR_DURATION = 5 * 60; // 5 minutes in seconds
-
-// ─── Helpers ──────────────────────────────────────────────────────────────────
-
-function formatPrice(amount: number) {
-  return `Rp ${amount.toLocaleString("id-ID")}`;
-}
-
-function formatTimer(seconds: number) {
-  const m = Math.floor(seconds / 60)
-    .toString()
-    .padStart(2, "0");
-  const s = (seconds % 60).toString().padStart(2, "0");
-  return `${m}:${s}`;
-}
 
 // ─── Main Page ────────────────────────────────────────────────────────────────
 
@@ -136,48 +121,6 @@ export default function PilihPembayaranPage() {
     );
   }
 
-  const methods: {
-    id: PaymentMethod;
-    icon: React.ComponentProps<typeof Ionicons>["name"];
-    iconBg: string;
-    iconColor: string;
-    title: string;
-    subtitle: string;
-  }[] = [
-    {
-      id: "tunai",
-      icon: "wallet-outline",
-      iconBg: "#DCFCE7",
-      iconColor: "#16A34A",
-      title: "Tunai",
-      subtitle: "Uang tunai & kembalian otomatis",
-    },
-    {
-      id: "qris",
-      icon: "qr-code-outline",
-      iconBg: "#DBEAFE",
-      iconColor: "#2563EB",
-      title: "QRIS",
-      subtitle: "Scan QR code untuk pembayaran digital",
-    },
-    {
-      id: "transfer",
-      icon: "business-outline",
-      iconBg: "#EDE9FE",
-      iconColor: "#7C3AED",
-      title: "Transfer Bank",
-      subtitle: "Pembayaran via transfer ke rekening toko",
-    },
-    {
-      id: "edc",
-      icon: "card-outline",
-      iconBg: "#FEF3C7",
-      iconColor: "#D97706",
-      title: "EDC / Kartu",
-      subtitle: "Debit atau kartu kredit melalui mesin EDC",
-    },
-  ];
-
   return (
     <SafeAreaView style={styles.container}>
       {/* Header */}
@@ -226,7 +169,7 @@ export default function PilihPembayaranPage() {
             METODE PEMBAYARAN
           </TextCaption>
 
-          {methods.map((method) => (
+          {paymentMethodOptions.map((method) => (
             <React.Fragment key={method.id}>
               <PaymentMethodCard
                 {...method}
@@ -304,8 +247,6 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 20,
     backgroundColor: "#1D4ED8",
-    background:
-      "linear-gradient(135deg, #1D4ED8 0%, #0D9488 100%)" as unknown as string,
     shadowColor: "#1D4ED8",
     shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.3,

@@ -2,13 +2,7 @@
  * Tab navigation configuration
  */
 
-import type { Ionicons } from "@expo/vector-icons";
-import type React from "react";
-
-export interface TabConfig {
-  active: React.ComponentProps<typeof Ionicons>["name"];
-  inactive: React.ComponentProps<typeof Ionicons>["name"];
-}
+import type { TabConfig } from "@/types";
 
 export const TAB_ICONS: Record<string, TabConfig> = {
   index: { active: "home", inactive: "home-outline" },

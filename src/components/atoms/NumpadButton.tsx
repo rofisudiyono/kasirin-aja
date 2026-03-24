@@ -7,6 +7,7 @@ import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import { StyleSheet, TouchableOpacity } from "react-native";
 
+import type { NumpadButtonProps } from "./NumpadButton/NumpadButton.types";
 import { TextH3 } from "./Typography";
 
 const styles = StyleSheet.create({
@@ -19,14 +20,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 6,
   },
 });
-
-interface NumpadButtonProps {
-  label: string;
-  onPress: () => void;
-  textColor?: string;
-  bgColor?: string;
-  isIcon?: boolean;
-}
 
 export function NumpadButton({
   label,

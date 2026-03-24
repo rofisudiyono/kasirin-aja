@@ -4,17 +4,26 @@
 
 export type {
   CatalogProduct,
+  CatalogStockStatus,
   VariantGroup,
   VariantOption,
 } from "./catalog.types";
-export type { ProductCategory } from "./category.types";
+export type { CategoryFilter, ProductCategory } from "./category.types";
 export type { FilterTab } from "./filters.types";
+export type { Product, SortOption, StockStatus } from "./inventory.types";
+export type { TabConfig } from "./navigation.types";
 export type {
-  CategoryFilter as InventoryCategory,
-  Product,
-  SortOption,
-  StockStatus,
-} from "./inventory.types";
-export type { OrderType, PaymentMethod } from "./payment.types";
+  AppliedPromo,
+  CashNumpadKey,
+  OrderType,
+  PaymentMethod,
+  PaymentMethodOption,
+  PromoConfig,
+} from "./payment.types";
 export type { IoniconName, SettingRowProps } from "./settings.types";
-export type { Transaction, TxStatus } from "./transaction.types";
+export type {
+  ReceiptItem,
+  StoreInfo,
+  Transaction,
+  TxStatus,
+} from "./transaction.types";

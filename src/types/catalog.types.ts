@@ -5,7 +5,7 @@
 import type { ProductCategory } from "./category.types";
 import type { StockStatus } from "./inventory.types";
 
-export type CategoryFilter = "Semua" | "Makanan" | "Minuman" | "Snack";
+export type CatalogStockStatus = Exclude<StockStatus, "inactive">;
 
 export interface VariantOption {
   id: string;
@@ -23,6 +23,6 @@ export interface CatalogProduct {
   name: string;
   category: ProductCategory;
   basePrice: number;
-  stockStatus: StockStatus;
+  stockStatus: CatalogStockStatus;
   variants?: VariantGroup[];
 }

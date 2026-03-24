@@ -7,14 +7,9 @@
 import React from "react";
 import { TouchableOpacity, View } from "react-native";
 
-import { formatPrice } from "@/lib/formatters";
+import { formatPrice } from "@/utils";
 import { TextBodySm } from "../atoms/Typography";
-
-interface SuggestionChipProps {
-  amount: number;
-  selected: boolean;
-  onPress: () => void;
-}
+import type { SuggestionChipProps } from "./SuggestionChip/SuggestionChip.types";
 
 export function SuggestionChip({
   amount,

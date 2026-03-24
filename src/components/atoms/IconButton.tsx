@@ -4,12 +4,11 @@
  * Replaces the repetitive TouchableOpacity > YStack > Ionicons pattern
  * that appears across every screen header and action area.
  */
+import type { IoniconName } from "@/types";
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import { TouchableOpacity } from "react-native";
 import { YStack } from "tamagui";
-
-type IoniconName = React.ComponentProps<typeof Ionicons>["name"];
 
 export interface IconButtonProps {
   iconName: IoniconName;

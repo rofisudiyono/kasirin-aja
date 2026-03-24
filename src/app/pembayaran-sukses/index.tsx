@@ -15,58 +15,9 @@ import {
   TextCaption,
   TextH2,
 } from "@/components/index";
+import { mockReceiptItems, storeInfo } from "@/data/receipt.data";
 import { cartAtom } from "@/store/cart";
-
-// ─── Helpers ──────────────────────────────────────────────────────────────────
-
-function formatPrice(amount: number) {
-  return `Rp ${amount.toLocaleString("id-ID")}`;
-}
-
-function getCurrentDateTime() {
-  const now = new Date();
-  const days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
-  const months = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "Mei",
-    "Jun",
-    "Jul",
-    "Agu",
-    "Sep",
-    "Okt",
-    "Nov",
-    "Des",
-  ];
-  const day = days[now.getDay()];
-  const date = now.getDate();
-  const month = months[now.getMonth()];
-  const year = now.getFullYear();
-  const hours = now.getHours().toString().padStart(2, "0");
-  const mins = now.getMinutes().toString().padStart(2, "0");
-  return `${day}, ${date} ${month} ${year} • ${hours}:${mins} WIB`;
-}
-
-function generateOrderNumber() {
-  const num = Math.floor(Math.random() * 9999) + 1;
-  return `#TRX-${num.toString().padStart(4, "0")}`;
-}
-
-// ─── Mock Data ────────────────────────────────────────────────────────────────
-
-const MOCK_ITEMS = [
-  { name: "Kopi Susu (Medium, Ice)", qty: 2, price: 44000 },
-  { name: "Nasi Goreng", qty: 1, price: 25000 },
-  { name: "Es Teh Manis", qty: 1, price: 8000 },
-];
-
-const STORE_INFO = {
-  name: "Toko Makmur",
-  address: "Jl. Sudirman No. 12, Banyuwangi",
-  phone: "Telp: 0812-3456-7890",
-};
+import { formatPrice, generateOrderNumber, getCurrentDateTime } from "@/utils";
 
 // ─── Main Page ────────────────────────────────────────────────────────────────
 
@@ -92,7 +43,7 @@ export default function PembayaranSuksesPage() {
   const dateTime = React.useMemo(() => getCurrentDateTime(), []);
 
   // Calculate subtotal from total (reverse: total = (subtotal - discount) * 1.11)
-  const subtotal = MOCK_ITEMS.reduce((s, item) => s + item.price, 0);
+  const subtotal = mockReceiptItems.reduce((s, item) => s + item.price, 0);
   const ppn = Math.round((subtotal - discount) * 0.11);
 
   function handleNewTransaction() {
@@ -135,12 +86,12 @@ export default function PembayaranSuksesPage() {
               <View style={styles.storeIcon}>
                 <Ionicons name="storefront" size={24} color="#2563EB" />
               </View>
-              <TextBodyLg fontWeight="700">{STORE_INFO.name}</TextBodyLg>
+              <TextBodyLg fontWeight="700">{storeInfo.name}</TextBodyLg>
               <TextCaption color="$colorSecondary" textAlign="center">
-                {STORE_INFO.address}
+                {storeInfo.address}
               </TextCaption>
               <TextCaption color="$colorSecondary">
-                {STORE_INFO.phone}
+                {storeInfo.phone}
               </TextCaption>
             </YStack>
 
@@ -181,7 +132,7 @@ export default function PembayaranSuksesPage() {
 
             {/* Items */}
             <YStack gap={8}>
-              {MOCK_ITEMS.map((item, index) => (
+              {mockReceiptItems.map((item, index) => (
                 <XStack key={index} justifyContent="space-between">
                   <TextBodySm color="$colorSecondary" flex={1}>
                     {item.name} x{item.qty}

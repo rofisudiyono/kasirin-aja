@@ -2,7 +2,7 @@ import React from "react";
 import { TouchableOpacity, View } from "react-native";
 
 import { TextBodySm } from "@/components/atoms/Typography";
-import { formatPrice } from "@/lib/formatters";
+import { formatPrice } from "@/utils";
 
 import type { SuggestionChipProps } from "./SuggestionChip.types";
 

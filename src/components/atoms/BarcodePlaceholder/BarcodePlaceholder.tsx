@@ -1,6 +1,7 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
 
+import { barcodeBars } from "@/data/barcode.data";
 import type { BarcodePlaceholderProps } from "./BarcodePlaceholder.types";
 
 const styles = StyleSheet.create({
@@ -16,14 +17,9 @@ const styles = StyleSheet.create({
 });
 
 export function BarcodePlaceholder({ style }: BarcodePlaceholderProps) {
-  const bars = [
-    3, 1, 2, 1, 3, 2, 1, 1, 3, 1, 2, 3, 1, 1, 2, 1, 3, 1, 2, 1, 1, 3, 2, 1, 1,
-    2, 3, 1, 2, 1, 3, 1, 1, 2, 1, 3, 2, 1, 3, 1,
-  ];
-
   return (
     <View style={[styles.container, style]}>
-      {bars.map((width, index) => (
+      {barcodeBars.map((width, index) => (
         <View
           key={index}
           style={[

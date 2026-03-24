@@ -8,7 +8,7 @@ import {
   TextBodySm,
   TextCaption,
 } from "@/components/atoms/Typography";
-import { formatPrice } from "@/lib/formatters";
+import { formatPrice } from "@/utils";
 
 import type { ProductCardProps } from "./ProductCard.types";
 

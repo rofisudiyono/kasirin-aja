@@ -13,8 +13,8 @@ export type { SectionCardProps } from "./SectionCard";
 export { PageHeader } from "./PageHeader";
 export type { PageHeaderProps } from "./PageHeader";
 
+export type { TxStatus } from "@/types";
 export { StatusBadge } from "./StatusBadge";
-export type { TxStatus } from "./StatusBadge";
 
 export { CategoryBadge } from "./CategoryBadge";
 export { StockBadge } from "./StockBadge";

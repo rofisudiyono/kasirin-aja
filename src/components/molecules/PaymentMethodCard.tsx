@@ -9,8 +9,8 @@ import React from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { YStack } from "tamagui";
 
-import type { PaymentMethod } from "@/types";
 import { TextBodyLg, TextCaption } from "../atoms/Typography";
+import type { PaymentMethodCardProps } from "./PaymentMethodCard/PaymentMethodCard.types";
 
 const styles = StyleSheet.create({
   methodCard: {
@@ -45,17 +45,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 });
-
-interface PaymentMethodCardProps {
-  id: PaymentMethod;
-  icon: React.ComponentProps<typeof Ionicons>["name"];
-  iconBg: string;
-  iconColor: string;
-  title: string;
-  subtitle: string;
-  selected: boolean;
-  onPress: () => void;
-}
 
 export function PaymentMethodCard({
   id,

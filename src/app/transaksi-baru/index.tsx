@@ -24,144 +24,15 @@ import {
   TextCaption,
   TextH3,
 } from "@/components/index";
-import { cartAtom, CartItem as StoreCartItem } from "@/store/cart";
-
-// ─── Types ────────────────────────────────────────────────────────────────────
-
-type CategoryFilter = "Semua" | "Makanan" | "Minuman" | "Snack";
-type StockStatus = "normal" | "low" | "empty";
-
-interface VariantOption {
-  id: string;
-  label: string;
-  priceAdd: number;
-}
-
-interface VariantGroup {
-  name: string;
-  options: VariantOption[];
-}
-
-interface CatalogProduct {
-  id: string;
-  name: string;
-  category: "Makanan" | "Minuman" | "Snack";
-  basePrice: number;
-  stockStatus: StockStatus;
-  variants?: VariantGroup[];
-}
-
-type CartItem = StoreCartItem;
-
-// ─── Mock Data ────────────────────────────────────────────────────────────────
-
-const PRODUCTS: CatalogProduct[] = [
-  {
-    id: "1",
-    name: "Es Kopi Susu Gula Aren",
-    category: "Minuman",
-    basePrice: 18000,
-    stockStatus: "normal",
-  },
-  {
-    id: "2",
-    name: "Nasi Ayam Crispy Sambal",
-    category: "Makanan",
-    basePrice: 22000,
-    stockStatus: "normal",
-  },
-  {
-    id: "3",
-    name: "Keripik Kentang BBQ",
-    category: "Snack",
-    basePrice: 12000,
-    stockStatus: "low",
-  },
-  {
-    id: "4",
-    name: "Air Mineral 600ml",
-    category: "Minuman",
-    basePrice: 5000,
-    stockStatus: "empty",
-  },
-  {
-    id: "5",
-    name: "Kopi Susu",
-    category: "Minuman",
-    basePrice: 15000,
-    stockStatus: "normal",
-    variants: [
-      {
-        name: "Ukuran",
-        options: [
-          { id: "s", label: "Small", priceAdd: 0 },
-          { id: "m", label: "Medium", priceAdd: 5000 },
-          { id: "l", label: "Large", priceAdd: 10000 },
-        ],
-      },
-      {
-        name: "Suhu",
-        options: [
-          { id: "hot", label: "Hot", priceAdd: 0 },
-          { id: "ice", label: "Ice", priceAdd: 2000 },
-        ],
-      },
-    ],
-  },
-  {
-    id: "6",
-    name: "Nasi Goreng Spesial",
-    category: "Makanan",
-    basePrice: 25000,
-    stockStatus: "normal",
-  },
-  {
-    id: "7",
-    name: "Teh Tarik",
-    category: "Minuman",
-    basePrice: 10000,
-    stockStatus: "normal",
-  },
-  {
-    id: "8",
-    name: "Kentang Goreng",
-    category: "Snack",
-    basePrice: 12000,
-    stockStatus: "normal",
-  },
-];
-
-// ─── Constants ────────────────────────────────────────────────────────────────
-
-const CATEGORY_BG: Record<string, string> = {
-  Makanan: "#FFEDD5",
-  Minuman: "#DBEAFE",
-  Snack: "#FEF3C7",
-};
-
-const CATEGORY_ICON: Record<
-  string,
-  React.ComponentProps<typeof Ionicons>["name"]
-> = {
-  Makanan: "restaurant-outline",
-  Minuman: "cafe-outline",
-  Snack: "pizza-outline",
-};
-
-const CATEGORY_ICON_COLOR: Record<string, string> = {
-  Makanan: "#EA580C",
-  Minuman: "#2563EB",
-  Snack: "#D97706",
-};
+import { CATEGORY_COLORS, CATEGORY_ICONS } from "@/constants/categoryStyles";
+import { catalogProducts } from "@/data/catalog";
+import { categoryFilters } from "@/data/category.data";
+import { cartAtom, type CartItem } from "@/store/cart";
+import type { CatalogProduct, CategoryFilter } from "@/types";
+import { formatPrice } from "@/utils";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 const CARD_WIDTH = (SCREEN_WIDTH - 16 * 2 - 12) / 2;
-
-// ─── Helpers ──────────────────────────────────────────────────────────────────
-
-function formatPrice(amount: number) {
-  return `Rp ${amount.toLocaleString("id-ID")}`;
-}
 
 // ─── Variant Bottom Sheet ─────────────────────────────────────────────────────
 
@@ -251,13 +122,13 @@ function VariantSheet({
             <View
               style={[
                 styles.sheetProductImage,
-                { backgroundColor: CATEGORY_BG[product.category] },
+                { backgroundColor: CATEGORY_COLORS[product.category].bg },
               ]}
             >
               <Ionicons
-                name={CATEGORY_ICON[product.category]}
+                name={CATEGORY_ICONS[product.category]}
                 size={28}
-                color={CATEGORY_ICON_COLOR[product.category]}
+                color={CATEGORY_COLORS[product.category].color}
               />
             </View>
             <YStack gap={2}>
@@ -389,8 +260,8 @@ export default function TransaksiBaruPage() {
 
   const filtered =
     categoryFilter === "Semua"
-      ? PRODUCTS
-      : PRODUCTS.filter((p) => p.category === categoryFilter);
+      ? catalogProducts
+      : catalogProducts.filter((p) => p.category === categoryFilter);
 
   const totalItems = cart.reduce((s, c) => s + c.quantity, 0);
   const totalPrice = cart.reduce((s, c) => s + c.unitPrice * c.quantity, 0);
@@ -488,9 +359,7 @@ export default function TransaksiBaruPage() {
           {/* Category filters */}
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             <XStack gap="$2">
-              {(
-                ["Semua", "Makanan", "Minuman", "Snack"] as CategoryFilter[]
-              ).map((c) => (
+              {categoryFilters.map((c) => (
                 <FilterChip
                   key={c}
                   label={c}
@@ -509,9 +378,9 @@ export default function TransaksiBaruPage() {
                 key={product.id}
                 name={product.name}
                 basePrice={product.basePrice}
-                categoryIcon={CATEGORY_ICON[product.category]}
-                categoryIconBg={CATEGORY_BG[product.category]}
-                categoryIconColor={CATEGORY_ICON_COLOR[product.category]}
+                categoryIcon={CATEGORY_ICONS[product.category]}
+                categoryIconBg={CATEGORY_COLORS[product.category].bg}
+                categoryIconColor={CATEGORY_COLORS[product.category].color}
                 stockStatus={product.stockStatus}
                 width={CARD_WIDTH}
                 onAdd={() => handleAddProduct(product)}

@@ -15,15 +15,9 @@ import {
   TextCaption,
   TextH2,
   TextH3,
-  type TxStatus,
 } from "@/components";
 import { ActionCardButton } from "@/components/atoms/ActionCardButton";
-
-const recentTransactions = [
-  { id: "#0021", time: "10:12 WIB", amount: "Rp 120.000", status: "Lunas" },
-  { id: "#0020", time: "09:48 WIB", amount: "Rp 85.000", status: "Lunas" },
-  { id: "#0019", time: "09:15 WIB", amount: "Rp 42.000", status: "Void" },
-];
+import { recentTransactions } from "@/data/transactions";
 
 export default function HomePage() {
   const router = useRouter();
@@ -200,7 +194,7 @@ export default function HomePage() {
                       <TextBodySm color="$colorSecondary">{tx.time}</TextBodySm>
                     </YStack>
                     <TextBodyLg fontWeight="600">{tx.amount}</TextBodyLg>
-                    <StatusBadge status={tx.status as TxStatus} />
+                    <StatusBadge status={tx.status} />
                   </XStack>
                 </React.Fragment>
               ))}

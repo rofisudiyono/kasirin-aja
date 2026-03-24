@@ -17,8 +17,7 @@ import {
   TextMicro,
 } from "@/components/index";
 import { useAuth } from "@/lib/auth";
-
-type IoniconName = React.ComponentProps<typeof Ionicons>["name"];
+import type { IoniconName } from "@/types";
 
 export default function PengaturanPage() {
   const { logout } = useAuth();

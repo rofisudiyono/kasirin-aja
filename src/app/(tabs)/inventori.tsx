@@ -12,13 +12,16 @@ import {
   PageHeader,
   SearchBar,
   ShadowCard,
+  StatsRow,
   StockBadge,
   TextBodyLg,
   TextBodySm,
   TextCaption,
   TextMicro,
 } from "@/components";
-import { products } from "@/data/inventory";
+import { CATEGORY_ICONS } from "@/constants/categoryStyles";
+import { categoryFilters } from "@/data/category.data";
+import { inventorySortOptions, products } from "@/data/inventory";
 import type { CategoryFilter, SortOption } from "@/types";
 
 export default function InventoriPage() {
@@ -57,9 +60,7 @@ export default function InventoriPage() {
           {/* ── Category Filters ── */}
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             <XStack gap="$2">
-              {(
-                ["Semua", "Makanan", "Minuman", "Snack"] as CategoryFilter[]
-              ).map((c) => (
+              {categoryFilters.map((c) => (
                 <FilterChip
                   key={c}
                   label={c}
@@ -74,7 +75,7 @@ export default function InventoriPage() {
           {/* ── Sort Options ── */}
           <XStack alignItems="center" gap="$2">
             <TextBodySm color="$colorSecondary">Urutkan:</TextBodySm>
-            {(["Nama A-Z", "Stok", "Terbaru"] as SortOption[]).map((s) => (
+            {inventorySortOptions.map((s) => (
               <FilterChip
                 key={s}
                 label={s}

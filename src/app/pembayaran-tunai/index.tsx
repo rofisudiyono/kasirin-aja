@@ -15,12 +15,8 @@ import {
   TextCaption,
   TextH1,
 } from "@/components/index";
-
-// ─── Helpers ──────────────────────────────────────────────────────────────────
-
-function formatPrice(amount: number) {
-  return `Rp ${amount.toLocaleString("id-ID").replace(/,/g, ".")}`;
-}
+import { cashNumpadRows } from "@/data/payment.data";
+import { formatPrice, getCashSuggestions } from "@/utils";
 
 // ─── Main Page ────────────────────────────────────────────────────────────────
 
@@ -42,12 +38,7 @@ export default function PembayaranTunaiPage() {
   const change = receivedAmount - total;
   const isEnough = receivedAmount >= total;
 
-  const suggestions = [
-    Math.ceil(total / 10000) * 10000 - 10000,
-    Math.ceil(total / 10000) * 10000,
-    Math.ceil(total / 50000) * 50000,
-    Math.ceil(total / 100000) * 100000,
-  ].filter((v, i, arr) => v > 0 && arr.indexOf(v) === i);
+  const suggestions = getCashSuggestions(total);
 
   function handleNumpad(key: string) {
     setInputValue((prev) => {
@@ -83,13 +74,6 @@ export default function PembayaranTunaiPage() {
       },
     });
   }
-
-  const numpadRows = [
-    ["1", "2", "3"],
-    ["4", "5", "6"],
-    ["7", "8", "9"],
-    ["000", "0", "DEL"],
-  ];
 
   return (
     <SafeAreaView style={styles.container}>
@@ -176,7 +160,7 @@ export default function PembayaranTunaiPage() {
 
         {/* Numpad */}
         <View style={styles.numpad}>
-          {numpadRows.map((row, rowIndex) => (
+          {cashNumpadRows.map((row, rowIndex) => (
             <View key={rowIndex} style={styles.numpadRow}>
               {row.map((key) =>
                 key === "DEL" ? (

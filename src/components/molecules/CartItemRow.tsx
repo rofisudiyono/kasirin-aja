@@ -16,8 +16,8 @@ import {
 import { XStack, YStack } from "tamagui";
 
 import { CATEGORY_COLORS, CATEGORY_ICONS } from "@/constants/categoryStyles";
-import { formatPrice } from "@/lib/formatters";
 import type { CartItem } from "@/store/cart";
+import { formatPrice } from "@/utils";
 import { TextBodyLg, TextBodySm, TextCaption } from "../atoms/Typography";
 
 const styles = StyleSheet.create({
@@ -225,34 +225,46 @@ export function CartItemRow({
               multiline
             />
             <XStack gap="$3">
-              <button
-                style={{
-                  flex: 1,
-                  borderColor: "#E5E7EB",
-                  borderWidth: 1,
-                  backgroundColor: "white",
-                  paddingVertical: 12,
-                  borderRadius: 10,
-                }}
+              <TouchableOpacity
+                style={{ flex: 1 }}
+                activeOpacity={0.8}
                 onPress={() => setNoteVisible(false)}
               >
-                <TextBodySm fontWeight="600" color="$color">
-                  Batal
-                </TextBodySm>
-              </button>
-              <button
-                style={{
-                  flex: 1,
-                  backgroundColor: "#2563EB",
-                  paddingVertical: 12,
-                  borderRadius: 10,
-                }}
+                <View
+                  style={{
+                    borderColor: "#E5E7EB",
+                    borderWidth: 1,
+                    backgroundColor: "white",
+                    paddingTop: 12,
+                    paddingBottom: 12,
+                    borderRadius: 10,
+                    alignItems: "center",
+                  }}
+                >
+                  <TextBodySm fontWeight="600" color="$color">
+                    Batal
+                  </TextBodySm>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{ flex: 1 }}
+                activeOpacity={0.8}
                 onPress={handleNoteSave}
               >
-                <TextBodySm fontWeight="600" color="white">
-                  Simpan
-                </TextBodySm>
-              </button>
+                <View
+                  style={{
+                    backgroundColor: "#2563EB",
+                    paddingTop: 12,
+                    paddingBottom: 12,
+                    borderRadius: 10,
+                    alignItems: "center",
+                  }}
+                >
+                  <TextBodySm fontWeight="600" color="white">
+                    Simpan
+                  </TextBodySm>
+                </View>
+              </TouchableOpacity>
             </XStack>
           </View>
         </View>

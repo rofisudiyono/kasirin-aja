@@ -7,9 +7,8 @@
 import React from "react";
 import { YStack } from "tamagui";
 
+import type { TxStatus } from "@/types";
 import { TextBodySm } from "../atoms/Typography";
-
-export type TxStatus = "Lunas" | "Void" | "Refund";
 
 const STATUS_MAP: Record<TxStatus, { bg: string; color: string }> = {
   Lunas: { bg: "#DCFCE7", color: "#16A34A" },

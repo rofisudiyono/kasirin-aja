@@ -1,6 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
-import { useAtom } from "jotai";
 import { useRouter } from "expo-router";
+import { useAtom } from "jotai";
 import React, { useState } from "react";
 import {
   Alert,
@@ -20,45 +20,15 @@ import {
   TextBodyLg,
   TextBodySm,
   TextCaption,
-  TextH2,
   TextH3,
 } from "@/components";
-import { cartAtom, CartItem } from "@/store/cart";
-
-// ─── Types ────────────────────────────────────────────────────────────────────
-
-type OrderType = "Dine In" | "Take Away" | "Delivery";
-
-// ─── Constants ────────────────────────────────────────────────────────────────
-
-const CATEGORY_BG: Record<string, string> = {
-  Makanan: "#FFEDD5",
-  Minuman: "#DBEAFE",
-  Snack: "#FEF3C7",
-};
-
-const CATEGORY_ICON: Record<
-  string,
-  React.ComponentProps<typeof Ionicons>["name"]
-> = {
-  Makanan: "restaurant-outline",
-  Minuman: "cafe-outline",
-  Snack: "pizza-outline",
-};
-
-const CATEGORY_ICON_COLOR: Record<string, string> = {
-  Makanan: "#EA580C",
-  Minuman: "#2563EB",
-  Snack: "#D97706",
-};
+import { CATEGORY_COLORS, CATEGORY_ICONS } from "@/constants/categoryStyles";
+import { orderTypeOptions, promoDefinitions } from "@/data/payment.data";
+import { cartAtom, type CartItem } from "@/store/cart";
+import type { AppliedPromo, OrderType } from "@/types";
+import { formatPrice } from "@/utils";
 
 const PPN_RATE = 0.11;
-
-// ─── Helpers ──────────────────────────────────────────────────────────────────
-
-function formatPrice(amount: number) {
-  return `Rp ${amount.toLocaleString("id-ID")}`;
-}
 
 // ─── Cart Item Row ─────────────────────────────────────────────────────────────
 
@@ -88,13 +58,15 @@ function CartItemRow({
         <View
           style={[
             styles.itemIcon,
-            { backgroundColor: CATEGORY_BG[item.category] ?? "#F3F4F6" },
+            {
+              backgroundColor: CATEGORY_COLORS[item.category]?.bg ?? "#F3F4F6",
+            },
           ]}
         >
           <Ionicons
-            name={CATEGORY_ICON[item.category] ?? "bag-outline"}
+            name={CATEGORY_ICONS[item.category] ?? "bag-outline"}
             size={26}
-            color={CATEGORY_ICON_COLOR[item.category] ?? "#6B7280"}
+            color={CATEGORY_COLORS[item.category]?.color ?? "#6B7280"}
           />
         </View>
 
@@ -225,11 +197,10 @@ export default function KeranjangPage() {
   const [orderType, setOrderType] = useState<OrderType>("Dine In");
 
   const [promoCode, setPromoCode] = useState("");
-  const [appliedPromo, setAppliedPromo] = useState<{
-    code: string;
-    discount: number;
-    label: string;
-  } | null>({ code: "DISKON10", discount: 5000, label: "DISKON10 - Hemat Rp 5.000" });
+  const [appliedPromo, setAppliedPromo] = useState<AppliedPromo | null>({
+    code: "DISKON10",
+    ...promoDefinitions.DISKON10,
+  });
   const [promoEnabled, setPromoEnabled] = useState(true);
 
   const totalItems = cart.reduce((s, c) => s + c.quantity, 0);
@@ -241,7 +212,7 @@ export default function KeranjangPage() {
 
   function handleUpdateQty(cartId: string, qty: number) {
     setCart((prev) =>
-      prev.map((c) => (c.cartId === cartId ? { ...c, quantity: qty } : c))
+      prev.map((c) => (c.cartId === cartId ? { ...c, quantity: qty } : c)),
     );
   }
 
@@ -251,7 +222,7 @@ export default function KeranjangPage() {
 
   function handleUpdateNote(cartId: string, note: string) {
     setCart((prev) =>
-      prev.map((c) => (c.cartId === cartId ? { ...c, note } : c))
+      prev.map((c) => (c.cartId === cartId ? { ...c, note } : c)),
     );
   }
 
@@ -269,18 +240,14 @@ export default function KeranjangPage() {
             router.back();
           },
         },
-      ]
+      ],
     );
   }
 
   function handleApplyPromo() {
-    const PROMOS: Record<string, { discount: number; label: string }> = {
-      DISKON10: { discount: 5000, label: "DISKON10 - Hemat Rp 5.000" },
-      HEMAT15: { discount: 15000, label: "HEMAT15 - Hemat Rp 15.000" },
-    };
     const code = promoCode.trim().toUpperCase();
-    if (PROMOS[code]) {
-      setAppliedPromo({ code, ...PROMOS[code] });
+    if (promoDefinitions[code]) {
+      setAppliedPromo({ code, ...promoDefinitions[code] });
       setPromoEnabled(true);
       setPromoCode("");
     } else {
@@ -310,7 +277,6 @@ export default function KeranjangPage() {
         contentContainerStyle={{ paddingBottom: 120 }}
       >
         <YStack paddingHorizontal={16} gap={12} paddingTop={8}>
-
           {/* Customer info card */}
           <View style={styles.card}>
             {/* Nama Pelanggan */}
@@ -326,7 +292,11 @@ export default function KeranjangPage() {
             />
 
             {/* Nomor Meja */}
-            <TextCaption color="$colorSecondary" marginBottom={6} marginTop={12}>
+            <TextCaption
+              color="$colorSecondary"
+              marginBottom={6}
+              marginTop={12}
+            >
               Nomor Meja
             </TextCaption>
             <TextInput
@@ -339,30 +309,32 @@ export default function KeranjangPage() {
             />
 
             {/* Tipe Pesanan */}
-            <TextCaption color="$colorSecondary" marginBottom={8} marginTop={12}>
+            <TextCaption
+              color="$colorSecondary"
+              marginBottom={8}
+              marginTop={12}
+            >
               Tipe Pesanan
             </TextCaption>
             <View style={styles.segmentControl}>
-              {(["Dine In", "Take Away", "Delivery"] as OrderType[]).map(
-                (type) => (
-                  <TouchableOpacity
-                    key={type}
-                    activeOpacity={0.8}
-                    style={[
-                      styles.segmentBtn,
-                      orderType === type && styles.segmentBtnActive,
-                    ]}
-                    onPress={() => setOrderType(type)}
+              {orderTypeOptions.map((type) => (
+                <TouchableOpacity
+                  key={type}
+                  activeOpacity={0.8}
+                  style={[
+                    styles.segmentBtn,
+                    orderType === type && styles.segmentBtnActive,
+                  ]}
+                  onPress={() => setOrderType(type)}
+                >
+                  <TextBodySm
+                    fontWeight="600"
+                    color={orderType === type ? "white" : "$colorSecondary"}
                   >
-                    <TextBodySm
-                      fontWeight="600"
-                      color={orderType === type ? "white" : "$colorSecondary"}
-                    >
-                      {type}
-                    </TextBodySm>
-                  </TouchableOpacity>
-                )
-              )}
+                    {type}
+                  </TextBodySm>
+                </TouchableOpacity>
+              ))}
             </View>
           </View>
 
@@ -384,9 +356,7 @@ export default function KeranjangPage() {
                     onRemove={handleRemove}
                     onUpdateNote={handleUpdateNote}
                   />
-                  {index < cart.length - 1 && (
-                    <View style={styles.divider} />
-                  )}
+                  {index < cart.length - 1 && <View style={styles.divider} />}
                 </React.Fragment>
               ))
             )}

@@ -2,7 +2,7 @@
  * Product inventory mock data
  */
 
-import type { Product } from "@/types";
+import type { Product, SortOption } from "@/types";
 
 export const products: Product[] = [
   {
@@ -52,4 +52,10 @@ export const products: Product[] = [
     stockStatus: "inactive",
     isNew: true,
   },
+];
+
+export const inventorySortOptions: SortOption[] = [
+  "Nama A-Z",
+  "Stok",
+  "Terbaru",
 ];

@@ -4,3 +4,4 @@
  */
 
 export type ProductCategory = "Makanan" | "Minuman" | "Snack";
+export type CategoryFilter = "Semua" | ProductCategory;
