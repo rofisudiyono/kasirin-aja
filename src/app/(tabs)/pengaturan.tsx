@@ -3,8 +3,17 @@ import { useRouter } from "expo-router";
 import React from "react";
 import { ScrollView, Switch, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Separator, Text, XStack, YStack } from "tamagui";
+import { Separator, XStack, YStack } from "tamagui";
 
+import {
+  AppButton,
+  TextBodySm,
+  TextBodyLg,
+  TextCaption,
+  TextH2,
+  TextH3,
+  TextMicro,
+} from "@/components";
 import { useAuth } from "@/lib/auth";
 
 type IoniconName = React.ComponentProps<typeof Ionicons>["name"];
@@ -59,22 +68,10 @@ function SettingRow({
           <Ionicons name={iconName} size={20} color={iconColor} />
         </YStack>
         <YStack flex={1} gap={2}>
-          <Text
-            fontFamily="$body"
-            fontSize="$md"
-            fontWeight="600"
-            color="$color"
-          >
-            {title}
-          </Text>
-          <Text
-            fontFamily="$body"
-            fontSize="$sm"
-            color="$colorSecondary"
-            numberOfLines={1}
-          >
+          <TextBodyLg fontWeight="600">{title}</TextBodyLg>
+          <TextBodySm color="$colorSecondary" numberOfLines={1}>
             {subtitle}
-          </Text>
+          </TextBodySm>
         </YStack>
         {badge && (
           <YStack
@@ -83,20 +80,13 @@ function SettingRow({
             paddingHorizontal={10}
             paddingVertical={4}
           >
-            <Text
-              fontFamily="$body"
-              fontSize={12}
-              fontWeight="700"
-              color={badgeColor ?? "#16A34A"}
-            >
+            <TextBodySm fontWeight="700" color={badgeColor ?? "#16A34A"}>
               {badge}
-            </Text>
+            </TextBodySm>
           </YStack>
         )}
         {value && (
-          <Text fontFamily="$body" fontSize="$sm" color="$colorSecondary">
-            {value}
-          </Text>
+          <TextBodySm color="$colorSecondary">{value}</TextBodySm>
         )}
         {hasToggle && (
           <Switch
@@ -122,9 +112,7 @@ function SectionCard({
 }) {
   return (
     <YStack gap="$2">
-      <Text fontFamily="$body" fontSize="$md" fontWeight="700" color="$color">
-        {title}
-      </Text>
+      <TextBodyLg fontWeight="700">{title}</TextBodyLg>
       <YStack
         backgroundColor="$background"
         borderRadius={14}
@@ -161,17 +149,10 @@ export default function PengaturanPage() {
         alignItems="center"
       >
         <YStack flex={1} gap={2}>
-          <Text
-            fontFamily="$body"
-            fontSize="$xl"
-            fontWeight="700"
-            color="$color"
-          >
-            Pengaturan
-          </Text>
-          <Text fontFamily="$body" fontSize="$sm" color="$colorSecondary">
+          <TextH2 fontWeight="700">Pengaturan</TextH2>
+          <TextBodySm color="$colorSecondary">
             Kelola toko, perangkat, dan preferensi aplikasi kasir
-          </Text>
+          </TextBodySm>
         </YStack>
         <TouchableOpacity>
           <YStack
@@ -209,17 +190,12 @@ export default function PengaturanPage() {
                 <Ionicons name="person" size={28} color="white" />
               </YStack>
               <YStack flex={1} gap={2}>
-                <Text
-                  fontFamily="$body"
-                  fontSize="$lg"
-                  fontWeight="700"
-                  color="white"
-                >
+                <TextH3 fontWeight="700" color="white">
                   Budi Santoso
-                </Text>
-                <Text fontFamily="$body" fontSize="$sm" color="#BFDBFE">
+                </TextH3>
+                <TextBodySm color="#BFDBFE">
                   Manajer Kasir • Toko Makmur
-                </Text>
+                </TextBodySm>
               </YStack>
               <YStack
                 backgroundColor="white"
@@ -227,14 +203,9 @@ export default function PengaturanPage() {
                 paddingHorizontal={12}
                 paddingVertical={5}
               >
-                <Text
-                  fontFamily="$body"
-                  fontSize="$sm"
-                  fontWeight="700"
-                  color="#2563EB"
-                >
+                <TextBodySm fontWeight="700" color="#2563EB">
                   Online
-                </Text>
+                </TextBodySm>
               </YStack>
             </XStack>
 
@@ -258,17 +229,10 @@ export default function PengaturanPage() {
                     />
                   )}
                   <YStack flex={1} gap={2}>
-                    <Text fontFamily="$body" fontSize={10} color="#BFDBFE">
-                      {item.label}
-                    </Text>
-                    <Text
-                      fontFamily="$body"
-                      fontSize="$sm"
-                      fontWeight="700"
-                      color="white"
-                    >
+                    <TextMicro color="#BFDBFE">{item.label}</TextMicro>
+                    <TextBodySm fontWeight="700" color="white">
                       {item.value}
-                    </Text>
+                    </TextBodySm>
                   </YStack>
                 </React.Fragment>
               ))}
@@ -318,21 +282,8 @@ export default function PengaturanPage() {
                     />
                   </YStack>
                   <YStack flex={1}>
-                    <Text
-                      fontFamily="$body"
-                      fontSize="$sm"
-                      fontWeight="600"
-                      color="$color"
-                    >
-                      {item.label}
-                    </Text>
-                    <Text
-                      fontFamily="$body"
-                      fontSize={11}
-                      color="$colorSecondary"
-                    >
-                      {item.sub}
-                    </Text>
+                    <TextBodySm fontWeight="600">{item.label}</TextBodySm>
+                    <TextCaption color="$colorSecondary">{item.sub}</TextCaption>
                   </YStack>
                   <Ionicons name="chevron-forward" size={16} color="#9CA3AF" />
                 </XStack>
@@ -465,47 +416,14 @@ export default function PengaturanPage() {
           </SectionCard>
 
           {/* ── Logout ── */}
-          <TouchableOpacity onPress={handleLogout}>
-            <YStack
-              backgroundColor="$background"
-              borderRadius={14}
-              paddingVertical="$4"
-              alignItems="center"
-              borderWidth={1}
-              borderColor="#FEE2E2"
-              shadowColor="#94A3B8"
-              shadowOpacity={0.12}
-              shadowRadius={4}
-              elevation={1}
-            >
-              <Text
-                fontFamily="$body"
-                fontSize="$md"
-                fontWeight="700"
-                color="#DC2626"
-              >
-                Keluar dari akun
-              </Text>
-              <Text
-                fontFamily="$body"
-                fontSize="$sm"
-                color="$colorSecondary"
-                marginTop={2}
-              >
-                Akhiri sesi kasir di perangkat ini
-              </Text>
-            </YStack>
-          </TouchableOpacity>
+          <AppButton variant="danger" fullWidth onPress={handleLogout}>
+            Keluar dari akun
+          </AppButton>
 
           {/* ── Footer ── */}
-          <Text
-            fontFamily="$body"
-            fontSize="$sm"
-            color="$colorTertiary"
-            textAlign="center"
-          >
+          <TextBodySm color="$colorTertiary" textAlign="center">
             Aplikasi Kasir • Versi 2.4.1
-          </Text>
+          </TextBodySm>
         </YStack>
       </ScrollView>
     </SafeAreaView>

@@ -2,7 +2,9 @@ import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
 import { ScrollView, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Text, XStack, YStack } from "tamagui";
+import { XStack, YStack } from "tamagui";
+
+import { TextBodyLg, TextBodySm, TextH2, TextH3 } from "@/components";
 
 type TxStatus = "Lunas" | "Void" | "Refund";
 type FilterTab = "Semua" | "Lunas" | "Void";
@@ -56,9 +58,9 @@ function StatusBadge({ status }: { status: TxStatus }) {
       paddingHorizontal={10}
       paddingVertical={4}
     >
-      <Text fontFamily="$body" fontSize={12} fontWeight="600" color={s.color}>
+      <TextBodySm fontWeight="600" color={s.color}>
         {status}
-      </Text>
+      </TextBodySm>
     </YStack>
   );
 }
@@ -82,14 +84,12 @@ function FilterChip({
         borderWidth={1}
         borderColor={active ? "$primary" : "$borderColor"}
       >
-        <Text
-          fontFamily="$body"
-          fontSize="$sm"
+        <TextBodySm
           fontWeight="600"
           color={active ? "white" : "$colorSecondary"}
         >
           {label}
-        </Text>
+        </TextBodySm>
       </YStack>
     </TouchableOpacity>
   );
@@ -125,16 +125,9 @@ export default function TransaksiPage() {
             <Ionicons name="arrow-back" size={20} color="#374151" />
           </YStack>
         </TouchableOpacity>
-        <Text
-          fontFamily="$body"
-          fontSize="$lg"
-          fontWeight="700"
-          color="$color"
-          flex={1}
-          textAlign="center"
-        >
+        <TextH3 fontWeight="700" flex={1} textAlign="center">
           Riwayat Transaksi
-        </Text>
+        </TextH3>
         <TouchableOpacity>
           <YStack
             width={36}
@@ -175,14 +168,9 @@ export default function TransaksiPage() {
             borderColor="$borderColor"
           >
             <Ionicons name="search-outline" size={16} color="#9CA3AF" />
-            <Text
-              fontFamily="$body"
-              fontSize="$md"
-              color="$colorTertiary"
-              flex={1}
-            >
+            <TextBodyLg color="$colorTertiary" flex={1}>
               Cari nomor order atau pelanggan...
-            </Text>
+            </TextBodyLg>
           </XStack>
 
           {/* ── Filters ── */}
@@ -209,14 +197,9 @@ export default function TransaksiPage() {
                 gap={4}
               >
                 <Ionicons name="calendar-outline" size={14} color="#2563EB" />
-                <Text
-                  fontFamily="$body"
-                  fontSize="$sm"
-                  fontWeight="600"
-                  color="$primary"
-                >
+                <TextBodySm fontWeight="600" color="$primary">
                   Hari Ini
-                </Text>
+                </TextBodySm>
                 <Ionicons name="chevron-down" size={12} color="#9CA3AF" />
               </XStack>
             </TouchableOpacity>
@@ -231,17 +214,10 @@ export default function TransaksiPage() {
             alignItems="center"
           >
             <YStack flex={1} alignItems="center" gap={4}>
-              <Text fontFamily="$body" fontSize="$sm" color="#BFDBFE">
-                Total Transaksi
-              </Text>
-              <Text
-                fontFamily="$body"
-                fontSize="$xl"
-                fontWeight="700"
-                color="white"
-              >
+              <TextBodySm color="#BFDBFE">Total Transaksi</TextBodySm>
+              <TextH2 fontWeight="700" color="white">
                 24
-              </Text>
+              </TextH2>
             </YStack>
             <YStack
               width={1}
@@ -249,17 +225,10 @@ export default function TransaksiPage() {
               backgroundColor="rgba(255,255,255,0.3)"
             />
             <YStack flex={2} alignItems="center" gap={4}>
-              <Text fontFamily="$body" fontSize="$sm" color="#BFDBFE">
-                Pendapatan
-              </Text>
-              <Text
-                fontFamily="$body"
-                fontSize="$lg"
-                fontWeight="700"
-                color="white"
-              >
+              <TextBodySm color="#BFDBFE">Pendapatan</TextBodySm>
+              <TextH3 fontWeight="700" color="white">
                 Rp 1.250.000
-              </Text>
+              </TextH3>
             </YStack>
             <YStack
               width={1}
@@ -267,29 +236,17 @@ export default function TransaksiPage() {
               backgroundColor="rgba(255,255,255,0.3)"
             />
             <YStack flex={1} alignItems="center" gap={4}>
-              <Text fontFamily="$body" fontSize="$sm" color="#BFDBFE">
-                Void
-              </Text>
-              <Text
-                fontFamily="$body"
-                fontSize="$xl"
-                fontWeight="700"
-                color="#FCA5A5"
-              >
+              <TextBodySm color="#BFDBFE">Void</TextBodySm>
+              <TextH2 fontWeight="700" color="#FCA5A5">
                 1
-              </Text>
+              </TextH2>
             </YStack>
           </XStack>
 
           {/* ── Date Label ── */}
-          <Text
-            fontFamily="$body"
-            fontSize="$sm"
-            color="$colorSecondary"
-            textAlign="center"
-          >
+          <TextBodySm color="$colorSecondary" textAlign="center">
             Hari Ini — Senin, 24 Mar 2025
-          </Text>
+          </TextBodySm>
 
           {/* ── Transaction List ── */}
           <YStack gap="$3">
@@ -308,26 +265,15 @@ export default function TransaksiPage() {
                   elevation={2}
                 >
                   <XStack alignItems="center" justifyContent="space-between">
-                    <Text
-                      fontFamily="$body"
-                      fontSize="$md"
-                      fontWeight="700"
-                      color="$primary"
-                    >
+                    <TextBodyLg fontWeight="700" color="$primary">
                       {tx.id}
-                    </Text>
+                    </TextBodyLg>
                     <StatusBadge status={tx.status} />
                   </XStack>
                   <XStack alignItems="center" gap="$3">
                     <XStack alignItems="center" gap={4}>
                       <Ionicons name="time-outline" size={13} color="#9CA3AF" />
-                      <Text
-                        fontFamily="$body"
-                        fontSize="$sm"
-                        color="$colorSecondary"
-                      >
-                        {tx.time}
-                      </Text>
+                      <TextBodySm color="$colorSecondary">{tx.time}</TextBodySm>
                     </XStack>
                     <XStack alignItems="center" gap={4}>
                       <Ionicons
@@ -335,27 +281,16 @@ export default function TransaksiPage() {
                         size={13}
                         color="#9CA3AF"
                       />
-                      <Text
-                        fontFamily="$body"
-                        fontSize="$sm"
-                        color="$colorSecondary"
-                      >
+                      <TextBodySm color="$colorSecondary">
                         {tx.table}
-                      </Text>
+                      </TextBodySm>
                     </XStack>
                   </XStack>
-                  <Text
-                    fontFamily="$body"
-                    fontSize="$sm"
-                    color="$colorSecondary"
-                    fontStyle="italic"
-                  >
+                  <TextBodySm color="$colorSecondary" fontStyle="italic">
                     {tx.items}
-                  </Text>
+                  </TextBodySm>
                   <XStack alignItems="center" justifyContent="space-between">
-                    <Text
-                      fontFamily="$body"
-                      fontSize="$md"
+                    <TextBodyLg
                       fontWeight="700"
                       color={tx.status === "Void" ? "#DC2626" : "$color"}
                       textDecorationLine={
@@ -363,7 +298,7 @@ export default function TransaksiPage() {
                       }
                     >
                       {tx.amount}
-                    </Text>
+                    </TextBodyLg>
                     <Ionicons
                       name="chevron-forward"
                       size={16}

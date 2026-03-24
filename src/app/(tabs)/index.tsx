@@ -2,7 +2,16 @@ import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import { ScrollView, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Separator, Text, XStack, YStack } from "tamagui";
+import { Separator, XStack, YStack } from "tamagui";
+
+import {
+  AppButton,
+  TextBodyLg,
+  TextBodySm,
+  TextCaption,
+  TextH2,
+  TextH3,
+} from "@/components";
 
 const recentTransactions = [
   { id: "#0021", time: "10:12 WIB", amount: "Rp 120.000", status: "Lunas" },
@@ -26,14 +35,9 @@ function StatusBadge({ status }: { status: TxStatus }) {
       paddingHorizontal={10}
       paddingVertical={4}
     >
-      <Text
-        fontFamily="$body"
-        fontSize={12}
-        fontWeight="600"
-        color={style.color}
-      >
+      <TextBodySm fontWeight="600" color={style.color}>
         {status}
-      </Text>
+      </TextBodySm>
     </YStack>
   );
 }
@@ -62,30 +66,12 @@ export default function HomePage() {
             <Ionicons name="person" size={26} color="#2563EB" />
           </YStack>
           <YStack flex={1}>
-            <Text
-              fontFamily="$body"
-              fontSize="$lg"
-              fontWeight="700"
-              color="$color"
-            >
-              Budi Santoso
-            </Text>
-            <Text fontFamily="$body" fontSize="$sm" color="$colorSecondary">
-              Toko Makmur
-            </Text>
+            <TextH3 fontWeight="700">Budi Santoso</TextH3>
+            <TextBodySm color="$colorSecondary">Toko Makmur</TextBodySm>
           </YStack>
           <YStack alignItems="flex-end" gap={2}>
-            <Text fontFamily="$body" fontSize={11} color="$colorSecondary">
-              Sen, 10 Jun 2024
-            </Text>
-            <Text
-              fontFamily="$body"
-              fontSize="$md"
-              fontWeight="700"
-              color="$color"
-            >
-              10:24 WIB
-            </Text>
+            <TextCaption color="$colorSecondary">Sen, 10 Jun 2024</TextCaption>
+            <TextBodyLg fontWeight="700">10:24 WIB</TextBodyLg>
           </YStack>
           <YStack
             width={40}
@@ -114,18 +100,11 @@ export default function HomePage() {
                 borderRadius={4}
                 backgroundColor="#4ADE80"
               />
-              <Text
-                fontFamily="$body"
-                fontSize="$md"
-                fontWeight="700"
-                color="white"
-              >
+              <TextBodyLg fontWeight="700" color="white">
                 Shift Aktif
-              </Text>
+              </TextBodyLg>
             </XStack>
-            <Text fontFamily="$body" fontSize="$sm" color="#BFDBFE">
-              Mulai: 08:00 WIB
-            </Text>
+            <TextBodySm color="#BFDBFE">Mulai: 08:00 WIB</TextBodySm>
 
             <XStack gap="$3">
               <YStack
@@ -135,17 +114,10 @@ export default function HomePage() {
                 padding="$3"
                 gap={4}
               >
-                <Text fontFamily="$body" fontSize="$sm" color="#BFDBFE">
-                  Total Transaksi
-                </Text>
-                <Text
-                  fontFamily="$body"
-                  fontSize="$xl"
-                  fontWeight="700"
-                  color="white"
-                >
+                <TextBodySm color="#BFDBFE">Total Transaksi</TextBodySm>
+                <TextH2 fontWeight="700" color="white">
                   24
-                </Text>
+                </TextH2>
               </YStack>
               <YStack
                 flex={1}
@@ -154,17 +126,10 @@ export default function HomePage() {
                 padding="$3"
                 gap={4}
               >
-                <Text fontFamily="$body" fontSize="$sm" color="#BFDBFE">
-                  Pendapatan
-                </Text>
-                <Text
-                  fontFamily="$body"
-                  fontSize="$md"
-                  fontWeight="700"
-                  color="white"
-                >
+                <TextBodySm color="#BFDBFE">Pendapatan</TextBodySm>
+                <TextBodyLg fontWeight="700" color="white">
                   Rp 1.250....
-                </Text>
+                </TextBodyLg>
               </YStack>
             </XStack>
 
@@ -178,39 +143,20 @@ export default function HomePage() {
                 borderWidth={1}
                 borderColor="rgba(255,255,255,0.3)"
               >
-                <Text
-                  fontFamily="$body"
-                  fontSize="$md"
-                  fontWeight="600"
-                  color="white"
-                >
+                <TextBodyLg fontWeight="600" color="white">
                   Tutup Shift
-                </Text>
+                </TextBodyLg>
               </YStack>
             </TouchableOpacity>
           </YStack>
 
           {/* ── Mulai Transaksi ── */}
-          <TouchableOpacity>
-            <XStack
-              backgroundColor="#2563EB"
-              borderRadius={14}
-              height={56}
-              alignItems="center"
-              justifyContent="center"
-              gap="$2"
-            >
-              <Ionicons name="cart-outline" size={22} color="white" />
-              <Text
-                fontFamily="$body"
-                fontSize="$lg"
-                fontWeight="700"
-                color="white"
-              >
-                Mulai Transaksi
-              </Text>
-            </XStack>
-          </TouchableOpacity>
+          <AppButton variant="primary" size="lg" fullWidth>
+            <Ionicons name="cart-outline" size={22} color="white" />
+            <TextH3 fontWeight="700" color="white">
+              Mulai Transaksi
+            </TextH3>
+          </AppButton>
 
           {/* ── Quick Actions ── */}
           <XStack gap="$3">
@@ -260,15 +206,9 @@ export default function HomePage() {
                       color={item.iconColor}
                     />
                   </YStack>
-                  <Text
-                    fontFamily="$body"
-                    fontSize="$sm"
-                    fontWeight="500"
-                    color="$color"
-                    textAlign="center"
-                  >
+                  <TextBodySm fontWeight="500" textAlign="center">
                     {item.label}
-                  </Text>
+                  </TextBodySm>
                 </YStack>
               </TouchableOpacity>
             ))}
@@ -283,37 +223,19 @@ export default function HomePage() {
             gap="$2"
           >
             <Ionicons name="warning-outline" size={18} color="#D97706" />
-            <Text
-              fontFamily="$body"
-              fontSize="$sm"
-              fontWeight="500"
-              color="#92400E"
-              flex={1}
-            >
+            <TextBodySm fontWeight="500" color="#92400E" flex={1}>
               3 produk stok hampir habis
-            </Text>
+            </TextBodySm>
             <TouchableOpacity>
-              <Text
-                fontFamily="$body"
-                fontSize="$sm"
-                fontWeight="700"
-                color="#D97706"
-              >
+              <TextBodySm fontWeight="700" color="#D97706">
                 Lihat
-              </Text>
+              </TextBodySm>
             </TouchableOpacity>
           </XStack>
 
           {/* ── Recent Transactions ── */}
           <YStack gap="$2">
-            <Text
-              fontFamily="$body"
-              fontSize="$lg"
-              fontWeight="700"
-              color="$color"
-            >
-              Transaksi Terakhir
-            </Text>
+            <TextH3 fontWeight="700">Transaksi Terakhir</TextH3>
             <YStack
               backgroundColor="$background"
               borderRadius={12}
@@ -338,30 +260,10 @@ export default function HomePage() {
                     gap="$2"
                   >
                     <YStack flex={1}>
-                      <Text
-                        fontFamily="$body"
-                        fontSize="$md"
-                        fontWeight="600"
-                        color="$color"
-                      >
-                        {tx.id}
-                      </Text>
-                      <Text
-                        fontFamily="$body"
-                        fontSize="$sm"
-                        color="$colorSecondary"
-                      >
-                        {tx.time}
-                      </Text>
+                      <TextBodyLg fontWeight="600">{tx.id}</TextBodyLg>
+                      <TextBodySm color="$colorSecondary">{tx.time}</TextBodySm>
                     </YStack>
-                    <Text
-                      fontFamily="$body"
-                      fontSize="$md"
-                      fontWeight="600"
-                      color="$color"
-                    >
-                      {tx.amount}
-                    </Text>
+                    <TextBodyLg fontWeight="600">{tx.amount}</TextBodyLg>
                     <StatusBadge status={tx.status as TxStatus} />
                   </XStack>
                 </React.Fragment>

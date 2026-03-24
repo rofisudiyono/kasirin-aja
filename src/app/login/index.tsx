@@ -8,9 +8,18 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Button, Text, XStack, YStack } from "tamagui";
+import { XStack, YStack } from "tamagui";
 
-import { AppInput } from "@/components/app-input";
+import {
+  AppButton,
+  AppInput,
+  TextBodyLg,
+  TextBodySm,
+  TextCaption,
+  TextH2,
+  TextH3,
+  TextMicro,
+} from "@/components";
 import { useAuth } from "@/lib/auth";
 
 export default function LoginPage() {
@@ -19,6 +28,7 @@ export default function LoginPage() {
   const [email, setEmail] = useState("budi.santoso@tokomakmur.id");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(true);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = () => {
     login();
@@ -53,18 +63,12 @@ export default function LoginPage() {
             >
               <Ionicons name="storefront-outline" size={28} color="white" />
             </YStack>
-            <Text
-              fontFamily="$body"
-              fontSize="$lg"
-              fontWeight="700"
-              color="$color"
-              marginTop="$2"
-            >
+            <TextH3 fontWeight="700" marginTop="$2">
               Kasir Toko Makmur
-            </Text>
-            <Text fontFamily="$body" fontSize="$sm" color="$colorSecondary">
+            </TextH3>
+            <TextBodySm color="$colorSecondary">
               Masuk untuk mulai transaksi hari ini
-            </Text>
+            </TextBodySm>
           </YStack>
 
           {/* ── Illustration card ── */}
@@ -96,36 +100,22 @@ export default function LoginPage() {
               gap={4}
               alignItems="center"
             >
-              <Text
-                fontSize={10}
-                color="#16A34A"
-                fontFamily="$body"
-                fontWeight="600"
-              >
+              <TextMicro color="#16A34A" fontWeight="600">
                 Login kasir • Siap buka shift
-              </Text>
+              </TextMicro>
             </XStack>
 
-            <Text
-              fontFamily="$body"
-              fontSize="$xl"
-              fontWeight="700"
-              color="$color"
-              textAlign="center"
-              lineHeight={28}
-            >
+            <TextH2 fontWeight="700" textAlign="center" lineHeight={28}>
               Selamat datang{"\n"}kembali
-            </Text>
-            <Text
-              fontFamily="$body"
-              fontSize="$sm"
+            </TextH2>
+            <TextBodySm
               color="$colorSecondary"
               textAlign="center"
               lineHeight={20}
             >
               Masuk dengan email dan password untuk{"\n"}melanjutkan penjualan,
               cek shift, dan{"\n"}mengakses fitur kasir dengan cepat.
-            </Text>
+            </TextBodySm>
           </YStack>
 
           {/* ── Form Card ── */}
@@ -161,49 +151,23 @@ export default function LoginPage() {
                 <Ionicons name="person-outline" size={18} color="#16A34A" />
               </YStack>
               <YStack flex={1}>
-                <Text
-                  fontFamily="$body"
-                  fontSize="$md"
-                  fontWeight="600"
-                  color="$color"
-                >
-                  Mode Kasir
-                </Text>
-                <Text fontFamily="$body" fontSize="$sm" color="$colorSecondary">
+                <TextBodyLg fontWeight="600">Mode Kasir</TextBodyLg>
+                <TextBodySm color="$colorSecondary">
                   Akun staf operasional toko
-                </Text>
+                </TextBodySm>
               </YStack>
-              <TouchableOpacity>
-                <Text
-                  fontFamily="$body"
-                  fontSize="$sm"
-                  fontWeight="600"
-                  color="$primary"
-                >
-                  Ganti
-                </Text>
-              </TouchableOpacity>
+              <AppButton variant="ghost" size="sm">
+                Ganti
+              </AppButton>
             </XStack>
 
             {/* Title */}
             <YStack gap="$1">
-              <Text
-                fontFamily="$body"
-                fontSize="$lg"
-                fontWeight="700"
-                color="$color"
-              >
-                Masuk ke akun kasir
-              </Text>
-              <Text
-                fontFamily="$body"
-                fontSize="$sm"
-                color="$colorSecondary"
-                lineHeight={18}
-              >
+              <TextH3 fontWeight="700">Masuk ke akun kasir</TextH3>
+              <TextBodySm color="$colorSecondary" lineHeight={18}>
                 Gunakan akun yang sudah terdaftar untuk membuka shift dan
                 memproses transaksi pelanggan.
-              </Text>
+              </TextBodySm>
             </YStack>
 
             {/* Email field */}
@@ -213,7 +177,9 @@ export default function LoginPage() {
               onChangeText={setEmail}
               placeholder="Email kasir aktif"
               hint="Email kasir aktif"
-              leftIcon="mail-outline"
+              leftIcon={
+                <Ionicons name="mail-outline" size={16} color="#9CA3AF" />
+              }
               keyboardType="email-address"
             />
 
@@ -224,8 +190,25 @@ export default function LoginPage() {
               onChangeText={setPassword}
               placeholder="Minimal 8 karakter"
               hint="Minimal 8 karakter"
-              leftIcon="lock-closed-outline"
-              secureTextEntry
+              leftIcon={
+                <Ionicons
+                  name="lock-closed-outline"
+                  size={16}
+                  color="#9CA3AF"
+                />
+              }
+              rightIcon={
+                <TouchableOpacity
+                  onPress={() => setShowPassword(!showPassword)}
+                >
+                  <Ionicons
+                    name={showPassword ? "eye-off-outline" : "eye-outline"}
+                    size={18}
+                    color="#9CA3AF"
+                  />
+                </TouchableOpacity>
+              }
+              secureTextEntry={!showPassword}
             />
 
             {/* Remember me + Forgot password */}
@@ -244,48 +227,31 @@ export default function LoginPage() {
                   alignItems="center"
                   justifyContent="center"
                 >
-                  {rememberMe && (
-                    <Text fontSize={12} color="white">
-                      ✓
-                    </Text>
-                  )}
+                  {rememberMe && <TextBodySm color="white">✓</TextBodySm>}
                 </YStack>
-                <Text fontFamily="$body" fontSize="$sm" color="$colorSecondary">
+                <TextBodySm color="$colorSecondary">
                   Ingat sesi perangkat ini
-                </Text>
+                </TextBodySm>
               </TouchableOpacity>
               <TouchableOpacity>
-                <Text
-                  fontFamily="$body"
-                  fontSize="$sm"
-                  fontWeight="600"
-                  color="$primary"
-                >
+                <TextBodySm fontWeight="600" color="$primary">
                   Lupa password?
-                </Text>
+                </TextBodySm>
               </TouchableOpacity>
             </XStack>
 
             {/* Login Button */}
-            <Button
+            <AppButton
+              variant="primary"
+              size="lg"
+              fullWidth
               onPress={handleLogin}
-              height={52}
-              backgroundColor="$primary"
-              borderRadius="$5"
-              pressStyle={{ opacity: 0.85 }}
             >
-              <XStack gap="$2" alignItems="center">
-                <Ionicons name="log-in-outline" size={18} color="white" />
-                <Text
-                  fontFamily="$body"
-                  fontSize="$md"
-                  fontWeight="700"
-                  color="white"
-                >
-                  Masuk Sekarang
-                </Text>
-              </XStack>
-            </Button>
+              <Ionicons name="log-in-outline" size={18} color="white" />
+              <TextBodyLg fontWeight="700" color="white">
+                Masuk Sekarang
+              </TextBodyLg>
+            </AppButton>
 
             {/* Help + Shift info */}
             <XStack gap="$3">
@@ -301,24 +267,16 @@ export default function LoginPage() {
                   size={20}
                   color="#6B7280"
                 />
-                <Text
-                  fontFamily="$body"
-                  fontSize="$sm"
-                  fontWeight="600"
-                  color="$color"
-                  textAlign="center"
-                >
+                <TextBodySm fontWeight="600" textAlign="center">
                   Butuh bantuan?
-                </Text>
-                <Text
-                  fontFamily="$body"
-                  fontSize={11}
+                </TextBodySm>
+                <TextCaption
                   color="$colorSecondary"
                   textAlign="center"
                   lineHeight={16}
                 >
                   Hubungi supervisor jika akun tidak bisa diakses.
-                </Text>
+                </TextCaption>
               </YStack>
               <YStack
                 flex={1}
@@ -328,24 +286,16 @@ export default function LoginPage() {
                 gap={4}
               >
                 <Ionicons name="sunny-outline" size={20} color="#D97706" />
-                <Text
-                  fontFamily="$body"
-                  fontSize="$sm"
-                  fontWeight="600"
-                  color="$color"
-                  textAlign="center"
-                >
+                <TextBodySm fontWeight="600" textAlign="center">
                   Buka shift
-                </Text>
-                <Text
-                  fontFamily="$body"
-                  fontSize={11}
+                </TextBodySm>
+                <TextCaption
                   color="$colorSecondary"
                   textAlign="center"
                   lineHeight={16}
                 >
                   Masuk untuk mulai shift dan catat modal awal kas.
-                </Text>
+                </TextCaption>
               </YStack>
             </XStack>
           </YStack>

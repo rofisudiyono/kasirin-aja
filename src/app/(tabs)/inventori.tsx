@@ -2,7 +2,17 @@ import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
 import { ScrollView, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Separator, Text, XStack, YStack } from "tamagui";
+import { Separator, XStack, YStack } from "tamagui";
+
+import {
+  AppButton,
+  TextBodySm,
+  TextBodyLg,
+  TextCaption,
+  TextH2,
+  TextH3,
+  TextMicro,
+} from "@/components";
 
 type StockStatus = "normal" | "low" | "empty" | "inactive";
 type CategoryFilter = "Semua" | "Makanan" | "Minuman" | "Snack";
@@ -88,14 +98,9 @@ function CategoryBadge({ category }: { category: string }) {
       paddingHorizontal={8}
       paddingVertical={3}
     >
-      <Text
-        fontFamily="$body"
-        fontSize={11}
-        fontWeight="600"
-        color={style.color}
-      >
+      <TextCaption fontWeight="600" color={style.color}>
         {category}
-      </Text>
+      </TextCaption>
     </YStack>
   );
 }
@@ -114,9 +119,9 @@ function StockBadge({
         paddingHorizontal={8}
         paddingVertical={3}
       >
-        <Text fontFamily="$body" fontSize={11} fontWeight="600" color="#DC2626">
+        <TextCaption fontWeight="600" color="#DC2626">
           Habis
-        </Text>
+        </TextCaption>
       </YStack>
     );
   }
@@ -128,9 +133,9 @@ function StockBadge({
         paddingHorizontal={8}
         paddingVertical={3}
       >
-        <Text fontFamily="$body" fontSize={11} fontWeight="600" color="#D97706">
+        <TextCaption fontWeight="600" color="#D97706">
           Tipis
-        </Text>
+        </TextCaption>
       </YStack>
     );
   }
@@ -142,9 +147,9 @@ function StockBadge({
         paddingHorizontal={8}
         paddingVertical={3}
       >
-        <Text fontFamily="$body" fontSize={11} fontWeight="600" color="#6B7280">
+        <TextCaption fontWeight="600" color="#6B7280">
           Nonaktif
-        </Text>
+        </TextCaption>
       </YStack>
     );
   }
@@ -170,14 +175,9 @@ function FilterChip({
         borderWidth={1}
         borderColor={active ? "$primary" : "$borderColor"}
       >
-        <Text
-          fontFamily="$body"
-          fontSize="$sm"
-          fontWeight="600"
-          color={active ? "white" : "$colorSecondary"}
-        >
+        <TextBodySm fontWeight="600" color={active ? "white" : "$colorSecondary"}>
           {label}
-        </Text>
+        </TextBodySm>
       </YStack>
     </TouchableOpacity>
   );
@@ -214,15 +214,9 @@ export default function InventoriPage() {
             <Ionicons name="arrow-back" size={20} color="#374151" />
           </YStack>
         </TouchableOpacity>
-        <Text
-          fontFamily="$body"
-          fontSize="$lg"
-          fontWeight="700"
-          color="$color"
-          flex={1}
-        >
+        <TextH3 fontWeight="700" flex={1}>
           Produk
-        </Text>
+        </TextH3>
         <TouchableOpacity>
           <YStack
             width={36}
@@ -235,25 +229,9 @@ export default function InventoriPage() {
             <Ionicons name="search-outline" size={20} color="#374151" />
           </YStack>
         </TouchableOpacity>
-        <TouchableOpacity>
-          <XStack
-            backgroundColor="$primary"
-            borderRadius={10}
-            paddingHorizontal={14}
-            paddingVertical={8}
-            alignItems="center"
-            gap={4}
-          >
-            <Text
-              fontFamily="$body"
-              fontSize="$sm"
-              fontWeight="700"
-              color="white"
-            >
-              + Tambah
-            </Text>
-          </XStack>
-        </TouchableOpacity>
+        <AppButton variant="primary" size="sm">
+          + Tambah
+        </AppButton>
       </XStack>
 
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -270,14 +248,9 @@ export default function InventoriPage() {
             borderColor="$borderColor"
           >
             <Ionicons name="search-outline" size={16} color="#9CA3AF" />
-            <Text
-              fontFamily="$body"
-              fontSize="$md"
-              color="$colorTertiary"
-              flex={1}
-            >
+            <TextBodyLg color="$colorTertiary" flex={1}>
               Cari nama, SKU, atau barcode...
-            </Text>
+            </TextBodyLg>
             <Ionicons name="options-outline" size={16} color="#374151" />
           </XStack>
 
@@ -299,9 +272,7 @@ export default function InventoriPage() {
 
           {/* ── Sort Options ── */}
           <XStack alignItems="center" gap="$2">
-            <Text fontFamily="$body" fontSize="$sm" color="$colorSecondary">
-              Urutkan:
-            </Text>
+            <TextBodySm color="$colorSecondary">Urutkan:</TextBodySm>
             {(["Nama A-Z", "Stok", "Terbaru"] as SortOption[]).map((s) => (
               <TouchableOpacity key={s} onPress={() => setSortOption(s)}>
                 <YStack
@@ -314,14 +285,12 @@ export default function InventoriPage() {
                   borderWidth={1}
                   borderColor={sortOption === s ? "$primary" : "$borderColor"}
                 >
-                  <Text
-                    fontFamily="$body"
-                    fontSize={12}
+                  <TextBodySm
                     fontWeight="600"
                     color={sortOption === s ? "white" : "$colorSecondary"}
                   >
                     {s}
-                  </Text>
+                  </TextBodySm>
                 </YStack>
               </TouchableOpacity>
             ))}
@@ -341,45 +310,24 @@ export default function InventoriPage() {
             elevation={2}
           >
             <YStack flex={1} alignItems="center" gap={2}>
-              <Text fontFamily="$body" fontSize="$sm" color="$colorSecondary">
-                Total Produk
-              </Text>
-              <Text
-                fontFamily="$body"
-                fontSize="$xl"
-                fontWeight="700"
-                color="$primary"
-              >
+              <TextBodySm color="$colorSecondary">Total Produk</TextBodySm>
+              <TextH2 fontWeight="700" color="$primary">
                 48
-              </Text>
+              </TextH2>
             </YStack>
             <YStack width={1} backgroundColor="$borderColor" />
             <YStack flex={1} alignItems="center" gap={2}>
-              <Text fontFamily="$body" fontSize="$sm" color="$colorSecondary">
-                Stok Habis
-              </Text>
-              <Text
-                fontFamily="$body"
-                fontSize="$xl"
-                fontWeight="700"
-                color="$danger"
-              >
+              <TextBodySm color="$colorSecondary">Stok Habis</TextBodySm>
+              <TextH2 fontWeight="700" color="$danger">
                 3
-              </Text>
+              </TextH2>
             </YStack>
             <YStack width={1} backgroundColor="$borderColor" />
             <YStack flex={1} alignItems="center" gap={2}>
-              <Text fontFamily="$body" fontSize="$sm" color="$colorSecondary">
-                Kategori
-              </Text>
-              <Text
-                fontFamily="$body"
-                fontSize="$xl"
-                fontWeight="700"
-                color="$success"
-              >
+              <TextBodySm color="$colorSecondary">Kategori</TextBodySm>
+              <TextH2 fontWeight="700" color="$success">
                 5
-              </Text>
+              </TextH2>
             </YStack>
           </XStack>
 
@@ -430,14 +378,7 @@ export default function InventoriPage() {
                   </YStack>
                   <YStack flex={1} gap={4}>
                     <XStack alignItems="center" gap="$2">
-                      <Text
-                        fontFamily="$body"
-                        fontSize="$md"
-                        fontWeight="700"
-                        color="$color"
-                      >
-                        {product.name}
-                      </Text>
+                      <TextBodyLg fontWeight="700">{product.name}</TextBodyLg>
                       {product.hasVariant && (
                         <YStack
                           backgroundColor="#DBEAFE"
@@ -445,28 +386,17 @@ export default function InventoriPage() {
                           paddingHorizontal={8}
                           paddingVertical={2}
                         >
-                          <Text
-                            fontFamily="$body"
-                            fontSize={10}
-                            fontWeight="600"
-                            color="#2563EB"
-                          >
+                          <TextMicro fontWeight="600" color="#2563EB">
                             Variant
-                          </Text>
+                          </TextMicro>
                         </YStack>
                       )}
                     </XStack>
                     <CategoryBadge category={product.category} />
-                    <Text
-                      fontFamily="$body"
-                      fontSize={11}
-                      color="$colorTertiary"
-                    >
+                    <TextCaption color="$colorTertiary">
                       SKU: {product.sku}
-                    </Text>
-                    <Text
-                      fontFamily="$body"
-                      fontSize="$sm"
+                    </TextCaption>
+                    <TextBodySm
                       fontWeight="700"
                       color={
                         product.stockStatus === "empty"
@@ -480,14 +410,12 @@ export default function InventoriPage() {
                       }
                     >
                       {product.price}
-                    </Text>
+                    </TextBodySm>
                   </YStack>
                   <YStack alignItems="flex-end" gap="$1">
                     {product.stockStatus !== "inactive" &&
                       product.stockStatus !== "empty" && (
-                        <Text
-                          fontFamily="$body"
-                          fontSize="$sm"
+                        <TextBodySm
                           fontWeight="700"
                           color={
                             product.stockStatus === "low"
@@ -496,17 +424,12 @@ export default function InventoriPage() {
                           }
                         >
                           Stok: {product.stock}
-                        </Text>
+                        </TextBodySm>
                       )}
                     {product.stockStatus === "empty" && (
-                      <Text
-                        fontFamily="$body"
-                        fontSize="$sm"
-                        fontWeight="700"
-                        color="#DC2626"
-                      >
+                      <TextBodySm fontWeight="700" color="#DC2626">
                         Stok: 0
-                      </Text>
+                      </TextBodySm>
                     )}
                     <StockBadge
                       stockStatus={product.stockStatus}
@@ -520,14 +443,9 @@ export default function InventoriPage() {
                         paddingVertical={2}
                         marginTop={2}
                       >
-                        <Text
-                          fontFamily="$body"
-                          fontSize={10}
-                          fontWeight="700"
-                          color="#CA8A04"
-                        >
+                        <TextMicro fontWeight="700" color="#CA8A04">
                           Produk Baru
-                        </Text>
+                        </TextMicro>
                       </YStack>
                     )}
                     <Ionicons
@@ -557,9 +475,9 @@ export default function InventoriPage() {
           shadowRadius={12}
           elevation={8}
         >
-          <Text fontSize={28} color="white" fontWeight="300">
+          <TextH2 color="white" fontWeight="300">
             +
-          </Text>
+          </TextH2>
         </YStack>
       </TouchableOpacity>
     </SafeAreaView>
