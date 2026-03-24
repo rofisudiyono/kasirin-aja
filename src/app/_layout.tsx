@@ -11,17 +11,16 @@ import {
   ThemeProvider,
 } from "@react-navigation/native";
 import { Slot } from "expo-router";
-import React, { useState } from "react";
+import { Provider as JotaiProvider } from "jotai";
+import React from "react";
 import { useColorScheme } from "react-native";
 import { TamaguiProvider } from "tamagui";
 
 import { AnimatedSplashOverlay } from "@/components/animated-icon";
-import { AuthContext } from "@/lib/auth";
 import { tamaguiConfig } from "../../tamagui.config";
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useFonts({
     Poppins_400Regular,
@@ -31,13 +30,7 @@ export default function RootLayout() {
   });
 
   return (
-    <AuthContext.Provider
-      value={{
-        isLoggedIn,
-        login: () => setIsLoggedIn(true),
-        logout: () => setIsLoggedIn(false),
-      }}
-    >
+    <JotaiProvider>
       <TamaguiProvider
         config={tamaguiConfig}
         defaultTheme={colorScheme === "dark" ? "dark" : "light"}
@@ -49,6 +42,6 @@ export default function RootLayout() {
           <Slot />
         </ThemeProvider>
       </TamaguiProvider>
-    </AuthContext.Provider>
+    </JotaiProvider>
   );
 }

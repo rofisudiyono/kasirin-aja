@@ -1,15 +1,12 @@
-import { createContext, useContext } from "react";
+import { useAtom } from "jotai";
+import { isLoggedInAtom } from "@/store/auth";
 
-export interface AuthContextType {
-  isLoggedIn: boolean;
-  login: () => void;
-  logout: () => void;
-}
+export const useAuth = () => {
+  const [isLoggedIn, setIsLoggedIn] = useAtom(isLoggedInAtom);
 
-export const AuthContext = createContext<AuthContextType>({
-  isLoggedIn: false,
-  login: () => {},
-  logout: () => {},
-});
-
-export const useAuth = () => useContext(AuthContext);
+  return {
+    isLoggedIn,
+    login: () => setIsLoggedIn(true),
+    logout: () => setIsLoggedIn(false),
+  };
+};
