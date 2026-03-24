@@ -7,6 +7,7 @@ import { TextBodySm } from "./Typography";
 
 export interface ActionCardButtonProps {
   label: string;
+  subtitle?: string;
   iconName: React.ComponentProps<typeof IconButton>["iconName"];
   iconBg?: React.ComponentProps<typeof IconButton>["bg"];
   iconColor?: React.ComponentProps<typeof IconButton>["iconColor"];
@@ -17,6 +18,7 @@ export interface ActionCardButtonProps {
 
 export function ActionCardButton({
   label,
+  subtitle,
   iconName,
   iconBg,
   iconColor,
@@ -38,13 +40,16 @@ export function ActionCardButton({
           iconSize={22}
           bg={iconBg}
           iconColor={iconColor}
-          // Kita disable IconButton-nya karena interaksi klik
-          // sudah ditangani oleh TouchableOpacity di luar
           disabled={true}
         />
         <TextBodySm fontWeight="500" textAlign="center">
           {label}
         </TextBodySm>
+        {!!subtitle && (
+          <TextBodySm color="$colorSecondary" textAlign="center" fontSize={11}>
+            {subtitle}
+          </TextBodySm>
+        )}
       </ShadowCard>
     </TouchableOpacity>
   );

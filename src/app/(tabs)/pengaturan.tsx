@@ -17,7 +17,6 @@ import {
   TextMicro,
 } from "@/components/index";
 import { useAuth } from "@/lib/auth";
-import type { IoniconName } from "@/types";
 import {
   ColorAccentOrange,
   ColorAccentPurple,
@@ -27,6 +26,7 @@ import {
   ColorPrimary,
   ColorWarning,
 } from "@/themes/Colors";
+import type { IoniconName } from "@/types";
 
 export default function PengaturanPage() {
   const { logout } = useAuth();
@@ -74,7 +74,7 @@ export default function PengaturanPage() {
                 height={56}
                 borderRadius={28}
                 backgroundColor={ColorPrimary.primary200}
-              </YStack>
+              />
               <YStack flex={1} gap={2}>
                 <TextH3 fontWeight="700" color={ColorBase.white}>
                   Budi Santoso
@@ -115,7 +115,9 @@ export default function PengaturanPage() {
                     />
                   )}
                   <YStack flex={1} gap={2}>
-                    <TextMicro color={ColorPrimary.primary200}>{item.label}</TextMicro>
+                    <TextMicro color={ColorPrimary.primary200}>
+                      {item.label}
+                    </TextMicro>
                     <TextBodySm fontWeight="700" color={ColorBase.white}>
                       {item.value}
                     </TextBodySm>
@@ -166,7 +168,11 @@ export default function PengaturanPage() {
                       {item.sub}
                     </TextCaption>
                   </YStack>
-                  <Ionicons name="chevron-forward" size={16} color={ColorNeutral.neutral400} />
+                  <Ionicons
+                    name="chevron-forward"
+                    size={16}
+                    color={ColorNeutral.neutral400}
+                  />
                 </XStack>
               </TouchableOpacity>
             ))}

@@ -1,30 +1,57 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React from "react";
-import { ScrollView, TouchableOpacity } from "react-native";
+import { ScrollView, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Separator, XStack, YStack } from "tamagui";
+import { XStack, YStack } from "tamagui";
 
 import {
   AppButton,
   IconButton,
   ShadowCard,
-  StatusBadge,
   TextBodyLg,
   TextBodySm,
   TextCaption,
-  TextH2,
   TextH3,
 } from "@/components";
 import { ActionCardButton } from "@/components/atoms/ActionCardButton";
-import { recentTransactions } from "@/data/transactions";
 import {
+  ColorAccentOrange,
   ColorAccentPurple,
   ColorBase,
   ColorGreen,
+  ColorNeutral,
   ColorPrimary,
+  ColorSuccess,
   ColorWarning,
 } from "@/themes/Colors";
+
+// ─── Preparation item badge ───────────────────────────────────────────────────
+function PrepBadge({
+  label,
+  type,
+}: {
+  label: string;
+  type: "green" | "orange";
+}) {
+  const bg = type === "green" ? ColorGreen.green100 : ColorWarning.warning100;
+  const color =
+    type === "green" ? ColorSuccess.success600 : ColorWarning.warning700;
+  return (
+    <View
+      style={{
+        backgroundColor: bg,
+        borderRadius: 20,
+        paddingHorizontal: 10,
+        paddingVertical: 4,
+      }}
+    >
+      <TextBodySm fontWeight="600" color={color}>
+        {label}
+      </TextBodySm>
+    </View>
+  );
+}
 
 export default function HomePage() {
   const router = useRouter();
@@ -57,35 +84,51 @@ export default function HomePage() {
           </YStack>
           <YStack alignItems="flex-end" gap={2}>
             <TextCaption color="$colorSecondary">Sen, 10 Jun 2024</TextCaption>
-            <TextBodyLg fontWeight="700">10:24 WIB</TextBodyLg>
+            <TextBodyLg fontWeight="700">07:54 WIB</TextBodyLg>
           </YStack>
           <IconButton iconName="notifications-outline" size={40} />
         </XStack>
 
         <YStack gap="$3" paddingHorizontal="$4" paddingBottom="$6">
-          {/* ── Shift Aktif Card ── */}
+          {/* ── Shift Akan Dimulai Card ── */}
           <YStack
             backgroundColor={ColorPrimary.primary600}
             borderRadius={16}
             padding="$4"
             gap="$3"
           >
-            <XStack alignItems="center" gap="$2">
+            {/* Title row */}
+            <XStack alignItems="center" justifyContent="space-between">
+              <XStack alignItems="center" gap="$2">
+                <YStack
+                  width={8}
+                  height={8}
+                  borderRadius={4}
+                  backgroundColor={ColorNeutral.neutral300}
+                />
+                <TextBodyLg fontWeight="700" color={ColorBase.white}>
+                  Shift Akan Dimulai
+                </TextBodyLg>
+              </XStack>
               <YStack
-                width={8}
-                height={8}
-                borderRadius={4}
-                backgroundColor={ColorGreen.green400}
-              />
-              <TextBodyLg fontWeight="700" color={ColorBase.white}>
-                Shift Aktif
-              </TextBodyLg>
+                width={36}
+                height={36}
+                borderRadius={18}
+                backgroundColor="rgba(255,255,255,0.2)"
+                alignItems="center"
+                justifyContent="center"
+              >
+                <Ionicons name="sunny-outline" size={18} color={ColorBase.white} />
+              </YStack>
             </XStack>
+
             <TextBodySm color={ColorPrimary.primary200}>
-              Mulai: 08:00 WIB
+              Siapkan modal awal dan cek perangkat kasir sebelum mulai menerima
+              transaksi.
             </TextBodySm>
 
-            <XStack gap="$3">
+            {/* Info chips */}
+            <XStack gap="$2">
               <YStack
                 flex={1}
                 backgroundColor="rgba(255,255,255,0.15)"
@@ -94,11 +137,11 @@ export default function HomePage() {
                 gap={4}
               >
                 <TextBodySm color={ColorPrimary.primary200}>
-                  Total Transaksi
+                  Jadwal Shift
                 </TextBodySm>
-                <TextH2 fontWeight="700" color={ColorBase.white}>
-                  24
-                </TextH2>
+                <TextBodyLg fontWeight="700" color={ColorBase.white}>
+                  08:00 WIB
+                </TextBodyLg>
               </YStack>
               <YStack
                 flex={1}
@@ -108,32 +151,79 @@ export default function HomePage() {
                 gap={4}
               >
                 <TextBodySm color={ColorPrimary.primary200}>
-                  Pendapatan
+                  Kasir Bertugas
                 </TextBodySm>
-                <TextBodyLg fontWeight="700" color={ColorBase.white}>
-                  Rp 1.250....
+                <TextBodyLg
+                  fontWeight="700"
+                  color={ColorBase.white}
+                  numberOfLines={1}
+                >
+                  Budi Santo...
                 </TextBodyLg>
               </YStack>
             </XStack>
 
+            {/* Modal awal card */}
+            <YStack
+              backgroundColor="rgba(255,255,255,0.12)"
+              borderRadius={12}
+              padding="$3"
+              gap={4}
+              borderWidth={1}
+              borderColor="rgba(255,255,255,0.2)"
+            >
+              <XStack alignItems="flex-start" gap="$2">
+                <Ionicons
+                  name="card-outline"
+                  size={18}
+                  color={ColorWarning.warning400}
+                  style={{ marginTop: 1 }}
+                />
+                <YStack flex={1} gap={2}>
+                  <TextBodySm fontWeight="600" color={ColorBase.white}>
+                    Modal awal direkomendasikan Rp 500.000
+                  </TextBodySm>
+                  <TextCaption color={ColorPrimary.primary200}>
+                    Jumlah ini akan dipakai sebagai saldo awal laci kasir saat
+                    shift dibuka.
+                  </TextCaption>
+                </YStack>
+              </XStack>
+            </YStack>
+
+            {/* CTA Button */}
             <AppButton
-              variant="glass"
-              title="Tutup Shift"
-              onPress={() => console.log("Tutup Shift ditekan")}
+              variant="success"
+              size="lg"
+              fullWidth
+              title="Mulai Shift Sekarang"
+              icon={
+                <Ionicons
+                  name="play-outline"
+                  size={18}
+                  color={ColorBase.white}
+                />
+              }
+              onPress={() => router.push("/buka-shift")}
             />
           </YStack>
 
-          {/* ── Mulai Transaksi ── */}
-          <AppButton
-            variant="primary"
-            size="lg"
-            fullWidth
-            title="Mulai Transaksi"
-            icon={
-              <Ionicons name="cart-outline" size={22} color={ColorBase.white} />
-            }
-            onPress={() => router.push("/transaksi-baru")}
-          />
+          {/* ── Disabled Transaksi hint ── */}
+          <XStack
+            alignItems="center"
+            justifyContent="center"
+            gap="$2"
+            paddingVertical="$2"
+          >
+            <Ionicons
+              name="cart-outline"
+              size={18}
+              color={ColorNeutral.neutral400}
+            />
+            <TextBodySm color={ColorNeutral.neutral400} fontWeight="500">
+              Mulai Transaksi setelah shift dibuka
+            </TextBodySm>
+          </XStack>
 
           {/* ── Quick Actions ── */}
           <XStack gap="$3">
@@ -141,18 +231,21 @@ export default function HomePage() {
               {
                 iconName: "pause-circle-outline" as const,
                 label: "Tahan Order",
+                subtitle: "Menunggu shift",
                 iconBg: ColorWarning.warning50,
                 iconColor: ColorWarning.warning600,
               },
               {
                 iconName: "time-outline" as const,
                 label: "Riwayat",
+                subtitle: "Lihat transaksi lalu",
                 iconBg: ColorAccentPurple.purple50,
                 iconColor: ColorAccentPurple.purple600,
               },
               {
                 iconName: "cube-outline" as const,
                 label: "Inventori",
+                subtitle: "Cek stok pagi ini",
                 iconBg: ColorGreen.green50,
                 iconColor: ColorGreen.green600,
               },
@@ -160,6 +253,7 @@ export default function HomePage() {
               <ActionCardButton
                 key={item.label}
                 label={item.label}
+                subtitle={item.subtitle}
                 iconName={item.iconName}
                 iconBg={item.iconBg}
                 iconColor={item.iconColor}
@@ -167,57 +261,82 @@ export default function HomePage() {
             ))}
           </XStack>
 
-          {/* ── Low stock warning ── */}
+          {/* ── Internet / device warning ── */}
           <XStack
-            backgroundColor={ColorWarning.warning100}
+            backgroundColor={ColorAccentOrange.orange100}
             borderRadius={12}
             padding="$3"
-            alignItems="center"
+            alignItems="flex-start"
             gap="$2"
           >
             <Ionicons
               name="warning-outline"
               size={18}
-              color={ColorWarning.warning600}
+              color={ColorAccentOrange.orange600}
+              style={{ marginTop: 1 }}
             />
             <TextBodySm
               fontWeight="500"
-              color={ColorWarning.warning800}
+              color={ColorAccentOrange.orange700}
               flex={1}
             >
-              3 produk stok hampir habis
+              Pastikan printer, scanner, dan koneksi internet sudah siap.
             </TextBodySm>
-            <TouchableOpacity>
-              <TextBodySm fontWeight="700" color={ColorWarning.warning600}>
-                Lihat
-              </TextBodySm>
-            </TouchableOpacity>
           </XStack>
 
-          {/* ── Recent Transactions ── */}
+          {/* ── Persiapan Shift ── */}
           <YStack gap="$2">
-            <TextH3 fontWeight="700">Transaksi Terakhir</TextH3>
+            <TextH3 fontWeight="700">Persiapan Shift</TextH3>
             <ShadowCard overflow="hidden">
-              {recentTransactions.map((tx, idx) => (
-                <React.Fragment key={tx.id}>
+              {[
+                {
+                  title: "Perangkat kasir",
+                  subtitle: "Scanner barcode dan printer struk terhubung",
+                  badge: { label: "Siap", type: "green" as const },
+                },
+                {
+                  title: "Modal awal kas",
+                  subtitle: "Tambahkan nominal awal sebelum mulai shift",
+                  badge: { label: "Isi dulu", type: "orange" as const },
+                },
+                {
+                  title: "Cek inventori cepat",
+                  subtitle: "3 produk stok hampir habis sebelum toko buka",
+                  badge: { label: "Periksa", type: "orange" as const },
+                },
+              ].map((item, idx) => (
+                <React.Fragment key={item.title}>
                   {idx > 0 && (
-                    <Separator
-                      borderColor="$borderColor"
-                      marginHorizontal="$3"
+                    <View
+                      style={{
+                        height: 1,
+                        backgroundColor: ColorNeutral.neutral200,
+                        marginHorizontal: 16,
+                      }}
                     />
                   )}
                   <XStack
                     paddingHorizontal="$4"
                     paddingVertical="$3"
                     alignItems="center"
-                    gap="$2"
+                    gap="$3"
                   >
-                    <YStack flex={1}>
-                      <TextBodyLg fontWeight="600">{tx.id}</TextBodyLg>
-                      <TextBodySm color="$colorSecondary">{tx.time}</TextBodySm>
+                    <YStack
+                      width={36}
+                      height={36}
+                      borderRadius={18}
+                      backgroundColor={ColorNeutral.neutral100}
+                    />
+                    <YStack flex={1} gap={2}>
+                      <TextBodyLg fontWeight="600">{item.title}</TextBodyLg>
+                      <TextBodySm color="$colorSecondary">
+                        {item.subtitle}
+                      </TextBodySm>
                     </YStack>
-                    <TextBodyLg fontWeight="600">{tx.amount}</TextBodyLg>
-                    <StatusBadge status={tx.status} />
+                    <PrepBadge
+                      label={item.badge.label}
+                      type={item.badge.type}
+                    />
                   </XStack>
                 </React.Fragment>
               ))}
