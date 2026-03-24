@@ -10,21 +10,19 @@ import {
   DefaultTheme,
   ThemeProvider,
 } from "@react-navigation/native";
+import { Slot } from "expo-router";
 import React, { useState } from "react";
 import { useColorScheme } from "react-native";
 import { TamaguiProvider } from "tamagui";
 
 import { AnimatedSplashOverlay } from "@/components/animated-icon";
-import AppTabs from "@/components/app-tabs";
 import { AuthContext } from "@/lib/auth";
-import LoginScreen from "@/screens/LoginScreen";
 import { tamaguiConfig } from "../../tamagui.config";
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  // Load Poppins in the background — Tamagui falls back to system font until ready
   useFonts({
     Poppins_400Regular,
     Poppins_500Medium,
@@ -48,7 +46,7 @@ export default function RootLayout() {
           value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
         >
           <AnimatedSplashOverlay />
-          {isLoggedIn ? <AppTabs /> : <LoginScreen />}
+          <Slot />
         </ThemeProvider>
       </TamaguiProvider>
     </AuthContext.Provider>

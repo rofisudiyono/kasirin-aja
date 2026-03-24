@@ -1,4 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
   KeyboardAvoidingView,
@@ -11,12 +12,18 @@ import { Button, Text, XStack, YStack } from "tamagui";
 
 import { useAuth } from "@/lib/auth";
 
-export default function LoginScreen() {
+export default function LoginPage() {
   const { login } = useAuth();
+  const router = useRouter();
   const [email, setEmail] = useState("budi.santoso@tokomakmur.id");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(true);
+
+  const handleLogin = () => {
+    login();
+    router.replace("/(tabs)");
+  };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#EFF4FF" }}>
@@ -316,7 +323,7 @@ export default function LoginScreen() {
 
             {/* Login Button */}
             <Button
-              onPress={login}
+              onPress={handleLogin}
               height={52}
               backgroundColor="$primary"
               borderRadius="$5"
@@ -396,35 +403,6 @@ export default function LoginScreen() {
                 </Text>
               </YStack>
             </XStack>
-          </YStack>
-
-          {/* ── Footer ── */}
-          <YStack alignItems="center" paddingVertical="$5" gap="$2">
-            <XStack
-              backgroundColor="#DCFCE7"
-              borderRadius="$full"
-              paddingHorizontal="$3"
-              paddingVertical={4}
-            >
-              <Text
-                fontSize={11}
-                color="#16A34A"
-                fontFamily="$body"
-                fontWeight="600"
-              >
-                Aman • Sinkronisasi toko aktif
-              </Text>
-            </XStack>
-            <Text
-              fontFamily="$body"
-              fontSize="$sm"
-              color="$colorTertiary"
-              textAlign="center"
-              lineHeight={18}
-            >
-              Hanya staf yang memiliki akses dapat masuk.{"\n"}Pastikan data
-              login benar sebelum memulai shift.
-            </Text>
           </YStack>
         </ScrollView>
       </KeyboardAvoidingView>

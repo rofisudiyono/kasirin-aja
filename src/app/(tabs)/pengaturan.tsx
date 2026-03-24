@@ -1,4 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 import React from "react";
 import { ScrollView, Switch, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -139,10 +140,16 @@ function SectionCard({
   );
 }
 
-export default function PengaturanScreen() {
+export default function PengaturanPage() {
   const { logout } = useAuth();
+  const router = useRouter();
   const [scannerEnabled, setScannerEnabled] = React.useState(true);
   const [autoPrint, setAutoPrint] = React.useState(false);
+
+  const handleLogout = () => {
+    logout();
+    router.replace("/login");
+  };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#F8FAFF" }}>
@@ -458,7 +465,7 @@ export default function PengaturanScreen() {
           </SectionCard>
 
           {/* ── Logout ── */}
-          <TouchableOpacity onPress={logout}>
+          <TouchableOpacity onPress={handleLogout}>
             <YStack
               backgroundColor="$background"
               borderRadius={14}

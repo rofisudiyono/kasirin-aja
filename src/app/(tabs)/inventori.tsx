@@ -102,7 +102,6 @@ function CategoryBadge({ category }: { category: string }) {
 
 function StockBadge({
   stockStatus,
-  stock,
 }: {
   stockStatus: StockStatus;
   stock: number;
@@ -184,7 +183,7 @@ function FilterChip({
   );
 }
 
-export default function InventoriScreen() {
+export default function InventoriPage() {
   const [categoryFilter, setCategoryFilter] = useState<CategoryFilter>("Semua");
   const [sortOption, setSortOption] = useState<SortOption>("Nama A-Z");
 
@@ -408,7 +407,6 @@ export default function InventoriScreen() {
                     product.stockStatus === "empty" ? "#FFF5F5" : "$background"
                   }
                 >
-                  {/* Product image placeholder */}
                   <YStack
                     width={56}
                     height={56}
@@ -430,7 +428,6 @@ export default function InventoriScreen() {
                       color="#9CA3AF"
                     />
                   </YStack>
-                  {/* Product info */}
                   <YStack flex={1} gap={4}>
                     <XStack alignItems="center" gap="$2">
                       <Text
@@ -485,8 +482,6 @@ export default function InventoriScreen() {
                       {product.price}
                     </Text>
                   </YStack>
-
-                  {/* Stock info */}
                   <YStack alignItems="flex-end" gap="$1">
                     {product.stockStatus !== "inactive" &&
                       product.stockStatus !== "empty" && (

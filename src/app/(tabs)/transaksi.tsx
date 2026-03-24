@@ -95,7 +95,7 @@ function FilterChip({
   );
 }
 
-export default function TransaksiScreen() {
+export default function TransaksiPage() {
   const [activeFilter, setActiveFilter] = useState<FilterTab>("Semua");
 
   const filtered =

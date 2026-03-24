@@ -38,7 +38,7 @@ function StatusBadge({ status }: { status: TxStatus }) {
   );
 }
 
-export default function HomeScreen() {
+export default function HomePage() {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#F8FAFF" }}>
       <ScrollView showsVerticalScrollIndicator={false}>
