@@ -6,11 +6,15 @@ import { Separator, XStack, YStack } from "tamagui";
 
 import {
   AppButton,
-  TextBodySm,
+  FilterChip,
+  IconButton,
+  PageHeader,
+  SearchBar,
+  ShadowCard,
+  StatsRow,
   TextBodyLg,
+  TextBodySm,
   TextCaption,
-  TextH2,
-  TextH3,
   TextMicro,
 } from "@/components";
 
@@ -86,6 +90,25 @@ const CATEGORY_COLORS: Record<string, { bg: string; color: string }> = {
   Snack: { bg: "#FEF3C7", color: "#D97706" },
 };
 
+const CATEGORY_ICONS: Record<
+  string,
+  React.ComponentProps<typeof Ionicons>["name"]
+> = {
+  Makanan: "restaurant-outline",
+  Minuman: "water-outline",
+  Snack: "pizza-outline",
+};
+
+const STOCK_BADGE: Record<
+  string,
+  { bg: string; color: string; label: string } | null
+> = {
+  empty: { bg: "#FEE2E2", color: "#DC2626", label: "Habis" },
+  low: { bg: "#FEF3C7", color: "#D97706", label: "Tipis" },
+  inactive: { bg: "#F3F4F6", color: "#6B7280", label: "Nonaktif" },
+  normal: null,
+};
+
 function CategoryBadge({ category }: { category: string }) {
   const style = CATEGORY_COLORS[category] ?? {
     bg: "#F3F4F6",
@@ -105,81 +128,20 @@ function CategoryBadge({ category }: { category: string }) {
   );
 }
 
-function StockBadge({
-  stockStatus,
-}: {
-  stockStatus: StockStatus;
-  stock: number;
-}) {
-  if (stockStatus === "empty") {
-    return (
-      <YStack
-        backgroundColor="#FEE2E2"
-        borderRadius={20}
-        paddingHorizontal={8}
-        paddingVertical={3}
-      >
-        <TextCaption fontWeight="600" color="#DC2626">
-          Habis
-        </TextCaption>
-      </YStack>
-    );
-  }
-  if (stockStatus === "low") {
-    return (
-      <YStack
-        backgroundColor="#FEF3C7"
-        borderRadius={20}
-        paddingHorizontal={8}
-        paddingVertical={3}
-      >
-        <TextCaption fontWeight="600" color="#D97706">
-          Tipis
-        </TextCaption>
-      </YStack>
-    );
-  }
-  if (stockStatus === "inactive") {
-    return (
-      <YStack
-        backgroundColor="#F3F4F6"
-        borderRadius={20}
-        paddingHorizontal={8}
-        paddingVertical={3}
-      >
-        <TextCaption fontWeight="600" color="#6B7280">
-          Nonaktif
-        </TextCaption>
-      </YStack>
-    );
-  }
-  return null;
-}
-
-function FilterChip({
-  label,
-  active,
-  onPress,
-}: {
-  label: string;
-  active: boolean;
-  onPress: () => void;
-}) {
+function StockBadge({ stockStatus }: { stockStatus: StockStatus }) {
+  const badge = STOCK_BADGE[stockStatus];
+  if (!badge) return null;
   return (
-    <TouchableOpacity onPress={onPress}>
-      <YStack
-        backgroundColor={active ? "$primary" : "$background"}
-        borderRadius={20}
-        paddingHorizontal={14}
-        paddingVertical={8}
-        borderWidth={1}
-        borderColor={active ? "$primary" : "$borderColor"}
-      >
-        <TextBodySm fontWeight="600" color={active ? "white" : "$colorSecondary"}>
-          {label}
-        </TextBodySm>
-      </YStack>
-    </TouchableOpacity>
+    <YStack
+      backgroundColor={badge.bg}
+      borderRadius={20}
+      paddingHorizontal={8}
+      paddingVertical={3}
+    >
+      <TextCaption fontWeight="600" color={badge.color}>
+        {badge.label}
+      </TextCaption>
+    </YStack>
   );
 }
 
@@ -195,64 +157,26 @@ export default function InventoriPage() {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#F8FAFF" }}>
       {/* ── Header ── */}
-      <XStack
-        paddingHorizontal="$4"
-        paddingTop="$3"
-        paddingBottom="$3"
-        alignItems="center"
-        gap="$3"
-      >
-        <TouchableOpacity>
-          <YStack
-            width={36}
-            height={36}
-            borderRadius={18}
-            backgroundColor="$backgroundSecondary"
-            alignItems="center"
-            justifyContent="center"
-          >
-            <Ionicons name="arrow-back" size={20} color="#374151" />
-          </YStack>
-        </TouchableOpacity>
-        <TextH3 fontWeight="700" flex={1}>
-          Produk
-        </TextH3>
-        <TouchableOpacity>
-          <YStack
-            width={36}
-            height={36}
-            borderRadius={18}
-            backgroundColor="$backgroundSecondary"
-            alignItems="center"
-            justifyContent="center"
-          >
-            <Ionicons name="search-outline" size={20} color="#374151" />
-          </YStack>
-        </TouchableOpacity>
-        <AppButton variant="primary" size="sm">
-          + Tambah
-        </AppButton>
-      </XStack>
+      <PageHeader
+        title="Produk"
+        showBack
+        actions={
+          <>
+            <IconButton iconName="search-outline" />
+            <AppButton variant="primary" size="sm">
+              + Tambah
+            </AppButton>
+          </>
+        }
+      />
 
       <ScrollView showsVerticalScrollIndicator={false}>
         <YStack gap="$3" paddingHorizontal="$4" paddingBottom="$6">
           {/* ── Search ── */}
-          <XStack
-            backgroundColor="$background"
-            borderRadius={12}
-            height={44}
-            alignItems="center"
-            paddingHorizontal="$3"
-            gap="$2"
-            borderWidth={1}
-            borderColor="$borderColor"
-          >
-            <Ionicons name="search-outline" size={16} color="#9CA3AF" />
-            <TextBodyLg color="$colorTertiary" flex={1}>
-              Cari nama, SKU, atau barcode...
-            </TextBodyLg>
-            <Ionicons name="options-outline" size={16} color="#374151" />
-          </XStack>
+          <SearchBar
+            placeholder="Cari nama, SKU, atau barcode..."
+            showFilterIcon
+          />
 
           {/* ── Category Filters ── */}
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
@@ -265,6 +189,7 @@ export default function InventoriPage() {
                   label={c}
                   active={categoryFilter === c}
                   onPress={() => setCategoryFilter(c)}
+                  paddingH={14}
                 />
               ))}
             </XStack>
@@ -274,25 +199,13 @@ export default function InventoriPage() {
           <XStack alignItems="center" gap="$2">
             <TextBodySm color="$colorSecondary">Urutkan:</TextBodySm>
             {(["Nama A-Z", "Stok", "Terbaru"] as SortOption[]).map((s) => (
-              <TouchableOpacity key={s} onPress={() => setSortOption(s)}>
-                <YStack
-                  backgroundColor={
-                    sortOption === s ? "$primary" : "$background"
-                  }
-                  borderRadius={20}
-                  paddingHorizontal={12}
-                  paddingVertical={6}
-                  borderWidth={1}
-                  borderColor={sortOption === s ? "$primary" : "$borderColor"}
-                >
-                  <TextBodySm
-                    fontWeight="600"
-                    color={sortOption === s ? "white" : "$colorSecondary"}
-                  >
-                    {s}
-                  </TextBodySm>
-                </YStack>
-              </TouchableOpacity>
+              <FilterChip
+                key={s}
+                label={s}
+                active={sortOption === s}
+                onPress={() => setSortOption(s)}
+                paddingH={12}
+              />
             ))}
             <TouchableOpacity style={{ marginLeft: "auto" }}>
               <Ionicons name="list-outline" size={18} color="#9CA3AF" />
@@ -300,47 +213,19 @@ export default function InventoriPage() {
           </XStack>
 
           {/* ── Summary ── */}
-          <XStack
-            backgroundColor="$background"
-            borderRadius={12}
-            paddingVertical="$3"
-            shadowColor="#94A3B8"
-            shadowOpacity={0.18}
-            shadowRadius={8}
-            elevation={2}
-          >
-            <YStack flex={1} alignItems="center" gap={2}>
-              <TextBodySm color="$colorSecondary">Total Produk</TextBodySm>
-              <TextH2 fontWeight="700" color="$primary">
-                48
-              </TextH2>
-            </YStack>
-            <YStack width={1} backgroundColor="$borderColor" />
-            <YStack flex={1} alignItems="center" gap={2}>
-              <TextBodySm color="$colorSecondary">Stok Habis</TextBodySm>
-              <TextH2 fontWeight="700" color="$danger">
-                3
-              </TextH2>
-            </YStack>
-            <YStack width={1} backgroundColor="$borderColor" />
-            <YStack flex={1} alignItems="center" gap={2}>
-              <TextBodySm color="$colorSecondary">Kategori</TextBodySm>
-              <TextH2 fontWeight="700" color="$success">
-                5
-              </TextH2>
-            </YStack>
-          </XStack>
+          <ShadowCard paddingVertical="$3">
+            <StatsRow
+              variant="light"
+              items={[
+                { label: "Total Produk", value: "48", valueColor: "$primary" },
+                { label: "Stok Habis", value: "3", valueColor: "$danger" },
+                { label: "Kategori", value: "5", valueColor: "$success" },
+              ]}
+            />
+          </ShadowCard>
 
           {/* ── Product List ── */}
-          <YStack
-            backgroundColor="$background"
-            borderRadius={14}
-            shadowColor="#94A3B8"
-            shadowOpacity={0.18}
-            shadowRadius={8}
-            elevation={2}
-            overflow="hidden"
-          >
+          <ShadowCard overflow="hidden">
             {filtered.map((product, idx) => (
               <React.Fragment key={product.id}>
                 {idx > 0 && (
@@ -365,13 +250,7 @@ export default function InventoriPage() {
                     overflow="hidden"
                   >
                     <Ionicons
-                      name={
-                        product.category === "Makanan"
-                          ? "restaurant-outline"
-                          : product.category === "Minuman"
-                            ? "water-outline"
-                            : "pizza-outline"
-                      }
+                      name={CATEGORY_ICONS[product.category] ?? "cube-outline"}
                       size={26}
                       color="#9CA3AF"
                     />
@@ -431,10 +310,7 @@ export default function InventoriPage() {
                         Stok: 0
                       </TextBodySm>
                     )}
-                    <StockBadge
-                      stockStatus={product.stockStatus}
-                      stock={product.stock}
-                    />
+                    <StockBadge stockStatus={product.stockStatus} />
                     {product.isNew && (
                       <YStack
                         backgroundColor="#FEF9C3"
@@ -457,7 +333,7 @@ export default function InventoriPage() {
                 </XStack>
               </React.Fragment>
             ))}
-          </YStack>
+          </ShadowCard>
         </YStack>
       </ScrollView>
 
@@ -475,9 +351,9 @@ export default function InventoriPage() {
           shadowRadius={12}
           elevation={8}
         >
-          <TextH2 color="white" fontWeight="300">
+          <TextBodyLg color="white" fontWeight="300" fontSize={28}>
             +
-          </TextH2>
+          </TextBodyLg>
         </YStack>
       </TouchableOpacity>
     </SafeAreaView>

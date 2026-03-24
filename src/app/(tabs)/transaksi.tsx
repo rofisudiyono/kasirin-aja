@@ -4,9 +4,19 @@ import { ScrollView, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { XStack, YStack } from "tamagui";
 
-import { TextBodyLg, TextBodySm, TextH2, TextH3 } from "@/components";
+import {
+  FilterChip,
+  IconButton,
+  PageHeader,
+  SearchBar,
+  ShadowCard,
+  StatsRow,
+  StatusBadge,
+  TextBodyLg,
+  TextBodySm,
+  type TxStatus,
+} from "@/components";
 
-type TxStatus = "Lunas" | "Void" | "Refund";
 type FilterTab = "Semua" | "Lunas" | "Void";
 
 const transactions = [
@@ -44,57 +54,6 @@ const transactions = [
   },
 ];
 
-function StatusBadge({ status }: { status: TxStatus }) {
-  const map: Record<TxStatus, { bg: string; color: string }> = {
-    Lunas: { bg: "#DCFCE7", color: "#16A34A" },
-    Void: { bg: "#FEE2E2", color: "#DC2626" },
-    Refund: { bg: "#FFEDD5", color: "#EA580C" },
-  };
-  const s = map[status];
-  return (
-    <YStack
-      backgroundColor={s.bg}
-      borderRadius={20}
-      paddingHorizontal={10}
-      paddingVertical={4}
-    >
-      <TextBodySm fontWeight="600" color={s.color}>
-        {status}
-      </TextBodySm>
-    </YStack>
-  );
-}
-
-function FilterChip({
-  label,
-  active,
-  onPress,
-}: {
-  label: string;
-  active: boolean;
-  onPress: () => void;
-}) {
-  return (
-    <TouchableOpacity onPress={onPress}>
-      <YStack
-        backgroundColor={active ? "$primary" : "$background"}
-        borderRadius={20}
-        paddingHorizontal={16}
-        paddingVertical={8}
-        borderWidth={1}
-        borderColor={active ? "$primary" : "$borderColor"}
-      >
-        <TextBodySm
-          fontWeight="600"
-          color={active ? "white" : "$colorSecondary"}
-        >
-          {label}
-        </TextBodySm>
-      </YStack>
-    </TouchableOpacity>
-  );
-}
-
 export default function TransaksiPage() {
   const [activeFilter, setActiveFilter] = useState<FilterTab>("Semua");
 
@@ -106,72 +65,21 @@ export default function TransaksiPage() {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#F8FAFF" }}>
       {/* ── Header ── */}
-      <XStack
-        paddingHorizontal="$4"
-        paddingTop="$3"
-        paddingBottom="$3"
-        alignItems="center"
-        gap="$3"
-      >
-        <TouchableOpacity>
-          <YStack
-            width={36}
-            height={36}
-            borderRadius={18}
-            backgroundColor="$backgroundSecondary"
-            alignItems="center"
-            justifyContent="center"
-          >
-            <Ionicons name="arrow-back" size={20} color="#374151" />
-          </YStack>
-        </TouchableOpacity>
-        <TextH3 fontWeight="700" flex={1} textAlign="center">
-          Riwayat Transaksi
-        </TextH3>
-        <TouchableOpacity>
-          <YStack
-            width={36}
-            height={36}
-            borderRadius={18}
-            backgroundColor="$backgroundSecondary"
-            alignItems="center"
-            justifyContent="center"
-          >
-            <Ionicons name="search-outline" size={20} color="#374151" />
-          </YStack>
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <YStack
-            width={36}
-            height={36}
-            borderRadius={18}
-            backgroundColor="$backgroundSecondary"
-            alignItems="center"
-            justifyContent="center"
-          >
-            <Ionicons name="options-outline" size={20} color="#374151" />
-          </YStack>
-        </TouchableOpacity>
-      </XStack>
+      <PageHeader
+        title="Riwayat Transaksi"
+        showBack
+        actions={
+          <>
+            <IconButton iconName="search-outline" />
+            <IconButton iconName="options-outline" />
+          </>
+        }
+      />
 
       <ScrollView showsVerticalScrollIndicator={false}>
         <YStack gap="$3" paddingHorizontal="$4" paddingBottom="$6">
           {/* ── Search ── */}
-          <XStack
-            backgroundColor="$background"
-            borderRadius={12}
-            height={44}
-            alignItems="center"
-            paddingHorizontal="$3"
-            gap="$2"
-            borderWidth={1}
-            borderColor="$borderColor"
-          >
-            <Ionicons name="search-outline" size={16} color="#9CA3AF" />
-            <TextBodyLg color="$colorTertiary" flex={1}>
-              Cari nomor order atau pelanggan...
-            </TextBodyLg>
-          </XStack>
+          <SearchBar placeholder="Cari nomor order atau pelanggan..." />
 
           {/* ── Filters ── */}
           <XStack alignItems="center" gap="$2">
@@ -213,34 +121,19 @@ export default function TransaksiPage() {
             paddingHorizontal="$4"
             alignItems="center"
           >
-            <YStack flex={1} alignItems="center" gap={4}>
-              <TextBodySm color="#BFDBFE">Total Transaksi</TextBodySm>
-              <TextH2 fontWeight="700" color="white">
-                24
-              </TextH2>
-            </YStack>
-            <YStack
-              width={1}
-              height={40}
-              backgroundColor="rgba(255,255,255,0.3)"
+            <StatsRow
+              variant="dark"
+              items={[
+                { label: "Total Transaksi", value: "24" },
+                {
+                  label: "Pendapatan",
+                  value: "Rp 1.250.000",
+                  flex: 2,
+                  smallValue: true,
+                },
+                { label: "Void", value: "1", valueColor: "#FCA5A5" },
+              ]}
             />
-            <YStack flex={2} alignItems="center" gap={4}>
-              <TextBodySm color="#BFDBFE">Pendapatan</TextBodySm>
-              <TextH3 fontWeight="700" color="white">
-                Rp 1.250.000
-              </TextH3>
-            </YStack>
-            <YStack
-              width={1}
-              height={40}
-              backgroundColor="rgba(255,255,255,0.3)"
-            />
-            <YStack flex={1} alignItems="center" gap={4}>
-              <TextBodySm color="#BFDBFE">Void</TextBodySm>
-              <TextH2 fontWeight="700" color="#FCA5A5">
-                1
-              </TextH2>
-            </YStack>
           </XStack>
 
           {/* ── Date Label ── */}
@@ -252,17 +145,12 @@ export default function TransaksiPage() {
           <YStack gap="$3">
             {filtered.map((tx) => (
               <TouchableOpacity key={tx.id}>
-                <YStack
+                <ShadowCard
                   backgroundColor={
                     tx.status === "Void" ? "#FFF5F5" : "$background"
                   }
-                  borderRadius={14}
                   padding="$4"
                   gap="$2"
-                  shadowColor="#94A3B8"
-                  shadowOpacity={0.18}
-                  shadowRadius={8}
-                  elevation={2}
                 >
                   <XStack alignItems="center" justifyContent="space-between">
                     <TextBodyLg fontWeight="700" color="$primary">
@@ -305,7 +193,7 @@ export default function TransaksiPage() {
                       color="#9CA3AF"
                     />
                   </XStack>
-                </YStack>
+                </ShadowCard>
               </TouchableOpacity>
             ))}
           </YStack>

@@ -7,10 +7,11 @@ import { Separator, XStack, YStack } from "tamagui";
 
 import {
   AppButton,
-  TextBodySm,
+  IconButton,
+  SectionCard,
   TextBodyLg,
+  TextBodySm,
   TextCaption,
-  TextH2,
   TextH3,
   TextMicro,
 } from "@/components";
@@ -85,9 +86,7 @@ function SettingRow({
             </TextBodySm>
           </YStack>
         )}
-        {value && (
-          <TextBodySm color="$colorSecondary">{value}</TextBodySm>
-        )}
+        {value && <TextBodySm color="$colorSecondary">{value}</TextBodySm>}
         {hasToggle && (
           <Switch
             value={toggleValue}
@@ -100,31 +99,6 @@ function SettingRow({
         )}
       </XStack>
     </TouchableOpacity>
-  );
-}
-
-function SectionCard({
-  title,
-  children,
-}: {
-  title: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <YStack gap="$2">
-      <TextBodyLg fontWeight="700">{title}</TextBodyLg>
-      <YStack
-        backgroundColor="$background"
-        borderRadius={14}
-        overflow="hidden"
-        shadowColor="#94A3B8"
-        shadowOpacity={0.18}
-        shadowRadius={8}
-        elevation={2}
-      >
-        {children}
-      </YStack>
-    </YStack>
   );
 }
 
@@ -149,23 +123,14 @@ export default function PengaturanPage() {
         alignItems="center"
       >
         <YStack flex={1} gap={2}>
-          <TextH2 fontWeight="700">Pengaturan</TextH2>
+          <TextBodyLg fontWeight="700" fontSize={18}>
+            Pengaturan
+          </TextBodyLg>
           <TextBodySm color="$colorSecondary">
             Kelola toko, perangkat, dan preferensi aplikasi kasir
           </TextBodySm>
         </YStack>
-        <TouchableOpacity>
-          <YStack
-            width={40}
-            height={40}
-            borderRadius={20}
-            backgroundColor="$backgroundSecondary"
-            alignItems="center"
-            justifyContent="center"
-          >
-            <Ionicons name="notifications-outline" size={20} color="#374151" />
-          </YStack>
-        </TouchableOpacity>
+        <IconButton iconName="notifications-outline" size={40} />
       </XStack>
 
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -267,23 +232,18 @@ export default function PengaturanPage() {
                   shadowRadius={8}
                   elevation={2}
                 >
-                  <YStack
-                    width={40}
-                    height={40}
-                    borderRadius={10}
-                    backgroundColor="$backgroundSecondary"
-                    alignItems="center"
-                    justifyContent="center"
-                  >
-                    <Ionicons
-                      name={item.iconName}
-                      size={20}
-                      color={item.iconColor}
-                    />
-                  </YStack>
+                  <IconButton
+                    iconName={item.iconName}
+                    size={40}
+                    shape="square"
+                    iconColor={item.iconColor}
+                    disabled
+                  />
                   <YStack flex={1}>
                     <TextBodySm fontWeight="600">{item.label}</TextBodySm>
-                    <TextCaption color="$colorSecondary">{item.sub}</TextCaption>
+                    <TextCaption color="$colorSecondary">
+                      {item.sub}
+                    </TextCaption>
                   </YStack>
                   <Ionicons name="chevron-forward" size={16} color="#9CA3AF" />
                 </XStack>

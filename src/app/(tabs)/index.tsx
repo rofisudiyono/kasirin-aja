@@ -6,11 +6,15 @@ import { Separator, XStack, YStack } from "tamagui";
 
 import {
   AppButton,
+  IconButton,
+  ShadowCard,
+  StatusBadge,
   TextBodyLg,
   TextBodySm,
   TextCaption,
   TextH2,
   TextH3,
+  type TxStatus,
 } from "@/components";
 
 const recentTransactions = [
@@ -18,29 +22,6 @@ const recentTransactions = [
   { id: "#0020", time: "09:48 WIB", amount: "Rp 85.000", status: "Lunas" },
   { id: "#0019", time: "09:15 WIB", amount: "Rp 42.000", status: "Void" },
 ];
-
-type TxStatus = "Lunas" | "Void" | "Refund";
-
-function StatusBadge({ status }: { status: TxStatus }) {
-  const map: Record<TxStatus, { bg: string; color: string }> = {
-    Lunas: { bg: "#DCFCE7", color: "#16A34A" },
-    Void: { bg: "#FEE2E2", color: "#DC2626" },
-    Refund: { bg: "#FFEDD5", color: "#EA580C" },
-  };
-  const style = map[status] ?? { bg: "#F3F4F6", color: "#6B7280" };
-  return (
-    <YStack
-      backgroundColor={style.bg}
-      borderRadius={20}
-      paddingHorizontal={10}
-      paddingVertical={4}
-    >
-      <TextBodySm fontWeight="600" color={style.color}>
-        {status}
-      </TextBodySm>
-    </YStack>
-  );
-}
 
 export default function HomePage() {
   return (
@@ -73,16 +54,7 @@ export default function HomePage() {
             <TextCaption color="$colorSecondary">Sen, 10 Jun 2024</TextCaption>
             <TextBodyLg fontWeight="700">10:24 WIB</TextBodyLg>
           </YStack>
-          <YStack
-            width={40}
-            height={40}
-            borderRadius={20}
-            backgroundColor="$backgroundSecondary"
-            alignItems="center"
-            justifyContent="center"
-          >
-            <Ionicons name="notifications-outline" size={20} color="#374151" />
-          </YStack>
+          <IconButton iconName="notifications-outline" size={40} />
         </XStack>
 
         <YStack gap="$3" paddingHorizontal="$4" paddingBottom="$6">
@@ -181,35 +153,19 @@ export default function HomePage() {
               },
             ].map((item) => (
               <TouchableOpacity key={item.label} style={{ flex: 1 }}>
-                <YStack
-                  backgroundColor="$background"
-                  borderRadius={12}
-                  padding="$3"
-                  alignItems="center"
-                  gap="$2"
-                  shadowColor="#94A3B8"
-                  shadowOpacity={0.18}
-                  shadowRadius={8}
-                  elevation={2}
-                >
-                  <YStack
-                    width={44}
-                    height={44}
-                    borderRadius={22}
-                    backgroundColor={item.iconBg}
-                    alignItems="center"
-                    justifyContent="center"
-                  >
-                    <Ionicons
-                      name={item.iconName}
-                      size={22}
-                      color={item.iconColor}
-                    />
-                  </YStack>
+                <ShadowCard padding="$3" alignItems="center" gap="$2">
+                  <IconButton
+                    iconName={item.iconName}
+                    size={44}
+                    iconSize={22}
+                    bg={item.iconBg}
+                    iconColor={item.iconColor}
+                    disabled
+                  />
                   <TextBodySm fontWeight="500" textAlign="center">
                     {item.label}
                   </TextBodySm>
-                </YStack>
+                </ShadowCard>
               </TouchableOpacity>
             ))}
           </XStack>
@@ -236,15 +192,7 @@ export default function HomePage() {
           {/* ── Recent Transactions ── */}
           <YStack gap="$2">
             <TextH3 fontWeight="700">Transaksi Terakhir</TextH3>
-            <YStack
-              backgroundColor="$background"
-              borderRadius={12}
-              shadowColor="#94A3B8"
-              shadowOpacity={0.18}
-              shadowRadius={8}
-              elevation={2}
-              overflow="hidden"
-            >
+            <ShadowCard overflow="hidden">
               {recentTransactions.map((tx, idx) => (
                 <React.Fragment key={tx.id}>
                   {idx > 0 && (
@@ -268,7 +216,7 @@ export default function HomePage() {
                   </XStack>
                 </React.Fragment>
               ))}
-            </YStack>
+            </ShadowCard>
           </YStack>
         </YStack>
       </ScrollView>
