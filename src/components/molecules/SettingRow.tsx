@@ -9,13 +9,14 @@ import React from "react";
 import { Switch, TouchableOpacity } from "react-native";
 import { XStack, YStack } from "tamagui";
 
+import { ColorGreen, ColorNeutral, ColorPrimary } from "@/themes/Colors";
 import type { SettingRowProps } from "@/types";
 import { TextBodyLg, TextBodySm } from "../atoms/Typography";
 
 export function SettingRow({
   iconName,
   iconBg,
-  iconColor = "#374151",
+  iconColor = ColorNeutral.neutral700,
   title,
   subtitle,
   badge,
@@ -53,12 +54,15 @@ export function SettingRow({
         </YStack>
         {badge && (
           <YStack
-            backgroundColor={badgeBg ?? "#DCFCE7"}
+            backgroundColor={badgeBg ?? ColorGreen.green100}
             borderRadius={20}
             paddingHorizontal={10}
             paddingVertical={4}
           >
-            <TextBodySm fontWeight="700" color={badgeColor ?? "#16A34A"}>
+            <TextBodySm
+              fontWeight="700"
+              color={badgeColor ?? ColorGreen.green600}
+            >
               {badge}
             </TextBodySm>
           </YStack>
@@ -68,11 +72,18 @@ export function SettingRow({
           <Switch
             value={toggleValue}
             onValueChange={onToggle}
-            trackColor={{ true: "#2563EB", false: "#D1D5DB" }}
+            trackColor={{
+              true: ColorPrimary.primary600,
+              false: ColorNeutral.neutral300,
+            }}
           />
         )}
         {showChevron && !hasToggle && (
-          <Ionicons name="chevron-forward" size={16} color="#9CA3AF" />
+          <Ionicons
+            name="chevron-forward"
+            size={16}
+            color={ColorNeutral.neutral400}
+          />
         )}
       </XStack>
     </TouchableOpacity>

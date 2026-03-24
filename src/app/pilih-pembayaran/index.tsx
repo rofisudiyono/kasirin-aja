@@ -22,6 +22,12 @@ import {
   TextH2,
 } from "@/components";
 import { paymentMethodOptions } from "@/data/payment.data";
+import {
+  ColorBase,
+  ColorDanger,
+  ColorNeutral,
+  ColorPrimary,
+} from "@/themes/Colors";
 import type { PaymentMethod } from "@/types";
 import { formatPrice, formatTimer } from "@/utils";
 
@@ -140,7 +146,7 @@ export default function PilihPembayaranPage() {
             <TextCaption color="rgba(255,255,255,0.8)" marginBottom={6}>
               Total Tagihan
             </TextCaption>
-            <TextH2 fontWeight="700" color="white" marginBottom={6}>
+            <TextH2 fontWeight="700" color={ColorBase.white} marginBottom={6}>
               {formatPrice(total)}
             </TextH2>
             <XStack gap={6} alignItems="center">
@@ -191,7 +197,11 @@ export default function PilihPembayaranPage() {
                       QR berlaku{" "}
                       <TextBodySm
                         fontWeight="700"
-                        color={qrTimer < 60 ? "#DC2626" : "$colorSecondary"}
+                        color={
+                          qrTimer < 60
+                            ? ColorDanger.danger600
+                            : "$colorSecondary"
+                        }
                       >
                         {formatTimer(qrTimer)}
                       </TextBodySm>{" "}
@@ -205,7 +215,7 @@ export default function PilihPembayaranPage() {
                         <Ionicons
                           name="refresh-outline"
                           size={18}
-                          color="#6B7280"
+                          color={ColorNeutral.neutral500}
                         />
                       </Animated.View>
                     </TouchableOpacity>
@@ -224,7 +234,7 @@ export default function PilihPembayaranPage() {
           style={styles.processBtn}
           onPress={handleProcess}
         >
-          <TextBodyLg fontWeight="700" color="white">
+          <TextBodyLg fontWeight="700" color={ColorBase.white}>
             Proses Pembayaran
           </TextBodyLg>
         </TouchableOpacity>
@@ -241,13 +251,13 @@ export default function PilihPembayaranPage() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F8FAFF",
+    backgroundColor: ColorBase.bgScreen,
   },
   totalCard: {
     borderRadius: 20,
     padding: 20,
-    backgroundColor: "#1D4ED8",
-    shadowColor: "#1D4ED8",
+    backgroundColor: ColorPrimary.primary700,
+    shadowColor: ColorPrimary.primary700,
     shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.3,
     shadowRadius: 12,
@@ -260,11 +270,11 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(255,255,255,0.6)",
   },
   qrisPanel: {
-    backgroundColor: "white",
+    backgroundColor: ColorBase.white,
     borderRadius: 16,
     padding: 20,
     alignItems: "center",
-    shadowColor: "#000",
+    shadowColor: ColorBase.black,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.05,
     shadowRadius: 6,
@@ -273,9 +283,9 @@ const styles = StyleSheet.create({
   },
   qrWrapper: {
     padding: 12,
-    backgroundColor: "white",
+    backgroundColor: ColorBase.white,
     borderRadius: 12,
-    shadowColor: "#000",
+    shadowColor: ColorBase.black,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.08,
     shadowRadius: 8,
@@ -286,15 +296,15 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    backgroundColor: "white",
+    backgroundColor: ColorBase.white,
     borderTopWidth: 1,
-    borderTopColor: "#F3F4F6",
+    borderTopColor: ColorNeutral.neutral100,
     paddingHorizontal: 16,
     paddingTop: 14,
     paddingBottom: 28,
   },
   processBtn: {
-    backgroundColor: "#2563EB",
+    backgroundColor: ColorPrimary.primary600,
     borderRadius: 14,
     height: 52,
     alignItems: "center",

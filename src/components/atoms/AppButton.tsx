@@ -13,6 +13,8 @@ import React from "react";
 import { ActivityIndicator } from "react-native";
 import { Button, Text } from "tamagui";
 
+import { ColorBase } from "@/themes/Colors";
+
 // ─── Types ────────────────────────────────────────────────────────────────────
 export type AppButtonVariant =
   | "primary"
@@ -56,42 +58,42 @@ const variantStyles: Record<
   primary: {
     bg: "$primary",
     border: "$primary",
-    labelColor: "#FFFFFF",
+    labelColor: ColorBase.white,
     pressOpacity: 0.85,
   },
   success: {
     bg: "$success",
     border: "$success",
-    labelColor: "#FFFFFF",
+    labelColor: ColorBase.white,
     pressOpacity: 0.85,
   },
   danger: {
     bg: "$danger",
     border: "$danger",
-    labelColor: "#FFFFFF",
+    labelColor: ColorBase.white,
     pressOpacity: 0.85,
   },
   warning: {
     bg: "$warning",
     border: "$warning",
-    labelColor: "#FFFFFF",
+    labelColor: ColorBase.white,
     pressOpacity: 0.85,
   },
   outline: {
-    bg: "transparent",
+    bg: ColorBase.transparent,
     border: "$primary",
     labelColor: "$primary",
     pressOpacity: 0.7,
   },
   outlineGray: {
-    bg: "transparent",
+    bg: ColorBase.transparent,
     border: "$borderColor",
     labelColor: "$color",
     pressOpacity: 0.7,
   },
   ghost: {
-    bg: "transparent",
-    border: "transparent",
+    bg: ColorBase.transparent,
+    border: ColorBase.transparent,
     labelColor: "$primary",
     pressOpacity: 0.6,
   },
@@ -104,7 +106,7 @@ const variantStyles: Record<
   glass: {
     bg: "rgba(255,255,255,0.15)",
     border: "rgba(255,255,255,0.3)",
-    labelColor: "#FFFFFF",
+    labelColor: ColorBase.white,
     pressOpacity: 0.7,
   },
 };
@@ -152,7 +154,7 @@ export function AppButton({
           color={
             ["outline", "outlineGray", "ghost"].includes(variant)
               ? undefined
-              : "#FFFFFF"
+              : ColorBase.white
           }
         />
       );

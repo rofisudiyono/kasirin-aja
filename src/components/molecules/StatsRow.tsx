@@ -7,6 +7,8 @@
 import React from "react";
 import { XStack, YStack } from "tamagui";
 
+import { ColorBase, ColorPrimary } from "@/themes/Colors";
+
 import { TextBodySm, TextH2, TextH3 } from "../atoms/Typography";
 
 export interface StatItem {
@@ -35,7 +37,8 @@ export function StatsRow({
   const dividerColor =
     variant === "dark" ? "rgba(255,255,255,0.3)" : "$borderColor";
   const resolvedLabelColor =
-    labelColor ?? (variant === "dark" ? "#BFDBFE" : "$colorSecondary");
+    labelColor ??
+    (variant === "dark" ? ColorPrimary.primary200 : "$colorSecondary");
 
   return (
     <XStack alignItems="center">
@@ -47,11 +50,17 @@ export function StatsRow({
           <YStack flex={item.flex ?? 1} alignItems="center" gap={4}>
             <TextBodySm color={resolvedLabelColor}>{item.label}</TextBodySm>
             {item.smallValue ? (
-              <TextH3 fontWeight="700" color={item.valueColor ?? "white"}>
+              <TextH3
+                fontWeight="700"
+                color={item.valueColor ?? ColorBase.white}
+              >
                 {item.value}
               </TextH3>
             ) : (
-              <TextH2 fontWeight="700" color={item.valueColor ?? "white"}>
+              <TextH2
+                fontWeight="700"
+                color={item.valueColor ?? ColorBase.white}
+              >
                 {item.value}
               </TextH2>
             )}

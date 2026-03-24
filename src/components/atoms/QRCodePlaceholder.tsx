@@ -6,11 +6,13 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
 
+import { ColorBase, ColorNeutral } from "@/themes/Colors";
+
 const styles = StyleSheet.create({
   container: {
     width: 180,
     height: 180,
-    backgroundColor: "white",
+    backgroundColor: ColorBase.white,
     borderRadius: 8,
     padding: 12,
     position: "relative",
@@ -22,7 +24,7 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderWidth: 4,
-    borderColor: "#111827",
+    borderColor: ColorNeutral.neutral900,
     borderRadius: 4,
     alignItems: "center",
     justifyContent: "center",
@@ -31,7 +33,7 @@ const styles = StyleSheet.create({
   finderInner: {
     width: 20,
     height: 20,
-    backgroundColor: "#111827",
+    backgroundColor: ColorNeutral.neutral900,
     borderRadius: 2,
   },
   dataArea: {
@@ -46,10 +48,10 @@ const styles = StyleSheet.create({
     width: 10,
     height: 10,
     borderRadius: 1,
-    backgroundColor: "transparent",
+    backgroundColor: ColorBase.transparent,
   },
   dataCellFilled: {
-    backgroundColor: "#111827",
+    backgroundColor: ColorNeutral.neutral900,
   },
 });
 

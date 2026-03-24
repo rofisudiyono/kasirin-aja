@@ -8,16 +8,22 @@ import {
   TextBodySm,
   TextCaption,
 } from "@/components/atoms/Typography";
+import {
+  ColorBase,
+  ColorNeutral,
+  ColorPrimary,
+  ColorWarning,
+} from "@/themes/Colors";
 import { formatPrice } from "@/utils";
 
 import type { ProductCardProps } from "./ProductCard.types";
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: "white",
+    backgroundColor: ColorBase.white,
     borderRadius: 14,
     overflow: "hidden",
-    shadowColor: "#000",
+    shadowColor: ColorBase.black,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.07,
     shadowRadius: 8,
@@ -71,16 +77,26 @@ export function ProductCard({
         <Ionicons name={categoryIcon} size={52} color={categoryIconColor} />
 
         {isLow && (
-          <View style={[styles.stockBadge, { backgroundColor: "#F59E0B" }]}>
-            <TextCaption fontWeight="700" color="white" fontSize={11}>
+          <View
+            style={[
+              styles.stockBadge,
+              { backgroundColor: ColorWarning.warning500 },
+            ]}
+          >
+            <TextCaption fontWeight="700" color={ColorBase.white} fontSize={11}>
               Stok Tipis
             </TextCaption>
           </View>
         )}
 
         {isEmpty && (
-          <View style={[styles.stockBadge, { backgroundColor: "#9CA3AF" }]}>
-            <TextCaption fontWeight="700" color="white" fontSize={11}>
+          <View
+            style={[
+              styles.stockBadge,
+              { backgroundColor: ColorNeutral.neutral400 },
+            ]}
+          >
+            <TextCaption fontWeight="700" color={ColorBase.white} fontSize={11}>
               Habis
             </TextCaption>
           </View>
@@ -113,13 +129,17 @@ export function ProductCard({
             <View
               style={[
                 styles.addButton,
-                { backgroundColor: isEmpty ? "#E5E7EB" : "#2563EB" },
+                {
+                  backgroundColor: isEmpty
+                    ? ColorNeutral.neutral200
+                    : ColorPrimary.primary600,
+                },
               ]}
             >
               <Ionicons
                 name="add"
                 size={20}
-                color={isEmpty ? "#9CA3AF" : "white"}
+                color={isEmpty ? ColorNeutral.neutral400 : ColorBase.white}
               />
             </View>
           </TouchableOpacity>

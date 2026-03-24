@@ -3,6 +3,7 @@ import React from "react";
 import { StyleSheet, TouchableOpacity } from "react-native";
 
 import { TextH3 } from "@/components/atoms/Typography";
+import { ColorDanger, ColorNeutral } from "@/themes/Colors";
 
 import type { NumpadButtonProps } from "./NumpadButton.types";
 
@@ -20,8 +21,8 @@ const styles = StyleSheet.create({
 export function NumpadButton({
   label,
   onPress,
-  textColor = "#111827",
-  bgColor = "#F4F5F9",
+  textColor = ColorNeutral.neutral900,
+  bgColor = ColorNeutral.neutral150,
   isIcon = false,
   style,
 }: NumpadButtonProps) {
@@ -32,7 +33,7 @@ export function NumpadButton({
       style={[styles.btn, { backgroundColor: bgColor }, style]}
     >
       {isIcon ? (
-        <Ionicons name="backspace" size={22} color="#DC2626" />
+        <Ionicons name="backspace" size={22} color={ColorDanger.danger600} />
       ) : (
         <TextH3 fontWeight="700" color={textColor} fontSize={20}>
           {label}

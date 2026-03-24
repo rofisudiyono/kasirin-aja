@@ -16,6 +16,14 @@ import {
   TextH1,
 } from "@/components/index";
 import { cashNumpadRows } from "@/data/payment.data";
+import {
+  ColorBase,
+  ColorDanger,
+  ColorGreen,
+  ColorNeutral,
+  ColorPrimary,
+  ColorSky,
+} from "@/themes/Colors";
 import { formatPrice, getCashSuggestions } from "@/utils";
 
 // ─── Main Page ────────────────────────────────────────────────────────────────
@@ -86,20 +94,32 @@ export default function PembayaranTunaiPage() {
       <View style={styles.content}>
         {/* Total display */}
         <YStack alignItems="center" gap={2}>
-          <TextBodySm color="#6B7280" fontWeight="600" letterSpacing={0.5}>
+          <TextBodySm
+            color={ColorNeutral.neutral500}
+            fontWeight="600"
+            letterSpacing={0.5}
+          >
             TOTAL YANG HARUS DIBAYAR
           </TextBodySm>
-          <TextH1 fontWeight="700" color="#2563EB" fontSize={26}>
+          <TextH1
+            fontWeight="700"
+            color={ColorPrimary.primary600}
+            fontSize={26}
+          >
             {formatPrice(total)}
           </TextH1>
         </YStack>
 
         {/* Received amount display */}
         <YStack alignItems="center" marginTop={8}>
-          <TextBodySm color="#6B7280" fontWeight="500">
+          <TextBodySm color={ColorNeutral.neutral500} fontWeight="500">
             Uang Diterima
           </TextBodySm>
-          <TextH1 fontWeight="800" marginTop={2} color="#111827">
+          <TextH1
+            fontWeight="800"
+            marginTop={2}
+            color={ColorNeutral.neutral900}
+          >
             {formatPrice(receivedAmount)}
           </TextH1>
           <View style={styles.inputUnderline} />
@@ -125,8 +145,10 @@ export default function PembayaranTunaiPage() {
         {/* Info card */}
         <View style={styles.infoCard}>
           <XStack justifyContent="space-between" alignItems="center">
-            <TextBodySm color="#374151">Total Tagihan</TextBodySm>
-            <TextBodySm fontWeight="600" color="#374151">
+            <TextBodySm color={ColorNeutral.neutral700}>
+              Total Tagihan
+            </TextBodySm>
+            <TextBodySm fontWeight="600" color={ColorNeutral.neutral700}>
               {formatPrice(total)}
             </TextBodySm>
           </XStack>
@@ -135,23 +157,29 @@ export default function PembayaranTunaiPage() {
             alignItems="center"
             marginTop={6}
           >
-            <TextBodySm color="#374151">Uang Diterima</TextBodySm>
-            <TextBodySm fontWeight="600" color="#374151">
+            <TextBodySm color={ColorNeutral.neutral700}>
+              Uang Diterima
+            </TextBodySm>
+            <TextBodySm fontWeight="600" color={ColorNeutral.neutral700}>
               {formatPrice(receivedAmount)}
             </TextBodySm>
           </XStack>
           <View style={styles.divider} />
           <XStack justifyContent="space-between" alignItems="center">
-            <TextBody fontWeight="700" color="#16A34A">
+            <TextBody fontWeight="700" color={ColorGreen.green600}>
               Kembalian
             </TextBody>
             <XStack alignItems="center" gap={6}>
               {isEnough && (
                 <View style={styles.checkBadge}>
-                  <Ionicons name="checkmark" size={12} color="#16A34A" />
+                  <Ionicons
+                    name="checkmark"
+                    size={12}
+                    color={ColorGreen.green600}
+                  />
                 </View>
               )}
-              <TextBody fontWeight="800" color="#16A34A">
+              <TextBody fontWeight="800" color={ColorGreen.green600}>
                 {isEnough ? formatPrice(change) : "Rp 0"}
               </TextBody>
             </XStack>
@@ -167,7 +195,7 @@ export default function PembayaranTunaiPage() {
                   <NumpadButton
                     key="DEL"
                     label=""
-                    bgColor="#FCE8E8"
+                    bgColor={ColorDanger.danger75}
                     onPress={() => handleNumpad("DEL")}
                     isIcon
                   />
@@ -175,8 +203,8 @@ export default function PembayaranTunaiPage() {
                   <NumpadButton
                     key="000"
                     label="000"
-                    bgColor="#EEF2FF"
-                    textColor="#2563EB"
+                    bgColor={ColorSky.indigo50}
+                    textColor={ColorPrimary.primary600}
                     onPress={() => handleNumpad("000")}
                   />
                 ) : (
@@ -200,7 +228,11 @@ export default function PembayaranTunaiPage() {
           onPress={handleConfirm}
           disabled={!isEnough}
         />
-        <TextCaption color="#6B7280" textAlign="center" marginTop={6}>
+        <TextCaption
+          color={ColorNeutral.neutral500}
+          textAlign="center"
+          marginTop={6}
+        >
           Kembalian akan otomatis tercatat
         </TextCaption>
         <TouchableOpacity
@@ -208,7 +240,11 @@ export default function PembayaranTunaiPage() {
           style={styles.batalBtn}
           activeOpacity={0.7}
         >
-          <TextBody fontWeight="700" color="#374151" letterSpacing={1}>
+          <TextBody
+            fontWeight="700"
+            color={ColorNeutral.neutral700}
+            letterSpacing={1}
+          >
             BATAL
           </TextBody>
         </TouchableOpacity>
@@ -222,7 +258,7 @@ export default function PembayaranTunaiPage() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F8FAFF",
+    backgroundColor: ColorBase.bgScreen,
   },
   content: {
     flex: 1,
@@ -232,7 +268,7 @@ const styles = StyleSheet.create({
   inputUnderline: {
     width: 220,
     height: 2,
-    backgroundColor: "#BFDBFE",
+    backgroundColor: ColorPrimary.primary200,
     marginTop: 6,
   },
   chipsContainer: {
@@ -241,25 +277,25 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   infoCard: {
-    backgroundColor: "#EAF5ED",
+    backgroundColor: ColorGreen.green75,
     borderRadius: 16,
     padding: 12,
     marginTop: 10,
   },
   divider: {
     height: 1,
-    backgroundColor: "#D1E8DD",
+    backgroundColor: ColorGreen.green150,
     marginVertical: 8,
   },
   checkBadge: {
     width: 18,
     height: 18,
     borderRadius: 9,
-    backgroundColor: "#D1FADD",
+    backgroundColor: ColorGreen.green125,
     alignItems: "center",
     justifyContent: "center",
     borderWidth: 1,
-    borderColor: "#16A34A",
+    borderColor: ColorGreen.green600,
   },
   numpad: {
     marginVertical: 10,
@@ -271,12 +307,12 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   bottomBar: {
-    backgroundColor: "white",
+    backgroundColor: ColorBase.white,
     paddingHorizontal: 16,
     paddingTop: 14,
     paddingBottom: 24,
     borderTopWidth: StyleSheet.hairlineWidth,
-    borderTopColor: "#E5E7EB",
+    borderTopColor: ColorNeutral.neutral200,
   },
   batalBtn: {
     alignItems: "center",

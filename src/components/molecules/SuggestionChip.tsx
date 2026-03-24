@@ -7,6 +7,7 @@
 import React from "react";
 import { TouchableOpacity, View } from "react-native";
 
+import { ColorBase, ColorNeutral, ColorPrimary } from "@/themes/Colors";
 import { formatPrice } from "@/utils";
 import { TextBodySm } from "../atoms/Typography";
 import type { SuggestionChipProps } from "./SuggestionChip/SuggestionChip.types";
@@ -20,14 +21,19 @@ export function SuggestionChip({
     <TouchableOpacity activeOpacity={0.8} onPress={onPress}>
       <View
         style={{
-          backgroundColor: selected ? "#2563EB" : "#F4F5F9",
+          backgroundColor: selected
+            ? ColorPrimary.primary600
+            : ColorNeutral.neutral150,
           borderRadius: 12,
           paddingHorizontal: 16,
           paddingVertical: 10,
           alignItems: "center",
         }}
       >
-        <TextBodySm fontWeight="600" color={selected ? "white" : "#2563EB"}>
+        <TextBodySm
+          fontWeight="600"
+          color={selected ? ColorBase.white : ColorPrimary.primary600}
+        >
           {formatPrice(amount)}
         </TextBodySm>
       </View>

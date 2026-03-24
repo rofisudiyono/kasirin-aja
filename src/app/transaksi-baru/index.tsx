@@ -28,6 +28,7 @@ import { CATEGORY_COLORS, CATEGORY_ICONS } from "@/constants/categoryStyles";
 import { catalogProducts } from "@/data/catalog";
 import { categoryFilters } from "@/data/category.data";
 import { cartAtom, type CartItem } from "@/store/cart";
+import { ColorBase, ColorNeutral, ColorPrimary } from "@/themes/Colors";
 import type { CatalogProduct, CategoryFilter } from "@/types";
 import { formatPrice } from "@/utils";
 
@@ -198,7 +199,7 @@ function VariantSheet({
               value={note}
               onChangeText={setNote}
               placeholder="Tambah catatan... (opsional)"
-              placeholderTextColor="#9CA3AF"
+              placeholderTextColor={ColorNeutral.neutral400}
               style={styles.noteInputText}
             />
           </View>
@@ -215,7 +216,11 @@ function VariantSheet({
               onPress={() => setQty((q) => Math.max(1, q - 1))}
             >
               <View style={styles.qtyButton}>
-                <Ionicons name="remove" size={20} color="#374151" />
+                <Ionicons
+                  name="remove"
+                  size={20}
+                  color={ColorNeutral.neutral700}
+                />
               </View>
             </TouchableOpacity>
 
@@ -228,7 +233,7 @@ function VariantSheet({
               onPress={() => setQty((q) => q + 1)}
             >
               <View style={[styles.qtyButton, styles.qtyButtonPrimary]}>
-                <Ionicons name="add" size={20} color="white" />
+                <Ionicons name="add" size={20} color={ColorBase.white} />
               </View>
             </TouchableOpacity>
           </XStack>
@@ -236,7 +241,11 @@ function VariantSheet({
           {/* Add to cart button */}
           <TouchableOpacity activeOpacity={0.85} onPress={handleAdd}>
             <View style={styles.addToCartButton}>
-              <TextBodyLg fontWeight="700" color="white" fontSize={16}>
+              <TextBodyLg
+                fontWeight="700"
+                color={ColorBase.white}
+                fontSize={16}
+              >
                 Tambah ke Keranjang • {formatPrice(total)}
               </TextBodyLg>
             </View>
@@ -314,13 +323,17 @@ export default function TransaksiBaruPage() {
             <IconButton iconName="scan-outline" />
             <View style={styles.cartIconWrapper}>
               <View style={styles.cartIconBtn}>
-                <Ionicons name="cart-outline" size={20} color="#374151" />
+                <Ionicons
+                  name="cart-outline"
+                  size={20}
+                  color={ColorNeutral.neutral700}
+                />
               </View>
               {totalItems > 0 && (
                 <View style={styles.cartBadge}>
                   <TextCaption
                     fontWeight="700"
-                    color="white"
+                    color={ColorBase.white}
                     fontSize={10}
                     lineHeight={14}
                   >
@@ -340,7 +353,7 @@ export default function TransaksiBaruPage() {
         <YStack paddingHorizontal="$4" gap="$3">
           {/* Search bar */}
           <XStack
-            backgroundColor="white"
+            backgroundColor={ColorBase.white}
             borderRadius={12}
             height={48}
             alignItems="center"
@@ -349,11 +362,19 @@ export default function TransaksiBaruPage() {
             borderWidth={1}
             borderColor="$borderColor"
           >
-            <Ionicons name="search-outline" size={18} color="#9CA3AF" />
+            <Ionicons
+              name="search-outline"
+              size={18}
+              color={ColorNeutral.neutral400}
+            />
             <TextBodyLg color="$colorTertiary" flex={1}>
               Cari produk atau scan barcode...
             </TextBodyLg>
-            <Ionicons name="barcode-outline" size={20} color="#6B7280" />
+            <Ionicons
+              name="barcode-outline"
+              size={20}
+              color={ColorNeutral.neutral500}
+            />
           </XStack>
 
           {/* Category filters */}
@@ -395,7 +416,11 @@ export default function TransaksiBaruPage() {
         <View style={styles.cartBar}>
           <View style={styles.cartBarInner}>
             <View style={styles.cartBarIcon}>
-              <Ionicons name="bag-outline" size={20} color="#2563EB" />
+              <Ionicons
+                name="bag-outline"
+                size={20}
+                color={ColorPrimary.primary600}
+              />
             </View>
             <YStack flex={1} gap={2}>
               <TextBodySm color="$colorSecondary">{totalItems} item</TextBodySm>
@@ -408,10 +433,14 @@ export default function TransaksiBaruPage() {
               onPress={() => router.push("/keranjang")}
             >
               <View style={styles.cartBarButton}>
-                <TextBodyLg fontWeight="700" color="white">
+                <TextBodyLg fontWeight="700" color={ColorBase.white}>
                   Lihat Keranjang
                 </TextBodyLg>
-                <Ionicons name="arrow-forward" size={16} color="white" />
+                <Ionicons
+                  name="arrow-forward"
+                  size={16}
+                  color={ColorBase.white}
+                />
               </View>
             </TouchableOpacity>
           </View>
@@ -434,7 +463,7 @@ export default function TransaksiBaruPage() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F8FAFF",
+    backgroundColor: ColorBase.bgScreen,
   },
   cartIconWrapper: {
     position: "relative",
@@ -445,9 +474,9 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: "white",
+    backgroundColor: ColorBase.white,
     borderWidth: 1,
-    borderColor: "#E5E7EB",
+    borderColor: ColorNeutral.neutral200,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -458,7 +487,7 @@ const styles = StyleSheet.create({
     width: 18,
     height: 18,
     borderRadius: 9,
-    backgroundColor: "#2563EB",
+    backgroundColor: ColorPrimary.primary600,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -470,18 +499,18 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingBottom: 20,
     paddingTop: 8,
-    backgroundColor: "white",
+    backgroundColor: ColorBase.white,
     borderTopWidth: 1,
-    borderTopColor: "#F3F4F6",
+    borderTopColor: ColorNeutral.neutral100,
   },
   cartBarInner: {
     flexDirection: "row",
     alignItems: "center",
     gap: 12,
-    backgroundColor: "white",
+    backgroundColor: ColorBase.white,
     borderRadius: 16,
     padding: 12,
-    shadowColor: "#000",
+    shadowColor: ColorBase.black,
     shadowOffset: { width: 0, height: -2 },
     shadowOpacity: 0.05,
     shadowRadius: 8,
@@ -490,12 +519,12 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 10,
-    backgroundColor: "#EFF6FF",
+    backgroundColor: ColorPrimary.primary50,
     alignItems: "center",
     justifyContent: "center",
   },
   cartBarButton: {
-    backgroundColor: "#2563EB",
+    backgroundColor: ColorPrimary.primary600,
     borderRadius: 12,
     paddingHorizontal: 16,
     height: 44,
@@ -510,7 +539,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
   },
   sheet: {
-    backgroundColor: "white",
+    backgroundColor: ColorBase.white,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     paddingHorizontal: 20,
@@ -520,7 +549,7 @@ const styles = StyleSheet.create({
   dragHandle: {
     width: 40,
     height: 4,
-    backgroundColor: "#E5E7EB",
+    backgroundColor: ColorNeutral.neutral200,
     borderRadius: 2,
     alignSelf: "center",
     marginBottom: 16,
@@ -537,15 +566,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: 8,
     borderWidth: 1.5,
-    borderColor: "#E5E7EB",
-    backgroundColor: "white",
+    borderColor: ColorNeutral.neutral200,
+    backgroundColor: ColorBase.white,
   },
   variantChipSelected: {
-    borderColor: "#2563EB",
-    backgroundColor: "#EFF6FF",
+    borderColor: ColorPrimary.primary600,
+    backgroundColor: ColorPrimary.primary50,
   },
   noteInput: {
-    backgroundColor: "#F3F4F6",
+    backgroundColor: ColorNeutral.neutral100,
     borderRadius: 10,
     paddingHorizontal: 14,
     paddingVertical: 12,
@@ -553,23 +582,23 @@ const styles = StyleSheet.create({
   },
   noteInputText: {
     fontSize: 14,
-    color: "#111827",
+    color: ColorNeutral.neutral900,
   },
   qtyButton: {
     width: 40,
     height: 40,
     borderRadius: 20,
     borderWidth: 1.5,
-    borderColor: "#E5E7EB",
+    borderColor: ColorNeutral.neutral200,
     alignItems: "center",
     justifyContent: "center",
   },
   qtyButtonPrimary: {
-    backgroundColor: "#2563EB",
-    borderColor: "#2563EB",
+    backgroundColor: ColorPrimary.primary600,
+    borderColor: ColorPrimary.primary600,
   },
   addToCartButton: {
-    backgroundColor: "#2563EB",
+    backgroundColor: ColorPrimary.primary600,
     borderRadius: 14,
     height: 52,
     alignItems: "center",

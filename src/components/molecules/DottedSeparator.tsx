@@ -6,6 +6,8 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
 
+import { ColorNeutral } from "@/themes/Colors";
+
 const styles = StyleSheet.create({
   dottedLine: {
     flexDirection: "row",
@@ -17,7 +19,7 @@ const styles = StyleSheet.create({
     width: 4,
     height: 4,
     borderRadius: 2,
-    backgroundColor: "#E5E7EB",
+    backgroundColor: ColorNeutral.neutral200,
   },
 });
 

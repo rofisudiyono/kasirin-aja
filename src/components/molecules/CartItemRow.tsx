@@ -17,6 +17,12 @@ import { XStack, YStack } from "tamagui";
 
 import { CATEGORY_COLORS, CATEGORY_ICONS } from "@/constants/categoryStyles";
 import type { CartItem } from "@/store/cart";
+import {
+  ColorBase,
+  ColorDanger,
+  ColorNeutral,
+  ColorPrimary,
+} from "@/themes/Colors";
 import { formatPrice } from "@/utils";
 import { TextBodyLg, TextBodySm, TextCaption } from "../atoms/Typography";
 
@@ -37,28 +43,28 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 8,
-    backgroundColor: "#F3F4F6",
+    backgroundColor: ColorNeutral.neutral100,
     alignItems: "center",
     justifyContent: "center",
   },
   qtyBtnPrimary: {
-    backgroundColor: "#2563EB",
+    backgroundColor: ColorPrimary.primary600,
   },
   deleteBtn: {
     width: 32,
     height: 32,
     borderRadius: 8,
-    backgroundColor: "#FEE2E2",
+    backgroundColor: ColorDanger.danger100,
     alignItems: "center",
     justifyContent: "center",
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: "rgba(0,0,0,0.5)",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
     justifyContent: "flex-end",
   },
   noteSheet: {
-    backgroundColor: "white",
+    backgroundColor: ColorBase.white,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     paddingHorizontal: 16,
@@ -68,7 +74,7 @@ const styles = StyleSheet.create({
   dragHandle: {
     width: 40,
     height: 4,
-    backgroundColor: "#D1D5DB",
+    backgroundColor: ColorNeutral.neutral300,
     borderRadius: 2,
     alignSelf: "center",
     marginBottom: 16,
@@ -79,9 +85,9 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 12,
     borderWidth: 1,
-    borderColor: "#E5E7EB",
+    borderColor: ColorNeutral.neutral200,
     borderRadius: 10,
-    backgroundColor: "#F9FAFB",
+    backgroundColor: ColorNeutral.neutral50,
     marginBottom: 16,
     minHeight: 80,
     textAlignVertical: "top",
@@ -105,8 +111,8 @@ export function CartItemRow({
   const [noteInput, setNoteInput] = useState(item.note ?? "");
 
   const categoryColor = CATEGORY_COLORS[item.category] ?? {
-    bg: "#F3F4F6",
-    color: "#6B7280",
+    bg: ColorNeutral.neutral100,
+    color: ColorNeutral.neutral500,
   };
   const categoryIcon = CATEGORY_ICONS[item.category] ?? "bag-outline";
 
@@ -163,7 +169,11 @@ export function CartItemRow({
                   }
                 >
                   <View style={styles.qtyBtn}>
-                    <Ionicons name="remove" size={16} color="#374151" />
+                    <Ionicons
+                      name="remove"
+                      size={16}
+                      color={ColorNeutral.neutral700}
+                    />
                   </View>
                 </TouchableOpacity>
 
@@ -176,7 +186,7 @@ export function CartItemRow({
                   onPress={() => onUpdateQty(item.cartId, item.quantity + 1)}
                 >
                   <View style={[styles.qtyBtn, styles.qtyBtnPrimary]}>
-                    <Ionicons name="add" size={16} color="white" />
+                    <Ionicons name="add" size={16} color={ColorBase.white} />
                   </View>
                 </TouchableOpacity>
               </XStack>
@@ -190,7 +200,11 @@ export function CartItemRow({
                 onPress={() => onRemove(item.cartId)}
               >
                 <View style={styles.deleteBtn}>
-                  <Ionicons name="trash-outline" size={16} color="#DC2626" />
+                  <Ionicons
+                    name="trash-outline"
+                    size={16}
+                    color={ColorDanger.danger600}
+                  />
                 </View>
               </TouchableOpacity>
             </YStack>
@@ -220,7 +234,7 @@ export function CartItemRow({
               value={noteInput}
               onChangeText={setNoteInput}
               placeholder="Contoh: Tidak pedas, kurangi gula..."
-              placeholderTextColor="#9CA3AF"
+              placeholderTextColor={ColorNeutral.neutral400}
               style={styles.noteInputText}
               multiline
             />
@@ -232,9 +246,9 @@ export function CartItemRow({
               >
                 <View
                   style={{
-                    borderColor: "#E5E7EB",
+                    borderColor: ColorNeutral.neutral200,
                     borderWidth: 1,
-                    backgroundColor: "white",
+                    backgroundColor: ColorBase.white,
                     paddingTop: 12,
                     paddingBottom: 12,
                     borderRadius: 10,
@@ -253,14 +267,14 @@ export function CartItemRow({
               >
                 <View
                   style={{
-                    backgroundColor: "#2563EB",
+                    backgroundColor: ColorPrimary.primary600,
                     paddingTop: 12,
                     paddingBottom: 12,
                     borderRadius: 10,
                     alignItems: "center",
                   }}
                 >
-                  <TextBodySm fontWeight="600" color="white">
+                  <TextBodySm fontWeight="600" color={ColorBase.white}>
                     Simpan
                   </TextBodySm>
                 </View>

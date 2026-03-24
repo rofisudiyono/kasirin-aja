@@ -13,6 +13,14 @@ import React, { useState } from "react";
 import { TextInput, type TextInputProps } from "react-native";
 import { Text, useTheme, XStack, YStack } from "tamagui";
 
+import {
+  ColorBase,
+  ColorDanger,
+  ColorGreen,
+  ColorNeutral,
+  ColorPrimary,
+} from "@/themes/Colors";
+
 // ─── Types ────────────────────────────────────────────────────────────────────
 export type AppInputState =
   | "default"
@@ -44,19 +52,21 @@ const sizeMap: Record<
 function useBorderColor(state: AppInputState) {
   const theme = useTheme();
   const map: Record<AppInputState, string> = {
-    default: theme.borderColor?.val ?? "#E5E7EB",
-    focused: theme.primary?.val ?? "#2563EB",
-    success: theme.success?.val ?? "#16A34A",
-    error: theme.danger?.val ?? "#DC2626",
-    disabled: theme.backgroundTertiary?.val ?? "#F3F4F6",
+    default: theme.borderColor?.val ?? ColorNeutral.neutral200,
+    focused: theme.primary?.val ?? ColorPrimary.primary600,
+    success: theme.success?.val ?? ColorGreen.green600,
+    error: theme.danger?.val ?? ColorDanger.danger600,
+    disabled: theme.backgroundTertiary?.val ?? ColorNeutral.neutral100,
   };
   return map[state];
 }
 
 function useBgColor(state: AppInputState) {
   const theme = useTheme();
-  if (state === "disabled") return theme.backgroundTertiary?.val ?? "#F3F4F6";
-  return theme.background?.val ?? "#FFFFFF";
+  if (state === "disabled") {
+    return theme.backgroundTertiary?.val ?? ColorNeutral.neutral100;
+  }
+  return theme.background?.val ?? ColorBase.white;
 }
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
@@ -140,10 +150,10 @@ export function AppInput({
   const backgroundColor = useBgColor(state);
   const dimensions = sizeMap[size];
 
-  const placeholderColor = theme.colorTertiary?.val ?? "#9CA3AF";
+  const placeholderColor = theme.colorTertiary?.val ?? ColorNeutral.neutral400;
   const textColor = isDisabled
-    ? (theme.colorTertiary?.val ?? "#9CA3AF")
-    : (theme.color?.val ?? "#111827");
+    ? (theme.colorTertiary?.val ?? ColorNeutral.neutral400)
+    : (theme.color?.val ?? ColorNeutral.neutral900);
 
   const inputContent = (
     <XStack

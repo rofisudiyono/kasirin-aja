@@ -8,6 +8,8 @@ import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import { XStack } from "tamagui";
 
+import { ColorNeutral } from "@/themes/Colors";
+
 import { TextBodyLg } from "../atoms/Typography";
 
 export interface SearchBarProps {
@@ -31,12 +33,20 @@ export function SearchBar({
       borderWidth={1}
       borderColor="$borderColor"
     >
-      <Ionicons name="search-outline" size={16} color="#9CA3AF" />
+      <Ionicons
+        name="search-outline"
+        size={16}
+        color={ColorNeutral.neutral400}
+      />
       <TextBodyLg color="$colorTertiary" flex={1}>
         {placeholder}
       </TextBodyLg>
       {showFilterIcon && (
-        <Ionicons name="options-outline" size={16} color="#374151" />
+        <Ionicons
+          name="options-outline"
+          size={16}
+          color={ColorNeutral.neutral700}
+        />
       )}
     </XStack>
   );

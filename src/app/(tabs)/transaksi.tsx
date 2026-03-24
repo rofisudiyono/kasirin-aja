@@ -16,7 +16,12 @@ import {
   TextBodySm,
 } from "@/components";
 import { transactionListMock } from "@/data/transactions";
-import { ColorBase, ColorNeutral, ColorPrimary } from "@/themes/Colors";
+import {
+  ColorBase,
+  ColorDanger,
+  ColorNeutral,
+  ColorPrimary,
+} from "@/themes/Colors";
 import type { FilterTab } from "@/types";
 
 export default function TransaksiPage() {
@@ -90,7 +95,7 @@ export default function TransaksiPage() {
 
           {/* ── Summary Card ── */}
           <XStack
-            backgroundColor="#2563EB"
+            backgroundColor={ColorPrimary.primary600}
             borderRadius={16}
             paddingVertical="$4"
             paddingHorizontal="$4"
@@ -106,7 +111,11 @@ export default function TransaksiPage() {
                   flex: 2,
                   smallValue: true,
                 },
-                { label: "Void", value: "1", valueColor: "#FCA5A5" },
+                {
+                  label: "Void",
+                  value: "1",
+                  valueColor: ColorDanger.danger400,
+                },
               ]}
             />
           </XStack>
@@ -122,7 +131,7 @@ export default function TransaksiPage() {
               <TouchableOpacity key={tx.id}>
                 <ShadowCard
                   backgroundColor={
-                    tx.status === "Void" ? "#FFF5F5" : "$background"
+                    tx.status === "Void" ? ColorDanger.danger25 : "$background"
                   }
                   padding="$4"
                   gap="$2"
@@ -135,14 +144,18 @@ export default function TransaksiPage() {
                   </XStack>
                   <XStack alignItems="center" gap="$3">
                     <XStack alignItems="center" gap={4}>
-                      <Ionicons name="time-outline" size={13} color="#9CA3AF" />
+                      <Ionicons
+                        name="time-outline"
+                        size={13}
+                        color={ColorNeutral.neutral400}
+                      />
                       <TextBodySm color="$colorSecondary">{tx.time}</TextBodySm>
                     </XStack>
                     <XStack alignItems="center" gap={4}>
                       <Ionicons
                         name="person-outline"
                         size={13}
-                        color="#9CA3AF"
+                        color={ColorNeutral.neutral400}
                       />
                       <TextBodySm color="$colorSecondary">
                         {tx.table}
@@ -155,7 +168,9 @@ export default function TransaksiPage() {
                   <XStack alignItems="center" justifyContent="space-between">
                     <TextBodyLg
                       fontWeight="700"
-                      color={tx.status === "Void" ? "#DC2626" : "$color"}
+                      color={
+                        tx.status === "Void" ? ColorDanger.danger600 : "$color"
+                      }
                       textDecorationLine={
                         tx.status === "Void" ? "line-through" : "none"
                       }
@@ -165,7 +180,7 @@ export default function TransaksiPage() {
                     <Ionicons
                       name="chevron-forward"
                       size={16}
-                      color="#9CA3AF"
+                      color={ColorNeutral.neutral400}
                     />
                   </XStack>
                 </ShadowCard>

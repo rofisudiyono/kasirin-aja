@@ -5,11 +5,13 @@
  */
 import { styled, YStack } from "tamagui";
 
+import { ColorNeutral } from "@/themes/Colors";
+
 export const ShadowCard = styled(YStack, {
   name: "ShadowCard",
   backgroundColor: "$background",
   borderRadius: 14,
-  shadowColor: "#94A3B8",
+  shadowColor: ColorNeutral.neutralShadow,
   shadowOpacity: 0.18,
   shadowRadius: 8,
   elevation: 2,

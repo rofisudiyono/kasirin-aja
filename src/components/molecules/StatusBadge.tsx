@@ -7,17 +7,29 @@
 import React from "react";
 import { YStack } from "tamagui";
 
+import {
+  ColorAccentOrange,
+  ColorDanger,
+  ColorGreen,
+  ColorNeutral,
+} from "@/themes/Colors";
 import type { TxStatus } from "@/types";
 import { TextBodySm } from "../atoms/Typography";
 
 const STATUS_MAP: Record<TxStatus, { bg: string; color: string }> = {
-  Lunas: { bg: "#DCFCE7", color: "#16A34A" },
-  Void: { bg: "#FEE2E2", color: "#DC2626" },
-  Refund: { bg: "#FFEDD5", color: "#EA580C" },
+  Lunas: { bg: ColorGreen.green100, color: ColorGreen.green600 },
+  Void: { bg: ColorDanger.danger100, color: ColorDanger.danger600 },
+  Refund: {
+    bg: ColorAccentOrange.orange100,
+    color: ColorAccentOrange.orange600,
+  },
 };
 
 export function StatusBadge({ status }: { status: TxStatus }) {
-  const style = STATUS_MAP[status] ?? { bg: "#F3F4F6", color: "#6B7280" };
+  const style = STATUS_MAP[status] ?? {
+    bg: ColorNeutral.neutral100,
+    color: ColorNeutral.neutral500,
+  };
   return (
     <YStack
       backgroundColor={style.bg}

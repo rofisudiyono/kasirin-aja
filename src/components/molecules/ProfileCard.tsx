@@ -8,6 +8,8 @@ import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import { XStack, YStack } from "tamagui";
 
+import { ColorBase, ColorPrimary } from "@/themes/Colors";
+
 import { TextBodySm, TextH3 } from "../atoms/Typography";
 
 interface ProfileCardProps {
@@ -24,32 +26,37 @@ export function ProfileCard({
   showNotifications = false,
 }: ProfileCardProps) {
   return (
-    <YStack backgroundColor="#2563EB" borderRadius={16} padding="$4" gap="$3">
+    <YStack
+      backgroundColor={ColorPrimary.primary600}
+      borderRadius={16}
+      padding="$4"
+      gap="$3"
+    >
       <XStack alignItems="center" gap="$3">
         <YStack
           width={56}
           height={56}
           borderRadius={28}
-          backgroundColor="#BFDBFE"
+          backgroundColor={ColorPrimary.primary200}
           alignItems="center"
           justifyContent="center"
           overflow="hidden"
         >
-          <Ionicons name="person" size={28} color="white" />
+          <Ionicons name="person" size={28} color={ColorBase.white} />
         </YStack>
         <YStack flex={1} gap={2}>
-          <TextH3 fontWeight="700" color="white">
+          <TextH3 fontWeight="700" color={ColorBase.white}>
             {name}
           </TextH3>
-          <TextBodySm color="#BFDBFE">{role}</TextBodySm>
+          <TextBodySm color={ColorPrimary.primary200}>{role}</TextBodySm>
         </YStack>
         <YStack
-          backgroundColor="white"
+          backgroundColor={ColorBase.white}
           borderRadius={20}
           paddingHorizontal={12}
           paddingVertical={5}
         >
-          <TextBodySm fontWeight="700" color="#2563EB">
+          <TextBodySm fontWeight="700" color={ColorPrimary.primary600}>
             {status}
           </TextBodySm>
         </YStack>

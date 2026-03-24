@@ -25,6 +25,13 @@ import {
 import { CATEGORY_COLORS, CATEGORY_ICONS } from "@/constants/categoryStyles";
 import { orderTypeOptions, promoDefinitions } from "@/data/payment.data";
 import { cartAtom, type CartItem } from "@/store/cart";
+import {
+  ColorBase,
+  ColorDanger,
+  ColorGreen,
+  ColorNeutral,
+  ColorPrimary,
+} from "@/themes/Colors";
 import type { AppliedPromo, OrderType } from "@/types";
 import { formatPrice } from "@/utils";
 
@@ -59,14 +66,17 @@ function CartItemRow({
           style={[
             styles.itemIcon,
             {
-              backgroundColor: CATEGORY_COLORS[item.category]?.bg ?? "#F3F4F6",
+              backgroundColor:
+                CATEGORY_COLORS[item.category]?.bg ?? ColorNeutral.neutral100,
             },
           ]}
         >
           <Ionicons
             name={CATEGORY_ICONS[item.category] ?? "bag-outline"}
             size={26}
-            color={CATEGORY_COLORS[item.category]?.color ?? "#6B7280"}
+            color={
+              CATEGORY_COLORS[item.category]?.color ?? ColorNeutral.neutral500
+            }
           />
         </View>
 
@@ -110,7 +120,11 @@ function CartItemRow({
                   }
                 >
                   <View style={styles.qtyBtn}>
-                    <Ionicons name="remove" size={16} color="#374151" />
+                    <Ionicons
+                      name="remove"
+                      size={16}
+                      color={ColorNeutral.neutral700}
+                    />
                   </View>
                 </TouchableOpacity>
 
@@ -123,7 +137,7 @@ function CartItemRow({
                   onPress={() => onUpdateQty(item.cartId, item.quantity + 1)}
                 >
                   <View style={[styles.qtyBtn, styles.qtyBtnPrimary]}>
-                    <Ionicons name="add" size={16} color="white" />
+                    <Ionicons name="add" size={16} color={ColorBase.white} />
                   </View>
                 </TouchableOpacity>
               </XStack>
@@ -137,7 +151,11 @@ function CartItemRow({
                 onPress={() => onRemove(item.cartId)}
               >
                 <View style={styles.deleteBtn}>
-                  <Ionicons name="trash-outline" size={16} color="#DC2626" />
+                  <Ionicons
+                    name="trash-outline"
+                    size={16}
+                    color={ColorDanger.danger600}
+                  />
                 </View>
               </TouchableOpacity>
             </YStack>
@@ -167,14 +185,14 @@ function CartItemRow({
               value={noteInput}
               onChangeText={setNoteInput}
               placeholder="Contoh: Tidak pedas, kurangi gula..."
-              placeholderTextColor="#9CA3AF"
+              placeholderTextColor={ColorNeutral.neutral400}
               style={styles.noteInputText}
               multiline
               autoFocus
             />
             <TouchableOpacity activeOpacity={0.85} onPress={handleNoteSave}>
               <View style={styles.noteSaveBtn}>
-                <TextBodyLg fontWeight="700" color="white">
+                <TextBodyLg fontWeight="700" color={ColorBase.white}>
                   Simpan Catatan
                 </TextBodyLg>
               </View>
@@ -266,7 +284,11 @@ export default function KeranjangPage() {
         actions={
           <TouchableOpacity activeOpacity={0.7} onPress={handleClearCart}>
             <View style={styles.trashBtn}>
-              <Ionicons name="trash-outline" size={18} color="#DC2626" />
+              <Ionicons
+                name="trash-outline"
+                size={18}
+                color={ColorDanger.danger600}
+              />
             </View>
           </TouchableOpacity>
         }
@@ -287,7 +309,7 @@ export default function KeranjangPage() {
               value={customerName}
               onChangeText={setCustomerName}
               placeholder="Opsional"
-              placeholderTextColor="#9CA3AF"
+              placeholderTextColor={ColorNeutral.neutral400}
               style={styles.inputField}
             />
 
@@ -303,7 +325,7 @@ export default function KeranjangPage() {
               value={tableNumber}
               onChangeText={setTableNumber}
               placeholder="Opsional"
-              placeholderTextColor="#9CA3AF"
+              placeholderTextColor={ColorNeutral.neutral400}
               style={styles.inputField}
               keyboardType="number-pad"
             />
@@ -329,7 +351,9 @@ export default function KeranjangPage() {
                 >
                   <TextBodySm
                     fontWeight="600"
-                    color={orderType === type ? "white" : "$colorSecondary"}
+                    color={
+                      orderType === type ? ColorBase.white : "$colorSecondary"
+                    }
                   >
                     {type}
                   </TextBodySm>
@@ -342,7 +366,11 @@ export default function KeranjangPage() {
           <View style={styles.card}>
             {cart.length === 0 ? (
               <YStack alignItems="center" paddingVertical={24} gap={8}>
-                <Ionicons name="bag-outline" size={40} color="#9CA3AF" />
+                <Ionicons
+                  name="bag-outline"
+                  size={40}
+                  color={ColorNeutral.neutral400}
+                />
                 <TextBody color="$colorSecondary">
                   Keranjang masih kosong
                 </TextBody>
@@ -370,14 +398,14 @@ export default function KeranjangPage() {
                   value={promoCode}
                   onChangeText={setPromoCode}
                   placeholder="Masukkan kode promo"
-                  placeholderTextColor="#9CA3AF"
+                  placeholderTextColor={ColorNeutral.neutral400}
                   style={styles.promoInput}
                   autoCapitalize="characters"
                 />
               </View>
               <TouchableOpacity activeOpacity={0.85} onPress={handleApplyPromo}>
                 <View style={styles.promoApplyBtn}>
-                  <TextBodySm fontWeight="700" color="white">
+                  <TextBodySm fontWeight="700" color={ColorBase.white}>
                     Pakai
                   </TextBodySm>
                 </View>
@@ -391,8 +419,16 @@ export default function KeranjangPage() {
                 marginTop={10}
                 style={styles.promoChip}
               >
-                <Ionicons name="pricetag-outline" size={14} color="#16A34A" />
-                <TextCaption color="#16A34A" fontWeight="600" flex={1}>
+                <Ionicons
+                  name="pricetag-outline"
+                  size={14}
+                  color={ColorGreen.green600}
+                />
+                <TextCaption
+                  color={ColorGreen.green600}
+                  fontWeight="600"
+                  flex={1}
+                >
                   {appliedPromo.label}
                 </TextCaption>
                 <TouchableOpacity
@@ -427,7 +463,7 @@ export default function KeranjangPage() {
             {discount > 0 && (
               <XStack justifyContent="space-between" marginBottom={10}>
                 <TextBody color="$colorSecondary">Diskon</TextBody>
-                <TextBody fontWeight="600" color="#16A34A">
+                <TextBody fontWeight="600" color={ColorGreen.green600}>
                   -{formatPrice(discount)}
                 </TextBody>
               </XStack>
@@ -478,7 +514,7 @@ export default function KeranjangPage() {
               })
             }
           >
-            <TextBodyLg fontWeight="700" color="white">
+            <TextBodyLg fontWeight="700" color={ColorBase.white}>
               Lanjut Bayar
             </TextBodyLg>
           </TouchableOpacity>
@@ -493,13 +529,13 @@ export default function KeranjangPage() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F8FAFF",
+    backgroundColor: ColorBase.bgScreen,
   },
   card: {
-    backgroundColor: "white",
+    backgroundColor: ColorBase.white,
     borderRadius: 16,
     padding: 16,
-    shadowColor: "#000",
+    shadowColor: ColorBase.black,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.06,
     shadowRadius: 8,
@@ -509,24 +545,24 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: "#FEF2F2",
+    backgroundColor: ColorDanger.danger50,
     alignItems: "center",
     justifyContent: "center",
   },
   inputField: {
-    backgroundColor: "#F9FAFB",
+    backgroundColor: ColorNeutral.neutral50,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: "#E5E7EB",
+    borderColor: ColorNeutral.neutral200,
     paddingHorizontal: 14,
     paddingVertical: 12,
     fontSize: 14,
-    color: "#111827",
+    color: ColorNeutral.neutral900,
     fontFamily: "Poppins_400Regular",
   },
   segmentControl: {
     flexDirection: "row",
-    backgroundColor: "#F3F4F6",
+    backgroundColor: ColorNeutral.neutral100,
     borderRadius: 24,
     padding: 4,
   },
@@ -537,7 +573,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   segmentBtnActive: {
-    backgroundColor: "#2563EB",
+    backgroundColor: ColorPrimary.primary600,
   },
   cartItemRow: {
     flexDirection: "row",
@@ -556,46 +592,46 @@ const styles = StyleSheet.create({
     height: 32,
     borderRadius: 16,
     borderWidth: 1.5,
-    borderColor: "#E5E7EB",
+    borderColor: ColorNeutral.neutral200,
     alignItems: "center",
     justifyContent: "center",
   },
   qtyBtnPrimary: {
-    backgroundColor: "#2563EB",
-    borderColor: "#2563EB",
+    backgroundColor: ColorPrimary.primary600,
+    borderColor: ColorPrimary.primary600,
   },
   deleteBtn: {
     width: 32,
     height: 32,
     borderRadius: 16,
     borderWidth: 1.5,
-    borderColor: "#FEE2E2",
-    backgroundColor: "#FEF2F2",
+    borderColor: ColorDanger.danger100,
+    backgroundColor: ColorDanger.danger50,
     alignItems: "center",
     justifyContent: "center",
   },
   divider: {
     height: 1,
-    backgroundColor: "#F3F4F6",
+    backgroundColor: ColorNeutral.neutral100,
     marginVertical: 12,
   },
   promoInputWrapper: {
     flex: 1,
-    backgroundColor: "#F9FAFB",
+    backgroundColor: ColorNeutral.neutral50,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: "#E5E7EB",
+    borderColor: ColorNeutral.neutral200,
     paddingHorizontal: 14,
     justifyContent: "center",
     height: 48,
   },
   promoInput: {
     fontSize: 14,
-    color: "#111827",
+    color: ColorNeutral.neutral900,
     fontFamily: "Poppins_400Regular",
   },
   promoApplyBtn: {
-    backgroundColor: "#2563EB",
+    backgroundColor: ColorPrimary.primary600,
     borderRadius: 12,
     paddingHorizontal: 20,
     height: 48,
@@ -603,29 +639,29 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   promoChip: {
-    backgroundColor: "#F0FDF4",
+    backgroundColor: ColorGreen.green50,
     borderRadius: 20,
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderWidth: 1,
-    borderColor: "#BBF7D0",
+    borderColor: ColorGreen.green200,
   },
   toggleTrack: {
     width: 36,
     height: 20,
     borderRadius: 10,
-    backgroundColor: "#D1D5DB",
+    backgroundColor: ColorNeutral.neutral300,
     justifyContent: "center",
     paddingHorizontal: 2,
   },
   toggleTrackActive: {
-    backgroundColor: "#16A34A",
+    backgroundColor: ColorGreen.green600,
   },
   toggleThumb: {
     width: 16,
     height: 16,
     borderRadius: 8,
-    backgroundColor: "white",
+    backgroundColor: ColorBase.white,
     alignSelf: "flex-start",
   },
   toggleThumbActive: {
@@ -636,9 +672,9 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    backgroundColor: "white",
+    backgroundColor: ColorBase.white,
     borderTopWidth: 1,
-    borderTopColor: "#F3F4F6",
+    borderTopColor: ColorNeutral.neutral100,
     paddingHorizontal: 16,
     paddingTop: 12,
     paddingBottom: 28,
@@ -648,7 +684,7 @@ const styles = StyleSheet.create({
     height: 52,
     borderRadius: 14,
     borderWidth: 1.5,
-    borderColor: "#E5E7EB",
+    borderColor: ColorNeutral.neutral200,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -656,18 +692,18 @@ const styles = StyleSheet.create({
     flex: 2,
     height: 52,
     borderRadius: 14,
-    backgroundColor: "#2563EB",
+    backgroundColor: ColorPrimary.primary600,
     alignItems: "center",
     justifyContent: "center",
   },
   // Note modal
   modalOverlay: {
     flex: 1,
-    backgroundColor: "rgba(0,0,0,0.4)",
+    backgroundColor: "rgba(0, 0, 0, 0.4)",
     justifyContent: "flex-end",
   },
   noteSheet: {
-    backgroundColor: "white",
+    backgroundColor: ColorBase.white,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     paddingHorizontal: 20,
@@ -677,25 +713,25 @@ const styles = StyleSheet.create({
   dragHandle: {
     width: 40,
     height: 4,
-    backgroundColor: "#E5E7EB",
+    backgroundColor: ColorNeutral.neutral200,
     borderRadius: 2,
     alignSelf: "center",
     marginBottom: 16,
   },
   noteInputText: {
-    backgroundColor: "#F3F4F6",
+    backgroundColor: ColorNeutral.neutral100,
     borderRadius: 12,
     paddingHorizontal: 14,
     paddingVertical: 12,
     fontSize: 14,
-    color: "#111827",
+    color: ColorNeutral.neutral900,
     minHeight: 80,
     textAlignVertical: "top",
     marginBottom: 16,
     fontFamily: "Poppins_400Regular",
   },
   noteSaveBtn: {
-    backgroundColor: "#2563EB",
+    backgroundColor: ColorPrimary.primary600,
     borderRadius: 14,
     height: 52,
     alignItems: "center",

@@ -1,6 +1,7 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
 
+import { ColorNeutral } from "@/themes/Colors";
 import type { DottedSeparatorProps } from "./DottedSeparator.types";
 
 const styles = StyleSheet.create({
@@ -13,7 +14,7 @@ const styles = StyleSheet.create({
   dot: {
     width: 4,
     height: 1,
-    backgroundColor: "#D1D5DB",
+    backgroundColor: ColorNeutral.neutral300,
     borderRadius: 1,
   },
 });

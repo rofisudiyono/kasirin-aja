@@ -9,6 +9,14 @@ import React from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { YStack } from "tamagui";
 
+import {
+  ColorBase,
+  ColorNeutral,
+  ColorPrimary,
+  ColorSky,
+  ColorSuccess,
+} from "@/themes/Colors";
+
 import { TextBodyLg, TextCaption } from "../atoms/Typography";
 import type { PaymentMethodCardProps } from "./PaymentMethodCard/PaymentMethodCard.types";
 
@@ -19,15 +27,15 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: "#E5E7EB",
-    backgroundColor: "white",
+    borderColor: ColorNeutral.neutral200,
+    backgroundColor: ColorBase.white,
     alignItems: "center",
     gap: 12,
     marginVertical: 8,
   },
   methodCardSelected: {
-    borderColor: "#2563EB",
-    backgroundColor: "#F0F9FF",
+    borderColor: ColorPrimary.primary600,
+    backgroundColor: ColorSky.sky50,
   },
   methodIcon: {
     width: 48,
@@ -40,7 +48,7 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     borderRadius: 12,
-    backgroundColor: "#10B981",
+    backgroundColor: ColorSuccess.success500,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -68,10 +76,14 @@ export function PaymentMethodCard({
         </YStack>
         {selected ? (
           <View style={styles.checkCircle}>
-            <Ionicons name="checkmark" size={16} color="white" />
+            <Ionicons name="checkmark" size={16} color={ColorBase.white} />
           </View>
         ) : (
-          <Ionicons name="chevron-forward" size={18} color="#9CA3AF" />
+          <Ionicons
+            name="chevron-forward"
+            size={18}
+            color={ColorNeutral.neutral400}
+          />
         )}
       </View>
     </TouchableOpacity>

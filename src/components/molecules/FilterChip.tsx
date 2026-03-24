@@ -7,6 +7,8 @@ import React from "react";
 import { TouchableOpacity } from "react-native";
 import { YStack } from "tamagui";
 
+import { ColorBase } from "@/themes/Colors";
+
 import { TextBodySm } from "../atoms/Typography";
 
 export interface FilterChipProps {
@@ -35,7 +37,7 @@ export function FilterChip({
       >
         <TextBodySm
           fontWeight="600"
-          color={active ? "white" : "$colorSecondary"}
+          color={active ? ColorBase.white : "$colorSecondary"}
         >
           {label}
         </TextBodySm>

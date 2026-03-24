@@ -192,7 +192,9 @@ export default function LoginPage() {
                   width={20}
                   height={20}
                   borderRadius={4}
-                  backgroundColor={rememberMe ? "$primary" : "transparent"}
+                  backgroundColor={
+                    rememberMe ? "$primary" : ColorBase.transparent
+                  }
                   borderWidth={2}
                   borderColor={rememberMe ? "$primary" : "$borderColor"}
                   alignItems="center"

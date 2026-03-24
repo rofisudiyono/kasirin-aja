@@ -17,6 +17,13 @@ import {
 } from "@/components/index";
 import { mockReceiptItems, storeInfo } from "@/data/receipt.data";
 import { cartAtom } from "@/store/cart";
+import {
+  ColorBase,
+  ColorDanger,
+  ColorGreen,
+  ColorNeutral,
+  ColorPrimary,
+} from "@/themes/Colors";
 import { formatPrice, generateOrderNumber, getCurrentDateTime } from "@/utils";
 
 // ─── Main Page ────────────────────────────────────────────────────────────────
@@ -66,7 +73,7 @@ export default function PembayaranSuksesPage() {
           {/* Success header */}
           <YStack alignItems="center" gap={12}>
             <View style={styles.successIcon}>
-              <Ionicons name="checkmark" size={40} color="white" />
+              <Ionicons name="checkmark" size={40} color={ColorBase.white} />
             </View>
             <TextH2 fontWeight="700" textAlign="center">
               Pembayaran Berhasil!
@@ -84,7 +91,11 @@ export default function PembayaranSuksesPage() {
             {/* Store info */}
             <YStack alignItems="center" gap={4} paddingVertical={16}>
               <View style={styles.storeIcon}>
-                <Ionicons name="storefront" size={24} color="#2563EB" />
+                <Ionicons
+                  name="storefront"
+                  size={24}
+                  color={ColorPrimary.primary600}
+                />
               </View>
               <TextBodyLg fontWeight="700">{storeInfo.name}</TextBodyLg>
               <TextCaption color="$colorSecondary" textAlign="center">
@@ -159,7 +170,7 @@ export default function PembayaranSuksesPage() {
                   <TextBodySm color="$colorSecondary">
                     Diskon (DISKON10)
                   </TextBodySm>
-                  <TextBodySm fontWeight="600" color="#DC2626">
+                  <TextBodySm fontWeight="600" color={ColorDanger.danger600}>
                     -{formatPrice(discount)}
                   </TextBodySm>
                 </XStack>
@@ -174,7 +185,7 @@ export default function PembayaranSuksesPage() {
                 marginTop={4}
               >
                 <TextBodyLg fontWeight="700">TOTAL</TextBodyLg>
-                <TextBodyLg fontWeight="700" color="#16A34A">
+                <TextBodyLg fontWeight="700" color={ColorGreen.green600}>
                   {formatPrice(total)}
                 </TextBodyLg>
               </XStack>
@@ -200,7 +211,7 @@ export default function PembayaranSuksesPage() {
                   </XStack>
                   <XStack justifyContent="space-between">
                     <TextBodySm color="$colorSecondary">Kembalian</TextBodySm>
-                    <TextBodySm fontWeight="700" color="#16A34A">
+                    <TextBodySm fontWeight="700" color={ColorGreen.green600}>
                       {formatPrice(change)}
                     </TextBodySm>
                   </XStack>
@@ -238,7 +249,7 @@ export default function PembayaranSuksesPage() {
               style={styles.outlineBtn}
               onPress={() => {}}
             >
-              <TextBodyLg fontWeight="700" color="#374151">
+              <TextBodyLg fontWeight="700" color={ColorNeutral.neutral700}>
                 Cetak Struk
               </TextBodyLg>
             </TouchableOpacity>
@@ -247,7 +258,7 @@ export default function PembayaranSuksesPage() {
               style={styles.outlineBtn}
               onPress={() => {}}
             >
-              <TextBodyLg fontWeight="700" color="#374151">
+              <TextBodyLg fontWeight="700" color={ColorNeutral.neutral700}>
                 Bagikan
               </TextBodyLg>
             </TouchableOpacity>
@@ -259,7 +270,7 @@ export default function PembayaranSuksesPage() {
             style={styles.newTransBtn}
             onPress={handleNewTransaction}
           >
-            <TextBodyLg fontWeight="700" color="white">
+            <TextBodyLg fontWeight="700" color={ColorBase.white}>
               Transaksi Baru +
             </TextBodyLg>
           </TouchableOpacity>
@@ -268,7 +279,7 @@ export default function PembayaranSuksesPage() {
           <TouchableOpacity activeOpacity={0.7} onPress={handleGoHome}>
             <TextBody
               fontWeight="600"
-              color="#2563EB"
+              color={ColorPrimary.primary600}
               textAlign="center"
               paddingVertical={8}
             >
@@ -286,27 +297,27 @@ export default function PembayaranSuksesPage() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F8FAFF",
+    backgroundColor: ColorBase.bgScreen,
   },
   successIcon: {
     width: 72,
     height: 72,
     borderRadius: 36,
-    backgroundColor: "#16A34A",
+    backgroundColor: ColorGreen.green600,
     alignItems: "center",
     justifyContent: "center",
-    shadowColor: "#16A34A",
+    shadowColor: ColorGreen.green600,
     shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.3,
     shadowRadius: 12,
     elevation: 6,
   },
   receiptCard: {
-    backgroundColor: "white",
+    backgroundColor: ColorBase.white,
     borderRadius: 20,
     paddingHorizontal: 20,
     paddingVertical: 8,
-    shadowColor: "#000",
+    shadowColor: ColorBase.black,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.08,
     shadowRadius: 12,
@@ -316,7 +327,7 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 12,
-    backgroundColor: "#EFF6FF",
+    backgroundColor: ColorPrimary.primary50,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -325,15 +336,15 @@ const styles = StyleSheet.create({
     height: 52,
     borderRadius: 14,
     borderWidth: 1.5,
-    borderColor: "#E5E7EB",
-    backgroundColor: "white",
+    borderColor: ColorNeutral.neutral200,
+    backgroundColor: ColorBase.white,
     alignItems: "center",
     justifyContent: "center",
   },
   newTransBtn: {
     height: 52,
     borderRadius: 14,
-    backgroundColor: "#16A34A",
+    backgroundColor: ColorGreen.green600,
     alignItems: "center",
     justifyContent: "center",
   },

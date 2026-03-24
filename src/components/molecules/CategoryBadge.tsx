@@ -7,6 +7,7 @@ import React from "react";
 import { YStack } from "tamagui";
 
 import { CATEGORY_COLORS } from "@/constants/categoryStyles";
+import { ColorNeutral } from "@/themes/Colors";
 import type { ProductCategory } from "@/types";
 import { TextCaption } from "../atoms/Typography";
 
@@ -16,8 +17,8 @@ interface CategoryBadgeProps {
 
 export function CategoryBadge({ category }: CategoryBadgeProps) {
   const style = CATEGORY_COLORS[category] ?? {
-    bg: "#F3F4F6",
-    color: "#6B7280",
+    bg: ColorNeutral.neutral100,
+    color: ColorNeutral.neutral500,
   };
   return (
     <YStack

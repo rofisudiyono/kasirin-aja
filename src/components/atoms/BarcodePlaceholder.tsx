@@ -7,6 +7,7 @@ import React from "react";
 import { StyleSheet, View } from "react-native";
 
 import { barcodeBars } from "@/data/barcode.data";
+import { ColorBase, ColorNeutral } from "@/themes/Colors";
 
 const styles = StyleSheet.create({
   container: {
@@ -30,7 +31,10 @@ export function BarcodePlaceholder() {
             styles.bar,
             {
               width,
-              backgroundColor: index % 2 === 0 ? "#111827" : "transparent",
+              backgroundColor:
+                index % 2 === 0
+                  ? ColorNeutral.neutral900
+                  : ColorBase.transparent,
             },
           ]}
         />

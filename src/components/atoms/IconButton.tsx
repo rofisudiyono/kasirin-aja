@@ -4,6 +4,7 @@
  * Replaces the repetitive TouchableOpacity > YStack > Ionicons pattern
  * that appears across every screen header and action area.
  */
+import { ColorNeutral } from "@/themes/Colors";
 import type { IoniconName } from "@/types";
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
@@ -30,7 +31,7 @@ export function IconButton({
   iconSize = 20,
   shape = "circle",
   bg = "$backgroundSecondary",
-  iconColor = "#374151",
+  iconColor = ColorNeutral.neutral700,
   onPress,
   disabled,
 }: IconButtonProps) {
