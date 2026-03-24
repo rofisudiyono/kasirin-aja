@@ -18,12 +18,19 @@ import {
 } from "@/components";
 import { ActionCardButton } from "@/components/atoms/ActionCardButton";
 import { recentTransactions } from "@/data/transactions";
+import {
+  ColorAccentPurple,
+  ColorBase,
+  ColorGreen,
+  ColorPrimary,
+  ColorWarning,
+} from "@/themes/Colors";
 
 export default function HomePage() {
   const router = useRouter();
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#F8FAFF" }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: ColorBase.bgScreen }}>
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* ── Header ── */}
         <XStack
@@ -37,12 +44,12 @@ export default function HomePage() {
             width={48}
             height={48}
             borderRadius={24}
-            backgroundColor="#DBEAFE"
+            backgroundColor={ColorPrimary.primary100}
             alignItems="center"
             justifyContent="center"
             overflow="hidden"
           >
-            <Ionicons name="person" size={26} color="#2563EB" />
+            <Ionicons name="person" size={26} color={ColorPrimary.primary600} />
           </YStack>
           <YStack flex={1}>
             <TextH3 fontWeight="700">Budi Santoso</TextH3>
@@ -58,7 +65,7 @@ export default function HomePage() {
         <YStack gap="$3" paddingHorizontal="$4" paddingBottom="$6">
           {/* ── Shift Aktif Card ── */}
           <YStack
-            backgroundColor="#2563EB"
+            backgroundColor={ColorPrimary.primary600}
             borderRadius={16}
             padding="$4"
             gap="$3"
@@ -68,13 +75,15 @@ export default function HomePage() {
                 width={8}
                 height={8}
                 borderRadius={4}
-                backgroundColor="#4ADE80"
+                backgroundColor={ColorGreen.green400}
               />
-              <TextBodyLg fontWeight="700" color="white">
+              <TextBodyLg fontWeight="700" color={ColorBase.white}>
                 Shift Aktif
               </TextBodyLg>
             </XStack>
-            <TextBodySm color="#BFDBFE">Mulai: 08:00 WIB</TextBodySm>
+            <TextBodySm color={ColorPrimary.primary200}>
+              Mulai: 08:00 WIB
+            </TextBodySm>
 
             <XStack gap="$3">
               <YStack
@@ -84,8 +93,10 @@ export default function HomePage() {
                 padding="$3"
                 gap={4}
               >
-                <TextBodySm color="#BFDBFE">Total Transaksi</TextBodySm>
-                <TextH2 fontWeight="700" color="white">
+                <TextBodySm color={ColorPrimary.primary200}>
+                  Total Transaksi
+                </TextBodySm>
+                <TextH2 fontWeight="700" color={ColorBase.white}>
                   24
                 </TextH2>
               </YStack>
@@ -96,8 +107,10 @@ export default function HomePage() {
                 padding="$3"
                 gap={4}
               >
-                <TextBodySm color="#BFDBFE">Pendapatan</TextBodySm>
-                <TextBodyLg fontWeight="700" color="white">
+                <TextBodySm color={ColorPrimary.primary200}>
+                  Pendapatan
+                </TextBodySm>
+                <TextBodyLg fontWeight="700" color={ColorBase.white}>
                   Rp 1.250....
                 </TextBodyLg>
               </YStack>
@@ -116,7 +129,9 @@ export default function HomePage() {
             size="lg"
             fullWidth
             title="Mulai Transaksi"
-            icon={<Ionicons name="cart-outline" size={22} color="white" />}
+            icon={
+              <Ionicons name="cart-outline" size={22} color={ColorBase.white} />
+            }
             onPress={() => router.push("/transaksi-baru")}
           />
 
@@ -126,20 +141,20 @@ export default function HomePage() {
               {
                 iconName: "pause-circle-outline" as const,
                 label: "Tahan Order",
-                iconBg: "#FFFBEB",
-                iconColor: "#D97706",
+                iconBg: ColorWarning.warning50,
+                iconColor: ColorWarning.warning600,
               },
               {
                 iconName: "time-outline" as const,
                 label: "Riwayat",
-                iconBg: "#F5F3FF",
-                iconColor: "#7C3AED",
+                iconBg: ColorAccentPurple.purple50,
+                iconColor: ColorAccentPurple.purple600,
               },
               {
                 iconName: "cube-outline" as const,
                 label: "Inventori",
-                iconBg: "#F0FDF4",
-                iconColor: "#16A34A",
+                iconBg: ColorGreen.green50,
+                iconColor: ColorGreen.green600,
               },
             ].map((item) => (
               <ActionCardButton
@@ -154,18 +169,26 @@ export default function HomePage() {
 
           {/* ── Low stock warning ── */}
           <XStack
-            backgroundColor="#FEF3C7"
+            backgroundColor={ColorWarning.warning100}
             borderRadius={12}
             padding="$3"
             alignItems="center"
             gap="$2"
           >
-            <Ionicons name="warning-outline" size={18} color="#D97706" />
-            <TextBodySm fontWeight="500" color="#92400E" flex={1}>
+            <Ionicons
+              name="warning-outline"
+              size={18}
+              color={ColorWarning.warning600}
+            />
+            <TextBodySm
+              fontWeight="500"
+              color={ColorWarning.warning800}
+              flex={1}
+            >
               3 produk stok hampir habis
             </TextBodySm>
             <TouchableOpacity>
-              <TextBodySm fontWeight="700" color="#D97706">
+              <TextBodySm fontWeight="700" color={ColorWarning.warning600}>
                 Lihat
               </TextBodySm>
             </TouchableOpacity>

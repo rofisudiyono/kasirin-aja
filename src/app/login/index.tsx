@@ -19,6 +19,14 @@ import {
   TextH3,
 } from "@/components";
 import { useAuth } from "@/lib/auth";
+import {
+  ColorBase,
+  ColorGreen,
+  ColorNeutral,
+  ColorPrimary,
+  ColorTeal,
+  ColorWarning,
+} from "@/themes/Colors";
 
 export default function LoginPage() {
   const { login } = useAuth();
@@ -34,7 +42,7 @@ export default function LoginPage() {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#EFF4FF" }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: ColorPrimary.primary25 }}>
       <KeyboardAvoidingView
         style={{ flex: 1 }}
         behavior={Platform.OS === "ios" ? "padding" : undefined}
@@ -55,11 +63,15 @@ export default function LoginPage() {
               width={56}
               height={56}
               borderRadius="$4"
-              backgroundColor="#0F766E"
+              backgroundColor={ColorTeal.teal700}
               alignItems="center"
               justifyContent="center"
             >
-              <Ionicons name="storefront-outline" size={28} color="white" />
+              <Ionicons
+                name="storefront-outline"
+                size={28}
+                color={ColorBase.white}
+              />
             </YStack>
             <TextH3 fontWeight="700" marginTop="$2">
               Kasir Toko Makmur
@@ -77,7 +89,7 @@ export default function LoginPage() {
             borderRadius="$6"
             padding="$4"
             gap="$4"
-            shadowColor="#94A3B8"
+            shadowColor={ColorNeutral.neutralShadow}
             shadowOpacity={0.2}
             shadowRadius={12}
             shadowOffset={{ width: 0, height: 2 }}
@@ -95,11 +107,15 @@ export default function LoginPage() {
                 width={36}
                 height={36}
                 borderRadius={18}
-                backgroundColor="#DCFCE7"
+                backgroundColor={ColorGreen.green100}
                 alignItems="center"
                 justifyContent="center"
               >
-                <Ionicons name="person-outline" size={18} color="#16A34A" />
+                <Ionicons
+                  name="person-outline"
+                  size={18}
+                  color={ColorGreen.green600}
+                />
               </YStack>
               <YStack flex={1}>
                 <TextBodyLg fontWeight="600">Mode Kasir</TextBodyLg>
@@ -129,7 +145,11 @@ export default function LoginPage() {
               placeholder="Email kasir aktif"
               hint="Email kasir aktif"
               leftIcon={
-                <Ionicons name="mail-outline" size={16} color="#9CA3AF" />
+                <Ionicons
+                  name="mail-outline"
+                  size={16}
+                  color={ColorNeutral.neutral400}
+                />
               }
               keyboardType="email-address"
             />
@@ -145,7 +165,7 @@ export default function LoginPage() {
                 <Ionicons
                   name="lock-closed-outline"
                   size={16}
-                  color="#9CA3AF"
+                  color={ColorNeutral.neutral400}
                 />
               }
               rightIcon={
@@ -155,7 +175,7 @@ export default function LoginPage() {
                   <Ionicons
                     name={showPassword ? "eye-off-outline" : "eye-outline"}
                     size={18}
-                    color="#9CA3AF"
+                    color={ColorNeutral.neutral400}
                   />
                 </TouchableOpacity>
               }
@@ -178,7 +198,9 @@ export default function LoginPage() {
                   alignItems="center"
                   justifyContent="center"
                 >
-                  {rememberMe && <TextBodySm color="white">✓</TextBodySm>}
+                  {rememberMe && (
+                    <TextBodySm color={ColorBase.white}>✓</TextBodySm>
+                  )}
                 </YStack>
                 <TextBodySm color="$colorSecondary">
                   Ingat sesi perangkat ini
@@ -199,7 +221,13 @@ export default function LoginPage() {
               size="lg"
               fullWidth
               title="Masuk Sekarang"
-              icon={<Ionicons name="log-in-outline" size={18} color="white" />}
+              icon={
+                <Ionicons
+                  name="log-in-outline"
+                  size={18}
+                  color={ColorBase.white}
+                />
+              }
             />
 
             {/* Help + Shift info */}
@@ -214,7 +242,7 @@ export default function LoginPage() {
                 <Ionicons
                   name="help-circle-outline"
                   size={20}
-                  color="#6B7280"
+                  color={ColorNeutral.neutral500}
                 />
                 <TextBodySm fontWeight="600" textAlign="center">
                   Butuh bantuan?
@@ -234,7 +262,11 @@ export default function LoginPage() {
                 padding="$3"
                 gap={4}
               >
-                <Ionicons name="sunny-outline" size={20} color="#D97706" />
+                <Ionicons
+                  name="sunny-outline"
+                  size={20}
+                  color={ColorWarning.warning600}
+                />
                 <TextBodySm fontWeight="600" textAlign="center">
                   Buka shift
                 </TextBodySm>

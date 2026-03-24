@@ -16,6 +16,7 @@ import {
   TextBodySm,
 } from "@/components";
 import { transactionListMock } from "@/data/transactions";
+import { ColorBase, ColorNeutral, ColorPrimary } from "@/themes/Colors";
 import type { FilterTab } from "@/types";
 
 export default function TransaksiPage() {
@@ -27,7 +28,7 @@ export default function TransaksiPage() {
       : transactionListMock.filter((t) => t.status === activeFilter);
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#F8FAFF" }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: ColorBase.bgScreen }}>
       {/* ── Header ── */}
       <PageHeader
         title="Riwayat Transaksi"
@@ -70,11 +71,19 @@ export default function TransaksiPage() {
                 alignItems="center"
                 gap={4}
               >
-                <Ionicons name="calendar-outline" size={14} color="#2563EB" />
+                <Ionicons
+                  name="calendar-outline"
+                  size={14}
+                  color={ColorPrimary.primary600}
+                />
                 <TextBodySm fontWeight="600" color="$primary">
                   Hari Ini
                 </TextBodySm>
-                <Ionicons name="chevron-down" size={12} color="#9CA3AF" />
+                <Ionicons
+                  name="chevron-down"
+                  size={12}
+                  color={ColorNeutral.neutral400}
+                />
               </XStack>
             </TouchableOpacity>
           </XStack>

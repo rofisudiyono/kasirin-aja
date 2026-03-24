@@ -22,6 +22,15 @@ import {
 import { CATEGORY_ICONS } from "@/constants/categoryStyles";
 import { categoryFilters } from "@/data/category.data";
 import { inventorySortOptions, products } from "@/data/inventory";
+import {
+  ColorBase,
+  ColorDanger,
+  ColorGreen,
+  ColorNeutral,
+  ColorPrimary,
+  ColorWarning,
+  ColorYellow,
+} from "@/themes/Colors";
 import type { CategoryFilter, SortOption } from "@/types";
 
 export default function InventoriPage() {
@@ -34,7 +43,7 @@ export default function InventoriPage() {
       : products.filter((p) => p.category === categoryFilter);
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#F8FAFF" }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: ColorBase.bgScreen }}>
       {/* ── Header ── */}
       <PageHeader
         title="Produk"
@@ -85,7 +94,11 @@ export default function InventoriPage() {
               />
             ))}
             <TouchableOpacity style={{ marginLeft: "auto" }}>
-              <Ionicons name="list-outline" size={18} color="#9CA3AF" />
+              <Ionicons
+                name="list-outline"
+                size={18}
+                color={ColorNeutral.neutral400}
+              />
             </TouchableOpacity>
           </XStack>
 
@@ -114,7 +127,9 @@ export default function InventoriPage() {
                   alignItems="center"
                   gap="$3"
                   backgroundColor={
-                    product.stockStatus === "empty" ? "#FFF5F5" : "$background"
+                    product.stockStatus === "empty"
+                      ? ColorDanger.danger25
+                      : "$background"
                   }
                 >
                   <YStack
@@ -129,7 +144,7 @@ export default function InventoriPage() {
                     <Ionicons
                       name={CATEGORY_ICONS[product.category] ?? "cube-outline"}
                       size={26}
-                      color="#9CA3AF"
+                      color={ColorNeutral.neutral400}
                     />
                   </YStack>
                   <YStack flex={1} gap={4}>
@@ -137,12 +152,15 @@ export default function InventoriPage() {
                       <TextBodyLg fontWeight="700">{product.name}</TextBodyLg>
                       {product.hasVariant && (
                         <YStack
-                          backgroundColor="#DBEAFE"
+                          backgroundColor={ColorPrimary.primary100}
                           borderRadius={20}
                           paddingHorizontal={8}
                           paddingVertical={2}
                         >
-                          <TextMicro fontWeight="600" color="#2563EB">
+                          <TextMicro
+                            fontWeight="600"
+                            color={ColorPrimary.primary600}
+                          >
                             Variant
                           </TextMicro>
                         </YStack>
@@ -175,28 +193,34 @@ export default function InventoriPage() {
                           fontWeight="700"
                           color={
                             product.stockStatus === "low"
-                              ? "#D97706"
-                              : "#16A34A"
+                              ? ColorWarning.warning600
+                              : ColorGreen.green600
                           }
                         >
                           Stok: {product.stock}
                         </TextBodySm>
                       )}
                     {product.stockStatus === "empty" && (
-                      <TextBodySm fontWeight="700" color="#DC2626">
+                      <TextBodySm
+                        fontWeight="700"
+                        color={ColorDanger.danger600}
+                      >
                         Stok: 0
                       </TextBodySm>
                     )}
                     <StockBadge stockStatus={product.stockStatus} />
                     {product.isNew && (
                       <YStack
-                        backgroundColor="#FEF9C3"
+                        backgroundColor={ColorYellow.yellow100}
                         borderRadius={6}
                         paddingHorizontal={6}
                         paddingVertical={2}
                         marginTop={2}
                       >
-                        <TextMicro fontWeight="700" color="#CA8A04">
+                        <TextMicro
+                          fontWeight="700"
+                          color={ColorYellow.yellow600}
+                        >
                           Produk Baru
                         </TextMicro>
                       </YStack>
@@ -204,7 +228,7 @@ export default function InventoriPage() {
                     <Ionicons
                       name="chevron-forward"
                       size={16}
-                      color="#9CA3AF"
+                      color={ColorNeutral.neutral400}
                     />
                   </YStack>
                 </XStack>
@@ -228,7 +252,7 @@ export default function InventoriPage() {
           shadowRadius={12}
           elevation={8}
         >
-          <TextBodyLg color="white" fontWeight="300" fontSize={28}>
+          <TextBodyLg color={ColorBase.white} fontWeight="300" fontSize={28}>
             +
           </TextBodyLg>
         </YStack>

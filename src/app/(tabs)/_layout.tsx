@@ -6,6 +6,7 @@ import { Text } from "tamagui";
 
 import { TAB_ICONS, TAB_LABELS } from "@/constants/navigation";
 import { useAuth } from "@/lib/auth";
+import { ColorBase, ColorNeutral, ColorPrimary } from "@/themes/Colors";
 
 export default function TabsLayout() {
   const { isLoggedIn } = useAuth();
@@ -24,7 +25,9 @@ export default function TabsLayout() {
             <Ionicons
               name={focused ? icons.active : icons.inactive}
               size={22}
-              color={focused ? "#2563EB" : "#9CA3AF"}
+              color={
+                focused ? ColorPrimary.primary600 : ColorNeutral.neutral400
+              }
             />
           );
         },
@@ -40,15 +43,19 @@ export default function TabsLayout() {
           </Text>
         ),
         tabBarStyle: {
-          backgroundColor: isDark ? "#111827" : "#FFFFFF",
-          borderTopColor: isDark ? "#374151" : "#E5E7EB",
+          backgroundColor: isDark ? ColorNeutral.neutral900 : ColorBase.white,
+          borderTopColor: isDark
+            ? ColorNeutral.neutral700
+            : ColorNeutral.neutral200,
           borderTopWidth: 1,
           height: Platform.OS === "ios" ? 84 : 64,
           paddingTop: 8,
           paddingBottom: Platform.OS === "ios" ? 24 : 8,
         },
-        tabBarActiveTintColor: "#2563EB",
-        tabBarInactiveTintColor: isDark ? "#9CA3AF" : "#6B7280",
+        tabBarActiveTintColor: ColorPrimary.primary600,
+        tabBarInactiveTintColor: isDark
+          ? ColorNeutral.neutral400
+          : ColorNeutral.neutral500,
       })}
     >
       <Tabs.Screen name="index" />

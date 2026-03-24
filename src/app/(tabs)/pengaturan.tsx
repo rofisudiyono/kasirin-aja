@@ -18,6 +18,15 @@ import {
 } from "@/components/index";
 import { useAuth } from "@/lib/auth";
 import type { IoniconName } from "@/types";
+import {
+  ColorAccentOrange,
+  ColorAccentPurple,
+  ColorBase,
+  ColorGreen,
+  ColorNeutral,
+  ColorPrimary,
+  ColorWarning,
+} from "@/themes/Colors";
 
 export default function PengaturanPage() {
   const { logout } = useAuth();
@@ -31,7 +40,7 @@ export default function PengaturanPage() {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#F8FAFF" }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: ColorBase.bgScreen }}>
       {/* ── Header ── */}
       <XStack
         paddingHorizontal="$4"
@@ -54,7 +63,7 @@ export default function PengaturanPage() {
         <YStack gap="$4" paddingHorizontal="$4" paddingBottom="$6">
           {/* ── User Profile Card ── */}
           <YStack
-            backgroundColor="#2563EB"
+            backgroundColor={ColorPrimary.primary600}
             borderRadius={16}
             padding="$4"
             gap="$3"
@@ -64,28 +73,23 @@ export default function PengaturanPage() {
                 width={56}
                 height={56}
                 borderRadius={28}
-                backgroundColor="#BFDBFE"
-                alignItems="center"
-                justifyContent="center"
-                overflow="hidden"
-              >
-                <Ionicons name="person" size={28} color="white" />
+                backgroundColor={ColorPrimary.primary200}
               </YStack>
               <YStack flex={1} gap={2}>
-                <TextH3 fontWeight="700" color="white">
+                <TextH3 fontWeight="700" color={ColorBase.white}>
                   Budi Santoso
                 </TextH3>
-                <TextBodySm color="#BFDBFE">
+                <TextBodySm color={ColorPrimary.primary200}>
                   Manajer Kasir • Toko Makmur
                 </TextBodySm>
               </YStack>
               <YStack
-                backgroundColor="white"
+                backgroundColor={ColorBase.white}
                 borderRadius={20}
                 paddingHorizontal={12}
                 paddingVertical={5}
               >
-                <TextBodySm fontWeight="700" color="#2563EB">
+                <TextBodySm fontWeight="700" color={ColorPrimary.primary600}>
                   Online
                 </TextBodySm>
               </YStack>
@@ -111,8 +115,8 @@ export default function PengaturanPage() {
                     />
                   )}
                   <YStack flex={1} gap={2}>
-                    <TextMicro color="#BFDBFE">{item.label}</TextMicro>
-                    <TextBodySm fontWeight="700" color="white">
+                    <TextMicro color={ColorPrimary.primary200}>{item.label}</TextMicro>
+                    <TextBodySm fontWeight="700" color={ColorBase.white}>
                       {item.value}
                     </TextBodySm>
                   </YStack>
@@ -128,13 +132,13 @@ export default function PengaturanPage() {
                 iconName: "storefront-outline" as IoniconName,
                 label: "Profil Toko",
                 sub: "Nama, alamat...",
-                iconColor: "#2563EB",
+                iconColor: ColorPrimary.primary600,
               },
               {
                 iconName: "phone-portrait-outline" as IoniconName,
                 label: "Perangkat",
                 sub: "Printer dan sc...",
-                iconColor: "#16A34A",
+                iconColor: ColorGreen.green600,
               },
             ].map((item) => (
               <TouchableOpacity key={item.label} style={{ flex: 1 }}>
@@ -144,7 +148,7 @@ export default function PengaturanPage() {
                   padding="$3"
                   alignItems="center"
                   gap="$2"
-                  shadowColor="#94A3B8"
+                  shadowColor={ColorNeutral.neutralShadow}
                   shadowOpacity={0.18}
                   shadowRadius={8}
                   elevation={2}
@@ -162,7 +166,7 @@ export default function PengaturanPage() {
                       {item.sub}
                     </TextCaption>
                   </YStack>
-                  <Ionicons name="chevron-forward" size={16} color="#9CA3AF" />
+                  <Ionicons name="chevron-forward" size={16} color={ColorNeutral.neutral400} />
                 </XStack>
               </TouchableOpacity>
             ))}
@@ -172,8 +176,8 @@ export default function PengaturanPage() {
           <SectionCard title="Umum">
             <SettingRow
               iconName="business-outline"
-              iconColor="#2563EB"
-              iconBg="#DBEAFE"
+              iconColor={ColorPrimary.primary600}
+              iconBg={ColorPrimary.primary100}
               title="Informasi Toko"
               subtitle="Nama usaha, alamat, logo,..."
               value="Lengkap"
@@ -181,19 +185,19 @@ export default function PengaturanPage() {
             <Separator borderColor="$borderColor" marginHorizontal="$4" />
             <SettingRow
               iconName="people-outline"
-              iconColor="#16A34A"
-              iconBg="#DCFCE7"
+              iconColor={ColorGreen.green600}
+              iconBg={ColorGreen.green100}
               title="Akun & Akses"
               subtitle="Kasir, PIN, dan hak akses ..."
               badge="2 kasir"
-              badgeColor="#16A34A"
-              badgeBg="#DCFCE7"
+              badgeColor={ColorGreen.green600}
+              badgeBg={ColorGreen.green100}
             />
             <Separator borderColor="$borderColor" marginHorizontal="$4" />
             <SettingRow
               iconName="card-outline"
-              iconColor="#D97706"
-              iconBg="#FEF3C7"
+              iconColor={ColorWarning.warning600}
+              iconBg={ColorWarning.warning100}
               title="Metode Pembayaran"
               subtitle="Tunai, QRIS, kartu, dan trans..."
               value="4 aktif"
@@ -204,19 +208,19 @@ export default function PengaturanPage() {
           <SectionCard title="Perangkat Kasir">
             <SettingRow
               iconName="print-outline"
-              iconColor="#2563EB"
-              iconBg="#DBEAFE"
+              iconColor={ColorPrimary.primary600}
+              iconBg={ColorPrimary.primary100}
               title="Printer Struk"
               subtitle="Bluetooth POS-58 sudah te..."
               badge="Siap"
-              badgeColor="#16A34A"
-              badgeBg="#DCFCE7"
+              badgeColor={ColorGreen.green600}
+              badgeBg={ColorGreen.green100}
             />
             <Separator borderColor="$borderColor" marginHorizontal="$4" />
             <SettingRow
               iconName="barcode-outline"
-              iconColor="#7C3AED"
-              iconBg="#EDE9FE"
+              iconColor={ColorAccentPurple.purple600}
+              iconBg={ColorAccentPurple.purple100}
               title="Scanner Barcode"
               subtitle="Mode otomatis aktif untuk transaksi..."
               hasToggle
@@ -227,8 +231,8 @@ export default function PengaturanPage() {
             <Separator borderColor="$borderColor" marginHorizontal="$4" />
             <SettingRow
               iconName="document-text-outline"
-              iconColor="#6B7280"
-              iconBg="#F3F4F6"
+              iconColor={ColorNeutral.neutral500}
+              iconBg={ColorNeutral.neutral100}
               title="Cetak Otomatis"
               subtitle="Struk tercetak setelah pembayaran..."
               hasToggle
@@ -242,8 +246,8 @@ export default function PengaturanPage() {
           <SectionCard title="Operasional">
             <SettingRow
               iconName="time-outline"
-              iconColor="#6B7280"
-              iconBg="#F3F4F6"
+              iconColor={ColorNeutral.neutral500}
+              iconBg={ColorNeutral.neutral100}
               title="Pengaturan Shift"
               subtitle="Jadwal buka, modal awal, da..."
               value="08:00"
@@ -251,24 +255,24 @@ export default function PengaturanPage() {
             <Separator borderColor="$borderColor" marginHorizontal="$4" />
             <SettingRow
               iconName="warning-outline"
-              iconColor="#D97706"
-              iconBg="#FEF3C7"
+              iconColor={ColorWarning.warning600}
+              iconBg={ColorWarning.warning100}
               title="Alert Stok Minimum"
               subtitle="Peringatan muncul saat s..."
               badge="10 item"
-              badgeColor="#EA580C"
-              badgeBg="#FFEDD5"
+              badgeColor={ColorAccentOrange.orange600}
+              badgeBg={ColorAccentOrange.orange100}
             />
             <Separator borderColor="$borderColor" marginHorizontal="$4" />
             <SettingRow
               iconName="sync-outline"
-              iconColor="#16A34A"
-              iconBg="#DCFCE7"
+              iconColor={ColorGreen.green600}
+              iconBg={ColorGreen.green100}
               title="Sinkronisasi & Backup"
               subtitle="Backup terakhir hari ini puk..."
               badge="Aktif"
-              badgeColor="#16A34A"
-              badgeBg="#DCFCE7"
+              badgeColor={ColorGreen.green600}
+              badgeBg={ColorGreen.green100}
             />
           </SectionCard>
 
@@ -276,16 +280,16 @@ export default function PengaturanPage() {
           <SectionCard title="Lainnya">
             <SettingRow
               iconName="help-circle-outline"
-              iconColor="#2563EB"
-              iconBg="#DBEAFE"
+              iconColor={ColorPrimary.primary600}
+              iconBg={ColorPrimary.primary100}
               title="Pusat Bantuan"
               subtitle="Panduan penggunaan aplikasi dan F..."
             />
             <Separator borderColor="$borderColor" marginHorizontal="$4" />
             <SettingRow
               iconName="information-circle-outline"
-              iconColor="#6B7280"
-              iconBg="#F3F4F6"
+              iconColor={ColorNeutral.neutral500}
+              iconBg={ColorNeutral.neutral100}
               title="Tentang Aplikasi"
               subtitle="Versi, lisensi, dan informasi si..."
               value="v2.4.1"
