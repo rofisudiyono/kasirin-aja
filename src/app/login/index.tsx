@@ -10,6 +10,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Button, Text, XStack, YStack } from "tamagui";
 
+import { AppInput } from "@/components/app-input";
 import { useAuth } from "@/lib/auth";
 
 export default function LoginPage() {
@@ -17,7 +18,6 @@ export default function LoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState("budi.santoso@tokomakmur.id");
   const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(true);
 
   const handleLogin = () => {
@@ -207,81 +207,26 @@ export default function LoginPage() {
             </YStack>
 
             {/* Email field */}
-            <YStack gap="$2">
-              <Text
-                fontFamily="$body"
-                fontSize="$md"
-                fontWeight="600"
-                color="$color"
-              >
-                Email
-              </Text>
-              <XStack
-                borderWidth={1}
-                borderColor="$borderColor"
-                borderRadius="$4"
-                height={48}
-                alignItems="center"
-                paddingHorizontal="$3"
-                gap="$2"
-                backgroundColor="$background"
-              >
-                <Ionicons name="mail-outline" size={16} color="#9CA3AF" />
-                <YStack flex={1}>
-                  <Text fontFamily="$body" fontSize="$md" color="$color">
-                    {email}
-                  </Text>
-                  <Text fontFamily="$body" fontSize={10} color="$colorTertiary">
-                    Email kasir aktif
-                  </Text>
-                </YStack>
-              </XStack>
-            </YStack>
+            <AppInput
+              label="Email"
+              value={email}
+              onChangeText={setEmail}
+              placeholder="Email kasir aktif"
+              hint="Email kasir aktif"
+              leftIcon="mail-outline"
+              keyboardType="email-address"
+            />
 
             {/* Password field */}
-            <YStack gap="$2">
-              <Text
-                fontFamily="$body"
-                fontSize="$md"
-                fontWeight="600"
-                color="$color"
-              >
-                Password
-              </Text>
-              <XStack
-                borderWidth={1}
-                borderColor="$borderColor"
-                borderRadius="$4"
-                height={48}
-                alignItems="center"
-                paddingHorizontal="$3"
-                gap="$2"
-                backgroundColor="$background"
-              >
-                <Ionicons
-                  name="lock-closed-outline"
-                  size={16}
-                  color="#9CA3AF"
-                />
-                <YStack flex={1}>
-                  <Text fontFamily="$body" fontSize="$md" color="$color">
-                    {showPassword ? "password123" : "••••••••••"}
-                  </Text>
-                  <Text fontFamily="$body" fontSize={10} color="$colorTertiary">
-                    Minimal 8 karakter
-                  </Text>
-                </YStack>
-                <TouchableOpacity
-                  onPress={() => setShowPassword(!showPassword)}
-                >
-                  <Ionicons
-                    name={showPassword ? "eye-off-outline" : "eye-outline"}
-                    size={18}
-                    color="#9CA3AF"
-                  />
-                </TouchableOpacity>
-              </XStack>
-            </YStack>
+            <AppInput
+              label="Password"
+              value={password}
+              onChangeText={setPassword}
+              placeholder="Minimal 8 karakter"
+              hint="Minimal 8 karakter"
+              leftIcon="lock-closed-outline"
+              secureTextEntry
+            />
 
             {/* Remember me + Forgot password */}
             <XStack alignItems="center" justifyContent="space-between">
