@@ -1,0 +1,433 @@
+import { Ionicons } from "@expo/vector-icons";
+import React, { useState } from "react";
+import {
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { Button, Text, XStack, YStack } from "tamagui";
+
+import { useAuth } from "@/lib/auth";
+
+export default function LoginScreen() {
+  const { login } = useAuth();
+  const [email, setEmail] = useState("budi.santoso@tokomakmur.id");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [rememberMe, setRememberMe] = useState(true);
+
+  return (
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#EFF4FF" }}>
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
+      >
+        <ScrollView
+          contentContainerStyle={{ flexGrow: 1 }}
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+        >
+          {/* ── Header ── */}
+          <YStack
+            alignItems="center"
+            paddingTop="$5"
+            paddingBottom="$4"
+            gap="$1"
+          >
+            <YStack
+              width={56}
+              height={56}
+              borderRadius="$4"
+              backgroundColor="#0F766E"
+              alignItems="center"
+              justifyContent="center"
+            >
+              <Ionicons name="storefront-outline" size={28} color="white" />
+            </YStack>
+            <Text
+              fontFamily="$body"
+              fontSize="$lg"
+              fontWeight="700"
+              color="$color"
+              marginTop="$2"
+            >
+              Kasir Toko Makmur
+            </Text>
+            <Text fontFamily="$body" fontSize="$sm" color="$colorSecondary">
+              Masuk untuk mulai transaksi hari ini
+            </Text>
+          </YStack>
+
+          {/* ── Illustration card ── */}
+          <YStack
+            marginHorizontal="$4"
+            borderRadius="$6"
+            backgroundColor="#DBEAFE"
+            padding="$5"
+            alignItems="center"
+            gap="$3"
+          >
+            <YStack
+              width={80}
+              height={80}
+              borderRadius={40}
+              backgroundColor="#BFDBFE"
+              alignItems="center"
+              justifyContent="center"
+            >
+              <Ionicons name="person" size={40} color="#2563EB" />
+            </YStack>
+
+            {/* Badge */}
+            <XStack
+              backgroundColor="#ECFDF5"
+              borderRadius="$full"
+              paddingHorizontal="$3"
+              paddingVertical={4}
+              gap={4}
+              alignItems="center"
+            >
+              <Text
+                fontSize={10}
+                color="#16A34A"
+                fontFamily="$body"
+                fontWeight="600"
+              >
+                Login kasir • Siap buka shift
+              </Text>
+            </XStack>
+
+            <Text
+              fontFamily="$body"
+              fontSize="$xl"
+              fontWeight="700"
+              color="$color"
+              textAlign="center"
+              lineHeight={28}
+            >
+              Selamat datang{"\n"}kembali
+            </Text>
+            <Text
+              fontFamily="$body"
+              fontSize="$sm"
+              color="$colorSecondary"
+              textAlign="center"
+              lineHeight={20}
+            >
+              Masuk dengan email dan password untuk{"\n"}melanjutkan penjualan,
+              cek shift, dan{"\n"}mengakses fitur kasir dengan cepat.
+            </Text>
+          </YStack>
+
+          {/* ── Form Card ── */}
+          <YStack
+            marginHorizontal="$4"
+            marginTop="$4"
+            backgroundColor="$background"
+            borderRadius="$6"
+            padding="$4"
+            gap="$4"
+            shadowColor="#94A3B8"
+            shadowOpacity={0.2}
+            shadowRadius={12}
+            shadowOffset={{ width: 0, height: 2 }}
+            elevation={3}
+          >
+            {/* Mode Kasir row */}
+            <XStack
+              backgroundColor="$backgroundSecondary"
+              borderRadius="$4"
+              padding="$3"
+              alignItems="center"
+              gap="$3"
+            >
+              <YStack
+                width={36}
+                height={36}
+                borderRadius={18}
+                backgroundColor="#DCFCE7"
+                alignItems="center"
+                justifyContent="center"
+              >
+                <Ionicons name="person-outline" size={18} color="#16A34A" />
+              </YStack>
+              <YStack flex={1}>
+                <Text
+                  fontFamily="$body"
+                  fontSize="$md"
+                  fontWeight="600"
+                  color="$color"
+                >
+                  Mode Kasir
+                </Text>
+                <Text fontFamily="$body" fontSize="$sm" color="$colorSecondary">
+                  Akun staf operasional toko
+                </Text>
+              </YStack>
+              <TouchableOpacity>
+                <Text
+                  fontFamily="$body"
+                  fontSize="$sm"
+                  fontWeight="600"
+                  color="$primary"
+                >
+                  Ganti
+                </Text>
+              </TouchableOpacity>
+            </XStack>
+
+            {/* Title */}
+            <YStack gap="$1">
+              <Text
+                fontFamily="$body"
+                fontSize="$lg"
+                fontWeight="700"
+                color="$color"
+              >
+                Masuk ke akun kasir
+              </Text>
+              <Text
+                fontFamily="$body"
+                fontSize="$sm"
+                color="$colorSecondary"
+                lineHeight={18}
+              >
+                Gunakan akun yang sudah terdaftar untuk membuka shift dan
+                memproses transaksi pelanggan.
+              </Text>
+            </YStack>
+
+            {/* Email field */}
+            <YStack gap="$2">
+              <Text
+                fontFamily="$body"
+                fontSize="$md"
+                fontWeight="600"
+                color="$color"
+              >
+                Email
+              </Text>
+              <XStack
+                borderWidth={1}
+                borderColor="$borderColor"
+                borderRadius="$4"
+                height={48}
+                alignItems="center"
+                paddingHorizontal="$3"
+                gap="$2"
+                backgroundColor="$background"
+              >
+                <Ionicons name="mail-outline" size={16} color="#9CA3AF" />
+                <YStack flex={1}>
+                  <Text fontFamily="$body" fontSize="$md" color="$color">
+                    {email}
+                  </Text>
+                  <Text fontFamily="$body" fontSize={10} color="$colorTertiary">
+                    Email kasir aktif
+                  </Text>
+                </YStack>
+              </XStack>
+            </YStack>
+
+            {/* Password field */}
+            <YStack gap="$2">
+              <Text
+                fontFamily="$body"
+                fontSize="$md"
+                fontWeight="600"
+                color="$color"
+              >
+                Password
+              </Text>
+              <XStack
+                borderWidth={1}
+                borderColor="$borderColor"
+                borderRadius="$4"
+                height={48}
+                alignItems="center"
+                paddingHorizontal="$3"
+                gap="$2"
+                backgroundColor="$background"
+              >
+                <Ionicons
+                  name="lock-closed-outline"
+                  size={16}
+                  color="#9CA3AF"
+                />
+                <YStack flex={1}>
+                  <Text fontFamily="$body" fontSize="$md" color="$color">
+                    {showPassword ? "password123" : "••••••••••"}
+                  </Text>
+                  <Text fontFamily="$body" fontSize={10} color="$colorTertiary">
+                    Minimal 8 karakter
+                  </Text>
+                </YStack>
+                <TouchableOpacity
+                  onPress={() => setShowPassword(!showPassword)}
+                >
+                  <Ionicons
+                    name={showPassword ? "eye-off-outline" : "eye-outline"}
+                    size={18}
+                    color="#9CA3AF"
+                  />
+                </TouchableOpacity>
+              </XStack>
+            </YStack>
+
+            {/* Remember me + Forgot password */}
+            <XStack alignItems="center" justifyContent="space-between">
+              <TouchableOpacity
+                onPress={() => setRememberMe(!rememberMe)}
+                style={{ flexDirection: "row", alignItems: "center", gap: 8 }}
+              >
+                <YStack
+                  width={20}
+                  height={20}
+                  borderRadius={4}
+                  backgroundColor={rememberMe ? "$primary" : "transparent"}
+                  borderWidth={2}
+                  borderColor={rememberMe ? "$primary" : "$borderColor"}
+                  alignItems="center"
+                  justifyContent="center"
+                >
+                  {rememberMe && (
+                    <Text fontSize={12} color="white">
+                      ✓
+                    </Text>
+                  )}
+                </YStack>
+                <Text fontFamily="$body" fontSize="$sm" color="$colorSecondary">
+                  Ingat sesi perangkat ini
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity>
+                <Text
+                  fontFamily="$body"
+                  fontSize="$sm"
+                  fontWeight="600"
+                  color="$primary"
+                >
+                  Lupa password?
+                </Text>
+              </TouchableOpacity>
+            </XStack>
+
+            {/* Login Button */}
+            <Button
+              onPress={login}
+              height={52}
+              backgroundColor="$primary"
+              borderRadius="$5"
+              pressStyle={{ opacity: 0.85 }}
+            >
+              <XStack gap="$2" alignItems="center">
+                <Ionicons name="log-in-outline" size={18} color="white" />
+                <Text
+                  fontFamily="$body"
+                  fontSize="$md"
+                  fontWeight="700"
+                  color="white"
+                >
+                  Masuk Sekarang
+                </Text>
+              </XStack>
+            </Button>
+
+            {/* Help + Shift info */}
+            <XStack gap="$3">
+              <YStack
+                flex={1}
+                backgroundColor="$backgroundSecondary"
+                borderRadius="$4"
+                padding="$3"
+                gap={4}
+              >
+                <Ionicons
+                  name="help-circle-outline"
+                  size={20}
+                  color="#6B7280"
+                />
+                <Text
+                  fontFamily="$body"
+                  fontSize="$sm"
+                  fontWeight="600"
+                  color="$color"
+                  textAlign="center"
+                >
+                  Butuh bantuan?
+                </Text>
+                <Text
+                  fontFamily="$body"
+                  fontSize={11}
+                  color="$colorSecondary"
+                  textAlign="center"
+                  lineHeight={16}
+                >
+                  Hubungi supervisor jika akun tidak bisa diakses.
+                </Text>
+              </YStack>
+              <YStack
+                flex={1}
+                backgroundColor="$backgroundSecondary"
+                borderRadius="$4"
+                padding="$3"
+                gap={4}
+              >
+                <Ionicons name="sunny-outline" size={20} color="#D97706" />
+                <Text
+                  fontFamily="$body"
+                  fontSize="$sm"
+                  fontWeight="600"
+                  color="$color"
+                  textAlign="center"
+                >
+                  Buka shift
+                </Text>
+                <Text
+                  fontFamily="$body"
+                  fontSize={11}
+                  color="$colorSecondary"
+                  textAlign="center"
+                  lineHeight={16}
+                >
+                  Masuk untuk mulai shift dan catat modal awal kas.
+                </Text>
+              </YStack>
+            </XStack>
+          </YStack>
+
+          {/* ── Footer ── */}
+          <YStack alignItems="center" paddingVertical="$5" gap="$2">
+            <XStack
+              backgroundColor="#DCFCE7"
+              borderRadius="$full"
+              paddingHorizontal="$3"
+              paddingVertical={4}
+            >
+              <Text
+                fontSize={11}
+                color="#16A34A"
+                fontFamily="$body"
+                fontWeight="600"
+              >
+                Aman • Sinkronisasi toko aktif
+              </Text>
+            </XStack>
+            <Text
+              fontFamily="$body"
+              fontSize="$sm"
+              color="$colorTertiary"
+              textAlign="center"
+              lineHeight={18}
+            >
+              Hanya staf yang memiliki akses dapat masuk.{"\n"}Pastikan data
+              login benar sebelum memulai shift.
+            </Text>
+          </YStack>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
+  );
+}

@@ -10,16 +10,19 @@ import {
   DefaultTheme,
   ThemeProvider,
 } from "@react-navigation/native";
-import React from "react";
+import React, { useState } from "react";
 import { useColorScheme } from "react-native";
 import { TamaguiProvider } from "tamagui";
 
 import { AnimatedSplashOverlay } from "@/components/animated-icon";
 import AppTabs from "@/components/app-tabs";
+import { AuthContext } from "@/lib/auth";
+import LoginScreen from "@/screens/LoginScreen";
 import { tamaguiConfig } from "../../tamagui.config";
 
-export default function TabLayout() {
+export default function RootLayout() {
   const colorScheme = useColorScheme();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   // Load Poppins in the background — Tamagui falls back to system font until ready
   useFonts({
@@ -30,14 +33,24 @@ export default function TabLayout() {
   });
 
   return (
-    <TamaguiProvider
-      config={tamaguiConfig}
-      defaultTheme={colorScheme === "dark" ? "dark" : "light"}
+    <AuthContext.Provider
+      value={{
+        isLoggedIn,
+        login: () => setIsLoggedIn(true),
+        logout: () => setIsLoggedIn(false),
+      }}
     >
-      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-        <AnimatedSplashOverlay />
-        <AppTabs />
-      </ThemeProvider>
-    </TamaguiProvider>
+      <TamaguiProvider
+        config={tamaguiConfig}
+        defaultTheme={colorScheme === "dark" ? "dark" : "light"}
+      >
+        <ThemeProvider
+          value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
+        >
+          <AnimatedSplashOverlay />
+          {isLoggedIn ? <AppTabs /> : <LoginScreen />}
+        </ThemeProvider>
+      </TamaguiProvider>
+    </AuthContext.Provider>
   );
 }
