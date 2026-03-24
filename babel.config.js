@@ -12,6 +12,15 @@ module.exports = function (api) {
           disableExtraction: process.env.NODE_ENV === "development",
         },
       ],
+      [
+        "module-resolver",
+        {
+          root: ["./"],
+          alias: {
+            "@/design-system": "./design-system/index.ts",
+          },
+        },
+      ],
     ],
   };
 };

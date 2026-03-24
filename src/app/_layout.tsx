@@ -1,4 +1,11 @@
 import {
+  Poppins_400Regular,
+  Poppins_500Medium,
+  Poppins_600SemiBold,
+  Poppins_700Bold,
+  useFonts,
+} from "@expo-google-fonts/poppins";
+import {
   DarkTheme,
   DefaultTheme,
   ThemeProvider,
@@ -13,6 +20,15 @@ import { tamaguiConfig } from "../../tamagui.config";
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+
+  // Load Poppins in the background — Tamagui falls back to system font until ready
+  useFonts({
+    Poppins_400Regular,
+    Poppins_500Medium,
+    Poppins_600SemiBold,
+    Poppins_700Bold,
+  });
+
   return (
     <TamaguiProvider
       config={tamaguiConfig}
