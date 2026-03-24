@@ -1,4 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
+import { useAtom } from "jotai";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
@@ -22,6 +23,7 @@ import {
   TextCaption,
   TextH3,
 } from "@/components";
+import { cartAtom, CartItem as StoreCartItem } from "@/store/cart";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -48,14 +50,7 @@ interface CatalogProduct {
   variants?: VariantGroup[];
 }
 
-interface CartItem {
-  cartId: string;
-  productId: string;
-  productName: string;
-  variantLabel?: string;
-  quantity: number;
-  unitPrice: number;
-}
+type CartItem = StoreCartItem;
 
 // ─── Mock Data ────────────────────────────────────────────────────────────────
 
@@ -317,6 +312,7 @@ function VariantSheet({
     onAddToCart({
       productId: product!.id,
       productName: product!.name,
+      category: product!.category,
       variantLabel,
       quantity: qty,
       unitPrice,
@@ -477,7 +473,7 @@ export default function TransaksiBaruPage() {
   const router = useRouter();
   const [categoryFilter, setCategoryFilter] =
     useState<CategoryFilter>("Semua");
-  const [cart, setCart] = useState<CartItem[]>([]);
+  const [cart, setCart] = useAtom(cartAtom);
   const [variantProduct, setVariantProduct] = useState<CatalogProduct | null>(
     null
   );
@@ -499,6 +495,7 @@ export default function TransaksiBaruPage() {
       addToCart({
         productId: product.id,
         productName: product.name,
+        category: product.category,
         quantity: 1,
         unitPrice: product.basePrice,
       });
@@ -623,7 +620,7 @@ export default function TransaksiBaruPage() {
                 {formatPrice(totalPrice)}
               </TextBodyLg>
             </YStack>
-            <TouchableOpacity activeOpacity={0.85}>
+            <TouchableOpacity activeOpacity={0.85} onPress={() => router.push("/keranjang")}>
               <View style={styles.cartBarButton}>
                 <TextBodyLg fontWeight="700" color="white">
                   Lihat Keranjang
