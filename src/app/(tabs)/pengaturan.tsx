@@ -5,18 +5,18 @@ import { ScrollView, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Separator, XStack, YStack } from "tamagui";
 
+import { SettingRow } from "@/features/settings/components/SettingRow";
 import {
   AppButton,
   IconButton,
   SectionCard,
-  SettingRow,
   TextBodyLg,
   TextBodySm,
   TextCaption,
   TextH3,
   TextMicro,
-} from "@/components/index";
-import { useAuth } from "@/lib/auth";
+} from "@/shared/components";
+import { useAuth } from "@/shared/lib/auth";
 import {
   ColorAccentOrange,
   ColorAccentPurple,
@@ -25,8 +25,8 @@ import {
   ColorNeutral,
   ColorPrimary,
   ColorWarning,
-} from "@/themes/Colors";
-import type { IoniconName } from "@/types";
+} from "@/shared/themes/Colors";
+import type { IoniconName } from "@/shared/types";
 
 export default function PengaturanPage() {
   const { logout } = useAuth();
@@ -40,7 +40,10 @@ export default function PengaturanPage() {
   };
 
   return (
-    <SafeAreaView edges={['top']} style={{ flex: 1, backgroundColor: ColorBase.bgScreen }}>
+    <SafeAreaView
+      edges={["top"]}
+      style={{ flex: 1, backgroundColor: ColorBase.bgScreen }}
+    >
       {/* ── Header ── */}
       <XStack
         paddingHorizontal="$4"

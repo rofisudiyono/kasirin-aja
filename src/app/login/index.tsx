@@ -17,8 +17,8 @@ import {
   TextBodySm,
   TextCaption,
   TextH3,
-} from "@/components";
-import { useAuth } from "@/lib/auth";
+} from "@/shared/components";
+import { useAuth } from "@/shared/lib/auth";
 import {
   ColorBase,
   ColorGreen,
@@ -26,7 +26,7 @@ import {
   ColorPrimary,
   ColorTeal,
   ColorWarning,
-} from "@/themes/Colors";
+} from "@/shared/themes/Colors";
 
 export default function LoginPage() {
   const { login } = useAuth();

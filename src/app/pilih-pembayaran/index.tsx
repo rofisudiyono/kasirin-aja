@@ -12,24 +12,24 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { XStack, YStack } from "tamagui";
 
+import { paymentMethodOptions } from "@/features/payment/api/payment.data";
+import { PaymentMethodCard } from "@/features/payment/components/PaymentMethodCard";
 import {
   PageHeader,
-  PaymentMethodCard,
   QRCodePlaceholder,
   TextBodyLg,
   TextBodySm,
   TextCaption,
   TextH2,
-} from "@/components";
-import { paymentMethodOptions } from "@/data/payment.data";
+} from "@/shared/components";
 import {
   ColorBase,
   ColorDanger,
   ColorNeutral,
   ColorPrimary,
-} from "@/themes/Colors";
-import type { PaymentMethod } from "@/types";
-import { formatPrice, formatTimer } from "@/utils";
+} from "@/shared/themes/Colors";
+import type { PaymentMethod } from "@/shared/types";
+import { formatPrice, formatTimer } from "@/shared/utils";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 

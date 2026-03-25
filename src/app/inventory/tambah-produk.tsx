@@ -12,15 +12,20 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { XStack, YStack } from "tamagui";
 
-import { AppButton, TextBodyLg, TextBodySm, TextCaption, TextH3 } from "@/components";
+import {
+  AppButton,
+  TextBodyLg,
+  TextBodySm,
+  TextCaption,
+  TextH3,
+} from "@/shared/components";
 import {
   ColorBase,
   ColorGreen,
   ColorNeutral,
   ColorPrimary,
   ColorSuccess,
-  ColorWarning,
-} from "@/themes/Colors";
+} from "@/shared/themes/Colors";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 type Category = "Makanan" | "Minuman" | "Snack" | "";
@@ -153,15 +158,23 @@ function AddPhotoSlot() {
       height={72}
       borderRadius={10}
       borderWidth={1.5}
-      borderColor={ColorPrimary.primary300 ?? ColorPrimary.primary200}
+      borderColor={ColorPrimary.primary400 ?? ColorPrimary.primary200}
       borderStyle="dashed"
       backgroundColor={ColorPrimary.primary50 ?? ColorPrimary.primary25}
       alignItems="center"
       justifyContent="center"
       gap={4}
     >
-      <Ionicons name="camera-outline" size={22} color={ColorPrimary.primary400} />
-      <TextCaption fontWeight="500" color={ColorPrimary.primary600} fontSize={10}>
+      <Ionicons
+        name="camera-outline"
+        size={22}
+        color={ColorPrimary.primary400}
+      />
+      <TextCaption
+        fontWeight="500"
+        color={ColorPrimary.primary600}
+        fontSize={10}
+      >
         + Foto
       </TextCaption>
     </YStack>
@@ -177,7 +190,11 @@ function FilledPhotoSlot({ onRemove }: { onRemove: () => void }) {
         alignItems="center"
         justifyContent="center"
       >
-        <Ionicons name="image-outline" size={28} color={ColorNeutral.neutral400} />
+        <Ionicons
+          name="image-outline"
+          size={28}
+          color={ColorNeutral.neutral400}
+        />
       </YStack>
       <TouchableOpacity
         onPress={onRemove}
@@ -255,7 +272,11 @@ export default function TambahProdukPage() {
           style={styles.batalBtn}
           activeOpacity={0.7}
         >
-          <Ionicons name="close" size={18} color={ColorNeutral.neutral600 ?? ColorNeutral.neutral500} />
+          <Ionicons
+            name="close"
+            size={18}
+            color={ColorNeutral.neutral700 ?? ColorNeutral.neutral500}
+          />
           <TextBodySm fontWeight="500" color={ColorNeutral.neutral700}>
             Batal
           </TextBodySm>
@@ -327,7 +348,9 @@ export default function TambahProdukPage() {
               rightElement={
                 <TouchableOpacity
                   style={styles.autoBtn}
-                  onPress={() => setSku(`SKU-${Date.now().toString().slice(-5)}`)}
+                  onPress={() =>
+                    setSku(`SKU-${Date.now().toString().slice(-5)}`)
+                  }
                 >
                   <TextBodySm fontWeight="600" color={ColorPrimary.primary600}>
                     Auto
@@ -375,7 +398,7 @@ export default function TambahProdukPage() {
                       }
                       backgroundColor={
                         kategori === cat
-                          ? ColorPrimary.primary50 ?? ColorPrimary.primary25
+                          ? (ColorPrimary.primary50 ?? ColorPrimary.primary25)
                           : ColorBase.white
                       }
                     >
@@ -424,7 +447,9 @@ export default function TambahProdukPage() {
                 <TextBodySm fontWeight="500" color={ColorNeutral.neutral700}>
                   Harga Modal
                 </TextBodySm>
-                <TextBodySm fontWeight="500" color="#DC2626">{" *"}</TextBodySm>
+                <TextBodySm fontWeight="500" color="#DC2626">
+                  {" *"}
+                </TextBodySm>
               </XStack>
               <XStack
                 borderWidth={1.5}
@@ -440,9 +465,7 @@ export default function TambahProdukPage() {
                 <TextInput
                   style={[styles.input, { flex: 1 }]}
                   value={formatRp(hargaModal)}
-                  onChangeText={(v) =>
-                    setHargaModal(v.replace(/\D/g, ""))
-                  }
+                  onChangeText={(v) => setHargaModal(v.replace(/\D/g, ""))}
                   keyboardType="numeric"
                   placeholderTextColor={ColorNeutral.neutral400}
                 />
@@ -454,7 +477,9 @@ export default function TambahProdukPage() {
                 <TextBodySm fontWeight="500" color={ColorNeutral.neutral700}>
                   Harga Jual
                 </TextBodySm>
-                <TextBodySm fontWeight="500" color="#DC2626">{" *"}</TextBodySm>
+                <TextBodySm fontWeight="500" color="#DC2626">
+                  {" *"}
+                </TextBodySm>
               </XStack>
               <XStack
                 borderWidth={1.5}
@@ -470,9 +495,7 @@ export default function TambahProdukPage() {
                 <TextInput
                   style={[styles.input, { flex: 1 }]}
                   value={formatRp(hargaJual)}
-                  onChangeText={(v) =>
-                    setHargaJual(v.replace(/\D/g, ""))
-                  }
+                  onChangeText={(v) => setHargaJual(v.replace(/\D/g, ""))}
                   keyboardType="numeric"
                   placeholderTextColor={ColorNeutral.neutral400}
                 />
@@ -513,7 +536,9 @@ export default function TambahProdukPage() {
           {/* Toggle row */}
           <XStack alignItems="center" justifyContent="space-between">
             <YStack flex={1} gap={2}>
-              <TextBodyLg fontWeight="600">Produk ini memiliki variant</TextBodyLg>
+              <TextBodyLg fontWeight="600">
+                Produk ini memiliki variant
+              </TextBodyLg>
               <TextCaption color={ColorNeutral.neutral400}>
                 Contoh: ukuran, warna, rasa
               </TextCaption>
@@ -557,7 +582,7 @@ export default function TambahProdukPage() {
                         paddingVertical={6}
                         borderRadius={20}
                         borderWidth={1}
-                        borderColor={ColorPrimary.primary300 ?? ColorPrimary.primary200}
+                        borderColor={ColorPrimary.primary200}
                         alignItems="center"
                         gap={4}
                       >
@@ -566,7 +591,10 @@ export default function TambahProdukPage() {
                           size={14}
                           color={ColorPrimary.primary600}
                         />
-                        <TextBodySm fontWeight="600" color={ColorPrimary.primary600}>
+                        <TextBodySm
+                          fontWeight="600"
+                          color={ColorPrimary.primary600}
+                        >
                           Tambah
                         </TextBodySm>
                       </XStack>
@@ -582,7 +610,7 @@ export default function TambahProdukPage() {
               <TouchableOpacity activeOpacity={0.7}>
                 <XStack
                   borderWidth={1.5}
-                  borderColor={ColorPrimary.primary300 ?? ColorPrimary.primary200}
+                  borderColor={ColorPrimary.primary200}
                   borderRadius={10}
                   borderStyle="dashed"
                   paddingVertical={12}
@@ -743,7 +771,8 @@ export default function TambahProdukPage() {
           textAlign="center"
           marginTop={6}
         >
-          Semua perubahan akan langsung tersimpan ke inventori setelah dipublikasikan
+          Semua perubahan akan langsung tersimpan ke inventori setelah
+          dipublikasikan
         </TextCaption>
       </View>
     </SafeAreaView>

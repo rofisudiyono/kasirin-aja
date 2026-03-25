@@ -21,19 +21,19 @@ import {
   TextBodySm,
   TextCaption,
   TextH3,
-} from "@/components";
-import { CATEGORY_COLORS, CATEGORY_ICONS } from "@/constants/categoryStyles";
-import { orderTypeOptions, promoDefinitions } from "@/data/payment.data";
-import { cartAtom, type CartItem } from "@/store/cart";
+} from "@/shared/components";
+import { CATEGORY_COLORS, CATEGORY_ICONS } from "@/config/categoryStyles";
+import { orderTypeOptions, promoDefinitions } from "@/features/payment/api/payment.data";
+import { cartAtom, type CartItem } from "@/features/cart/store/cart.store";
 import {
   ColorBase,
   ColorDanger,
   ColorGreen,
   ColorNeutral,
   ColorPrimary,
-} from "@/themes/Colors";
-import type { AppliedPromo, OrderType } from "@/types";
-import { formatPrice } from "@/utils";
+} from "@/shared/themes/Colors";
+import type { AppliedPromo, OrderType } from "@/shared/types";
+import { formatPrice } from "@/shared/utils";
 
 const PPN_RATE = 0.11;
 

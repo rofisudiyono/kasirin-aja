@@ -4,25 +4,25 @@ import { ScrollView, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { XStack, YStack } from "tamagui";
 
+import { StatsRow } from "@/features/shift/components/StatsRow";
+import { transactionListMock } from "@/features/transactions/api/transactions.data";
+import { StatusBadge } from "@/features/transactions/components/StatusBadge";
 import {
   FilterChip,
   IconButton,
   PageHeader,
   SearchBar,
   ShadowCard,
-  StatsRow,
-  StatusBadge,
   TextBodyLg,
   TextBodySm,
-} from "@/components";
-import { transactionListMock } from "@/data/transactions";
+} from "@/shared/components";
 import {
   ColorBase,
   ColorDanger,
   ColorNeutral,
   ColorPrimary,
-} from "@/themes/Colors";
-import type { FilterTab } from "@/types";
+} from "@/shared/themes/Colors";
+import type { FilterTab } from "@/shared/types";
 
 export default function TransaksiPage() {
   const [activeFilter, setActiveFilter] = useState<FilterTab>("Semua");
@@ -33,7 +33,10 @@ export default function TransaksiPage() {
       : transactionListMock.filter((t) => t.status === activeFilter);
 
   return (
-    <SafeAreaView edges={['top']} style={{ flex: 1, backgroundColor: ColorBase.bgScreen }}>
+    <SafeAreaView
+      edges={["top"]}
+      style={{ flex: 1, backgroundColor: ColorBase.bgScreen }}
+    >
       {/* ── Header ── */}
       <PageHeader
         title="Riwayat Transaksi"

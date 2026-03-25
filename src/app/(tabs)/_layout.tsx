@@ -4,9 +4,9 @@ import React from "react";
 import { Platform, useColorScheme } from "react-native";
 import { Text } from "tamagui";
 
-import { TAB_ICONS, TAB_LABELS } from "@/constants/navigation";
-import { useAuth } from "@/lib/auth";
-import { ColorBase, ColorNeutral, ColorPrimary } from "@/themes/Colors";
+import { TAB_ICONS, TAB_LABELS } from "@/config/navigation";
+import { useAuth } from "@/shared/lib/auth";
+import { ColorBase, ColorNeutral, ColorPrimary } from "@/shared/themes/Colors";
 
 export default function TabsLayout() {
   const { isLoggedIn } = useAuth();

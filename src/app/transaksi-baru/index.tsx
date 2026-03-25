@@ -14,23 +14,23 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { XStack, YStack } from "tamagui";
 
+import { CATEGORY_COLORS, CATEGORY_ICONS } from "@/config/categoryStyles";
+import { cartAtom, type CartItem } from "@/features/cart/store/cart.store";
+import { catalogProducts } from "@/features/catalog/api/catalog.data";
+import { categoryFilters } from "@/features/catalog/api/category.data";
+import { ProductCard } from "@/features/catalog/components/ProductCard";
 import {
   FilterChip,
   IconButton,
   PageHeader,
-  ProductCard,
   TextBodyLg,
   TextBodySm,
   TextCaption,
   TextH3,
-} from "@/components/index";
-import { CATEGORY_COLORS, CATEGORY_ICONS } from "@/constants/categoryStyles";
-import { catalogProducts } from "@/data/catalog";
-import { categoryFilters } from "@/data/category.data";
-import { cartAtom, type CartItem } from "@/store/cart";
-import { ColorBase, ColorNeutral, ColorPrimary } from "@/themes/Colors";
-import type { CatalogProduct, CategoryFilter } from "@/types";
-import { formatPrice } from "@/utils";
+} from "@/shared/components";
+import { ColorBase, ColorNeutral, ColorPrimary } from "@/shared/themes/Colors";
+import type { CatalogProduct, CategoryFilter } from "@/shared/types";
+import { formatPrice } from "@/shared/utils";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 const CARD_WIDTH = (SCREEN_WIDTH - 16 * 2 - 12) / 2;

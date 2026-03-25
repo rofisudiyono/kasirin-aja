@@ -14,8 +14,8 @@ import {
   TextCaption,
   TextH1,
   TextH3,
-} from "@/components";
-import { isShiftStartedAtom } from "@/store/shift";
+} from "@/shared/components";
+import { isShiftStartedAtom } from "@/features/shift/store/shift.store";
 import {
   ColorBase,
   ColorDanger,
@@ -24,8 +24,8 @@ import {
   ColorPrimary,
   ColorSky,
   ColorWarning,
-} from "@/themes/Colors";
-import { formatPrice } from "@/utils";
+} from "@/shared/themes/Colors";
+import { formatPrice } from "@/shared/utils";
 
 const PRESET_AMOUNTS = [200_000, 500_000, 1_000_000];
 

@@ -16,7 +16,7 @@ import React from "react";
 import { useColorScheme } from "react-native";
 import { TamaguiProvider } from "tamagui";
 
-import { AnimatedSplashOverlay } from "@/components/animated-icon";
+import { AnimatedSplashOverlay } from "@/shared/components/animated-icon";
 import { tamaguiConfig } from "../../tamagui.config";
 
 export default function RootLayout() {

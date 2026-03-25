@@ -14,17 +14,17 @@ import {
   TextBodySm,
   TextCaption,
   TextH2,
-} from "@/components/index";
-import { mockReceiptItems, storeInfo } from "@/data/receipt.data";
-import { cartAtom } from "@/store/cart";
+} from "@/shared/components";
+import { mockReceiptItems, storeInfo } from "@/features/payment/api/receipt.data";
+import { cartAtom } from "@/features/cart/store/cart.store";
 import {
   ColorBase,
   ColorDanger,
   ColorGreen,
   ColorNeutral,
   ColorPrimary,
-} from "@/themes/Colors";
-import { formatPrice, generateOrderNumber, getCurrentDateTime } from "@/utils";
+} from "@/shared/themes/Colors";
+import { formatPrice, generateOrderNumber, getCurrentDateTime } from "@/shared/utils";
 
 // ─── Main Page ────────────────────────────────────────────────────────────────
 

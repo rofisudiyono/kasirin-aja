@@ -4,24 +4,27 @@ import { ScrollView, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Separator, XStack, YStack } from "tamagui";
 
+import { CATEGORY_ICONS } from "@/config/categoryStyles";
+import { categoryFilters } from "@/features/catalog/api/category.data";
+import { CategoryBadge } from "@/features/catalog/components/CategoryBadge";
+import {
+  inventorySortOptions,
+  products,
+} from "@/features/inventory/api/inventory.data";
+import { StockBadge } from "@/features/inventory/components/StockBadge";
+import { StatsRow } from "@/features/shift/components/StatsRow";
 import {
   AppButton,
-  CategoryBadge,
   FilterChip,
   IconButton,
   PageHeader,
   SearchBar,
   ShadowCard,
-  StatsRow,
-  StockBadge,
   TextBodyLg,
   TextBodySm,
   TextCaption,
   TextMicro,
-} from "@/components";
-import { CATEGORY_ICONS } from "@/constants/categoryStyles";
-import { categoryFilters } from "@/data/category.data";
-import { inventorySortOptions, products } from "@/data/inventory";
+} from "@/shared/components";
 import {
   ColorBase,
   ColorDanger,
@@ -30,8 +33,9 @@ import {
   ColorPrimary,
   ColorWarning,
   ColorYellow,
-} from "@/themes/Colors";
-import type { CategoryFilter, SortOption } from "@/types";
+} from "@/shared/themes/Colors";
+import type { CategoryFilter, SortOption } from "@/shared/types";
+import { router } from "expo-router";
 
 export default function InventoriPage() {
   const [categoryFilter, setCategoryFilter] = useState<CategoryFilter>("Semua");
@@ -43,7 +47,10 @@ export default function InventoriPage() {
       : products.filter((p) => p.category === categoryFilter);
 
   return (
-    <SafeAreaView edges={['top']} style={{ flex: 1, backgroundColor: ColorBase.bgScreen }}>
+    <SafeAreaView
+      edges={["top"]}
+      style={{ flex: 1, backgroundColor: ColorBase.bgScreen }}
+    >
       {/* ── Header ── */}
       <PageHeader
         title="Produk"
@@ -51,7 +58,11 @@ export default function InventoriPage() {
         actions={
           <>
             <IconButton iconName="search-outline" />
-            <AppButton variant="primary" size="sm">
+            <AppButton
+              variant="primary"
+              size="sm"
+              onPress={() => router.push("/inventory/tambah-produk")}
+            >
               + Tambah
             </AppButton>
           </>

@@ -14,10 +14,10 @@ import {
   TextBodySm,
   TextCaption,
   TextH3,
-} from "@/components";
-import { ActionCardButton } from "@/components/atoms/ActionCardButton";
-import { recentTransactions } from "@/data/transactions";
-import { isShiftStartedAtom } from "@/store/shift";
+} from "@/shared/components";
+import { ActionCardButton } from "@/shared/components/atoms/ActionCardButton";
+import { recentTransactions } from "@/features/transactions/api/transactions.data";
+import { isShiftStartedAtom } from "@/features/shift/store/shift.store";
 import {
   ColorAccentOrange,
   ColorAccentPurple,
@@ -28,7 +28,7 @@ import {
   ColorPrimary,
   ColorSuccess,
   ColorWarning,
-} from "@/themes/Colors";
+} from "@/shared/themes/Colors";
 
 // ─── Preparation item badge ───────────────────────────────────────────────────
 function PrepBadge({

@@ -5,9 +5,11 @@ import { ScrollView, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Separator, XStack, YStack } from "tamagui";
 
+import { CATEGORY_COLORS, CATEGORY_ICONS } from "@/config/categoryStyles";
+import { CategoryBadge } from "@/features/catalog/components/CategoryBadge";
+import { productDetails } from "@/features/inventory/api/inventory.data";
 import {
   AppButton,
-  CategoryBadge,
   IconButton,
   ShadowCard,
   TextBody,
@@ -17,17 +19,15 @@ import {
   TextH1,
   TextH3,
   TextMicro,
-} from "@/components";
-import { CATEGORY_COLORS, CATEGORY_ICONS } from "@/constants/categoryStyles";
-import { productDetails } from "@/data/inventory";
+} from "@/shared/components";
 import {
   ColorBase,
   ColorGreen,
   ColorNeutral,
   ColorPrimary,
   ColorWarning,
-} from "@/themes/Colors";
-import type { ProductCategory } from "@/types";
+} from "@/shared/themes/Colors";
+import type { ProductCategory } from "@/shared/types";
 
 function heroBgColor(category: ProductCategory): string {
   return CATEGORY_COLORS[category]?.bg ?? ColorNeutral.neutral100;
@@ -51,8 +51,14 @@ export default function ProductDetailPage() {
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: ColorBase.bgScreen }}>
         <YStack flex={1} alignItems="center" justifyContent="center" gap="$3">
-          <Ionicons name="cube-outline" size={48} color={ColorNeutral.neutral300} />
-          <TextBodyLg color={ColorNeutral.neutral400}>Produk tidak ditemukan</TextBodyLg>
+          <Ionicons
+            name="cube-outline"
+            size={48}
+            color={ColorNeutral.neutral300}
+          />
+          <TextBodyLg color={ColorNeutral.neutral400}>
+            Produk tidak ditemukan
+          </TextBodyLg>
           <AppButton
             variant="outline"
             size="sm"
@@ -65,7 +71,7 @@ export default function ProductDetailPage() {
   }
 
   const margin = Math.round(
-    ((product.sellPrice - product.costPrice) / product.sellPrice) * 100
+    ((product.sellPrice - product.costPrice) / product.sellPrice) * 100,
   );
 
   return (
@@ -247,8 +253,7 @@ export default function ProductDetailPage() {
                 <ShadowCard overflow="hidden">
                   {group.options.map((opt, idx) => {
                     const isLow =
-                      opt.stock > 0 &&
-                      opt.stock <= product.lowStockThreshold;
+                      opt.stock > 0 && opt.stock <= product.lowStockThreshold;
 
                     const priceText =
                       group.priceMode === "total"
@@ -277,7 +282,9 @@ export default function ProductDetailPage() {
                             paddingHorizontal={12}
                             paddingVertical={4}
                           >
-                            <TextBodySm fontWeight="600">{opt.label}</TextBodySm>
+                            <TextBodySm fontWeight="600">
+                              {opt.label}
+                            </TextBodySm>
                           </YStack>
 
                           <TextBodySm
@@ -289,10 +296,7 @@ export default function ProductDetailPage() {
                                 : ColorNeutral.neutral700
                             }
                           >
-                            {[
-                              priceText,
-                              `Stok: ${opt.stock}`,
-                            ]
+                            {[priceText, `Stok: ${opt.stock}`]
                               .filter(Boolean)
                               .join(" • ")}
                           </TextBodySm>
@@ -381,7 +385,7 @@ export default function ProductDetailPage() {
           size="lg"
           fullWidth
           title="Edit Produk"
-          onPress={() => router.push("/(tabs)/inventory/tambah-produk")}
+          onPress={() => router.push("/inventory/tambah-produk")}
         />
       </YStack>
     </SafeAreaView>

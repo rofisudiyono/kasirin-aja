@@ -14,8 +14,8 @@ import {
   TextBodySm,
   TextCaption,
   TextH1,
-} from "@/components/index";
-import { cashNumpadRows } from "@/data/payment.data";
+} from "@/shared/components";
+import { cashNumpadRows } from "@/features/payment/api/payment.data";
 import {
   ColorBase,
   ColorDanger,
@@ -23,8 +23,8 @@ import {
   ColorNeutral,
   ColorPrimary,
   ColorSky,
-} from "@/themes/Colors";
-import { formatPrice, getCashSuggestions } from "@/utils";
+} from "@/shared/themes/Colors";
+import { formatPrice, getCashSuggestions } from "@/shared/utils";
 
 // ─── Main Page ────────────────────────────────────────────────────────────────
 
