@@ -25,4 +25,5 @@ export interface CatalogProduct {
   basePrice: number;
   stockStatus: CatalogStockStatus;
   variants?: VariantGroup[];
+  barcode?: string;
 }

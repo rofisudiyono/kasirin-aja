@@ -1,12 +1,13 @@
 import { useRouter } from "expo-router";
 import { useAtom } from "jotai";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ScrollView, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { YStack } from "tamagui";
 
-import { cartAtom, type CartItem } from "@/features/cart/store/cart.store";
+import { cartAtom, heldOrdersAtom, scannedBarcodeAtom, type CartItem } from "@/features/cart/store/cart.store";
 import { catalogProducts } from "@/features/catalog/api/catalog.data";
+import { catalogStockAtom } from "@/features/catalog/store/catalog.store";
 import {
   CartBar,
   CartIconButton,
@@ -22,13 +23,35 @@ export default function TransaksiBaruPage() {
   const router = useRouter();
   const [categoryFilter, setCategoryFilter] = useState<CategoryFilter>("Semua");
   const [cart, setCart] = useAtom(cartAtom);
+  const [scannedBarcode, setScannedBarcode] = useAtom(scannedBarcodeAtom);
+  const [heldOrders] = useAtom(heldOrdersAtom);
+  const [catalogStock] = useAtom(catalogStockAtom);
   const [variantProduct, setVariantProduct] = useState<CatalogProduct | null>(null);
   const [sheetVisible, setSheetVisible] = useState(false);
 
+  // Handle scanned barcode from scanner screen
+  useEffect(() => {
+    if (!scannedBarcode) return;
+    const found = catalogProducts.find((p) => p.barcode === scannedBarcode);
+    if (found) {
+      handleAddProduct(found);
+    }
+    setScannedBarcode(null);
+  }, [scannedBarcode]);
+
+  // Merge live stock counts into catalog products
+  const productsWithLiveStock = catalogProducts.map((p) => {
+    const liveStock = catalogStock[p.id];
+    if (liveStock === undefined) return p;
+    const stockStatus: typeof p.stockStatus =
+      liveStock === 0 ? "empty" : liveStock <= 5 ? "low" : "normal";
+    return { ...p, stockStatus };
+  });
+
   const filtered =
     categoryFilter === "Semua"
-      ? catalogProducts
-      : catalogProducts.filter((p) => p.category === categoryFilter);
+      ? productsWithLiveStock
+      : productsWithLiveStock.filter((p) => p.category === categoryFilter);
 
   const totalItems = cart.reduce((s, c) => s + c.quantity, 0);
   const totalPrice = cart.reduce((s, c) => s + c.unitPrice * c.quantity, 0);
@@ -77,7 +100,12 @@ export default function TransaksiBaruPage() {
         onBack={() => router.back()}
         actions={
           <>
-            <IconButton iconName="scan-outline" />
+            <IconButton iconName="scan-outline" onPress={() => router.push("/barcode-scanner" as never)} />
+            <IconButton
+              iconName="time-outline"
+              onPress={() => router.push("/pesanan-ditahan" as never)}
+              badge={heldOrders.length > 0 ? heldOrders.length : undefined}
+            />
             <CartIconButton totalItems={totalItems} />
           </>
         }

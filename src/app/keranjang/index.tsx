@@ -20,6 +20,7 @@ import {
   PromoCard,
   cartAtom,
 } from "@/features/cart";
+import { cartSnapshotAtom, heldOrdersAtom } from "@/features/cart/store/cart.store";
 import { promoDefinitions } from "@/features/payment/api/payment.data";
 import { PageHeader } from "@/shared/components";
 import { ColorBase, ColorDanger } from "@/shared/themes/Colors";
@@ -30,6 +31,8 @@ const PPN_RATE = 0.11;
 export default function KeranjangPage() {
   const router = useRouter();
   const [cart, setCart] = useAtom(cartAtom);
+  const [, setHeldOrders] = useAtom(heldOrdersAtom);
+  const [, setCartSnapshot] = useAtom(cartSnapshotAtom);
 
   const [customerName, setCustomerName] = useState("");
   const [tableNumber, setTableNumber] = useState("");
@@ -155,8 +158,28 @@ export default function KeranjangPage() {
 
       <BottomActionBar
         cartLength={cart.length}
-        onHoldOrder={() => Alert.alert("Tahan Order", "Pesanan ditahan.")}
+        onHoldOrder={() => {
+          if (cart.length === 0) return;
+          const label = customerName || tableNumber || orderType;
+          const now = new Date();
+          const timeStr = now.toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" });
+          const held = {
+            id: `hold-${Date.now()}`,
+            items: [...cart],
+            customerName,
+            tableNumber,
+            orderType,
+            createdAt: timeStr,
+            label,
+          };
+          setHeldOrders((prev) => [held, ...prev]);
+          setCart([]);
+          Alert.alert("Pesanan Ditahan", `Pesanan "${label}" telah ditahan.`, [
+            { text: "OK", onPress: () => router.back() },
+          ]);
+        }}
         onPay={() => {
+          setCartSnapshot([...cart]);
           const itemsSummary = cart
             .map((c) => `${c.productName}${c.variantLabel ? ` (${c.variantLabel})` : ""} x${c.quantity}`)
             .join(", ");

@@ -1,12 +1,15 @@
 import { Ionicons } from "@expo/vector-icons";
+import * as Print from "expo-print";
+import * as Sharing from "expo-sharing";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useAtom, useSetAtom } from "jotai";
 import React from "react";
-import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Alert, ScrollView, Share, StyleSheet, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { XStack, YStack } from "tamagui";
 
-import { cartAtom } from "@/features/cart/store/cart.store";
+import { cartAtom, cartSnapshotAtom } from "@/features/cart/store/cart.store";
+import { catalogStockAtom } from "@/features/catalog/store/catalog.store";
 import {
   mockReceiptItems,
   storeInfo,
@@ -43,6 +46,8 @@ export default function PembayaranSuksesPage() {
   const router = useRouter();
   const setCart = useSetAtom(cartAtom);
   const [transactions, setTransactions] = useAtom(transactionsAtom);
+  const [, setCatalogStock] = useAtom(catalogStockAtom);
+  const [cartSnapshot, setCartSnapshot] = useAtom(cartSnapshotAtom);
   const params = useLocalSearchParams<{
     total: string;
     totalItems: string;
@@ -65,16 +70,31 @@ export default function PembayaranSuksesPage() {
   const orderNumber = React.useMemo(() => generateOrderNumber(), []);
   const dateTime = React.useMemo(() => getCurrentDateTime(), []);
 
-  // Save transaction once on mount
+  // Save transaction & deduct stock once on mount
   const savedRef = React.useRef(false);
   React.useEffect(() => {
     if (savedRef.current || total === 0) return;
     savedRef.current = true;
+
+    // Save transaction
     const tx = buildTransaction(
       { total, items, method, customerName: customerLabel },
       transactions.length,
     );
     setTransactions((prev) => [tx, ...prev]);
+
+    // Deduct stock for each sold item
+    if (cartSnapshot.length > 0) {
+      setCatalogStock((prev) => {
+        const updated = { ...prev };
+        for (const item of cartSnapshot) {
+          const current = updated[item.productId] ?? 0;
+          updated[item.productId] = Math.max(0, current - item.quantity);
+        }
+        return updated;
+      });
+      setCartSnapshot([]);
+    }
   }, []);
 
   // Calculate subtotal from total (reverse: total = (subtotal - discount) * 1.11)
@@ -89,6 +109,76 @@ export default function PembayaranSuksesPage() {
   function handleGoHome() {
     setCart([]);
     router.dismissAll();
+  }
+
+  function buildReceiptHtml() {
+    const itemsHtml = mockReceiptItems
+      .map(
+        (item) =>
+          `<tr><td>${item.name} x${item.qty}</td><td style="text-align:right">${formatPrice(item.price)}</td></tr>`,
+      )
+      .join("");
+    return `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <meta charset="utf-8"/>
+          <style>
+            body { font-family: monospace; width: 280px; margin: 0 auto; font-size: 12px; }
+            h2 { text-align: center; margin: 4px 0; font-size: 14px; }
+            p { text-align: center; margin: 2px 0; font-size: 11px; }
+            hr { border: none; border-top: 1px dashed #000; margin: 8px 0; }
+            table { width: 100%; border-collapse: collapse; }
+            td { padding: 2px 0; }
+            .total { font-weight: bold; font-size: 13px; }
+            .footer { text-align: center; margin-top: 8px; font-style: italic; }
+          </style>
+        </head>
+        <body>
+          <h2>${storeInfo.name}</h2>
+          <p>${storeInfo.address}</p>
+          <p>${storeInfo.phone}</p>
+          <hr/>
+          <p>No. Order: ${orderNumber}</p>
+          <p>Kasir: Budi Santoso &nbsp;|&nbsp; ${new Date().toLocaleDateString("id-ID")}</p>
+          <hr/>
+          <table>${itemsHtml}</table>
+          <hr/>
+          <table>
+            <tr><td>Subtotal</td><td style="text-align:right">${formatPrice(subtotal)}</td></tr>
+            ${discount > 0 ? `<tr><td>Diskon</td><td style="text-align:right">-${formatPrice(discount)}</td></tr>` : ""}
+            <tr><td>PPN 11%</td><td style="text-align:right">${formatPrice(ppn)}</td></tr>
+            <tr class="total"><td>TOTAL</td><td style="text-align:right">${formatPrice(total)}</td></tr>
+          </table>
+          <hr/>
+          <table>
+            <tr><td>Metode</td><td style="text-align:right">${method}</td></tr>
+            ${method === "Tunai" ? `<tr><td>Diterima</td><td style="text-align:right">${formatPrice(received)}</td></tr><tr><td>Kembalian</td><td style="text-align:right">${formatPrice(change)}</td></tr>` : ""}
+          </table>
+          <p class="footer">Terima kasih telah berbelanja!</p>
+        </body>
+      </html>
+    `;
+  }
+
+  async function handlePrint() {
+    try {
+      const { uri } = await Print.printToFileAsync({ html: buildReceiptHtml(), base64: false });
+      const canShare = await Sharing.isAvailableAsync();
+      if (canShare) {
+        await Sharing.shareAsync(uri, { mimeType: "application/pdf", dialogTitle: "Cetak / Bagikan Struk" });
+      } else {
+        await Print.printAsync({ uri });
+      }
+    } catch {
+      Alert.alert("Gagal", "Tidak dapat membuka struk PDF.");
+    }
+  }
+
+  async function handleShare() {
+    const itemsText = mockReceiptItems.map((i) => `${i.name} x${i.qty}  ${formatPrice(i.price)}`).join("\n");
+    const text = `🧾 STRUK PEMBAYARAN\n${storeInfo.name}\n${storeInfo.address}\n\nNo. Order: ${orderNumber}\n\n${itemsText}\n\nSubtotal: ${formatPrice(subtotal)}\nPPN 11%: ${formatPrice(ppn)}\nTOTAL: ${formatPrice(total)}\nMetode: ${method}\n\nTerima kasih!`;
+    await Share.share({ message: text, title: "Struk Pembayaran" });
   }
 
   return (
@@ -275,8 +365,9 @@ export default function PembayaranSuksesPage() {
             <TouchableOpacity
               activeOpacity={0.85}
               style={styles.outlineBtn}
-              onPress={() => {}}
+              onPress={handlePrint}
             >
+              <Ionicons name="print-outline" size={18} color={ColorNeutral.neutral700} style={{ marginRight: 6 }} />
               <TextBodyLg fontWeight="700" color={ColorNeutral.neutral700}>
                 Cetak Struk
               </TextBodyLg>
@@ -284,8 +375,9 @@ export default function PembayaranSuksesPage() {
             <TouchableOpacity
               activeOpacity={0.85}
               style={styles.outlineBtn}
-              onPress={() => {}}
+              onPress={handleShare}
             >
+              <Ionicons name="share-outline" size={18} color={ColorNeutral.neutral700} style={{ marginRight: 6 }} />
               <TextBodyLg fontWeight="700" color={ColorNeutral.neutral700}>
                 Bagikan
               </TextBodyLg>
@@ -368,6 +460,7 @@ const styles = StyleSheet.create({
     backgroundColor: ColorBase.white,
     alignItems: "center",
     justifyContent: "center",
+    flexDirection: "row",
   },
   newTransBtn: {
     height: 52,

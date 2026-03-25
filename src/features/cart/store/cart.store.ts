@@ -1,5 +1,6 @@
-import type { ProductCategory } from "@/shared/types";
+import type { OrderType, ProductCategory } from "@/shared/types";
 import { atom } from "jotai";
+import { atomWithMMKV } from "@/shared/store/storage";
 
 export interface CartItem {
   cartId: string;
@@ -13,3 +14,23 @@ export interface CartItem {
 }
 
 export const cartAtom = atom<CartItem[]>([]);
+
+// Signals the transaksi-baru page that a barcode was scanned
+export const scannedBarcodeAtom = atom<string | null>(null);
+
+// Snapshot of the cart at payment time — used by pembayaran-sukses for stock deduction
+export const cartSnapshotAtom = atom<CartItem[]>([]);
+
+// ─── Hold Order ───────────────────────────────────────────────────────────────
+
+export interface HeldOrder {
+  id: string;
+  items: CartItem[];
+  customerName: string;
+  tableNumber: string;
+  orderType: OrderType;
+  createdAt: string;
+  label: string; // display label, e.g. "Meja 3" or "Budi"
+}
+
+export const heldOrdersAtom = atomWithMMKV<HeldOrder[]>("heldOrders", []);

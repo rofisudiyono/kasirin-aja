@@ -12,6 +12,7 @@ export const catalogProducts: CatalogProduct[] = [
     category: "Minuman",
     basePrice: 18000,
     stockStatus: "normal",
+    barcode: "8901234560001",
   },
   {
     id: "2",
@@ -19,6 +20,7 @@ export const catalogProducts: CatalogProduct[] = [
     category: "Makanan",
     basePrice: 22000,
     stockStatus: "normal",
+    barcode: "8901234560002",
   },
   {
     id: "3",
@@ -26,6 +28,7 @@ export const catalogProducts: CatalogProduct[] = [
     category: "Snack",
     basePrice: 12000,
     stockStatus: "low",
+    barcode: "8901234560003",
   },
   {
     id: "4",
@@ -33,6 +36,7 @@ export const catalogProducts: CatalogProduct[] = [
     category: "Minuman",
     basePrice: 5000,
     stockStatus: "empty",
+    barcode: "8901234560004",
   },
   {
     id: "5",
@@ -40,6 +44,7 @@ export const catalogProducts: CatalogProduct[] = [
     category: "Minuman",
     basePrice: 15000,
     stockStatus: "normal",
+    barcode: "8901234560005",
     variants: [
       {
         name: "Ukuran",
@@ -64,6 +69,7 @@ export const catalogProducts: CatalogProduct[] = [
     category: "Makanan",
     basePrice: 25000,
     stockStatus: "normal",
+    barcode: "8901234560006",
   },
   {
     id: "7",
@@ -71,6 +77,7 @@ export const catalogProducts: CatalogProduct[] = [
     category: "Minuman",
     basePrice: 10000,
     stockStatus: "normal",
+    barcode: "8901234560007",
   },
   {
     id: "8",
@@ -78,5 +85,6 @@ export const catalogProducts: CatalogProduct[] = [
     category: "Snack",
     basePrice: 12000,
     stockStatus: "normal",
+    barcode: "8901234560008",
   },
 ];

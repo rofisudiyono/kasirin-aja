@@ -4,11 +4,11 @@
  * Replaces the repetitive TouchableOpacity > YStack > Ionicons pattern
  * that appears across every screen header and action area.
  */
-import { ColorNeutral } from "@/shared/themes/Colors";
+import { ColorNeutral, ColorDanger } from "@/shared/themes/Colors";
 import type { IoniconName } from "@/shared/types";
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
-import { TouchableOpacity } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { YStack } from "tamagui";
 
 export interface IconButtonProps {
@@ -23,6 +23,8 @@ export interface IconButtonProps {
   iconColor?: string;
   onPress?: () => void;
   disabled?: boolean;
+  /** Show a numeric badge on top-right corner */
+  badge?: number;
 }
 
 export function IconButton({
@@ -34,6 +36,7 @@ export function IconButton({
   iconColor = ColorNeutral.neutral700,
   onPress,
   disabled,
+  badge,
 }: IconButtonProps) {
   const radius = shape === "circle" ? size / 2 : 10;
 
@@ -48,7 +51,20 @@ export function IconButton({
         justifyContent="center"
       >
         <Ionicons name={iconName} size={iconSize} color={iconColor} />
+        {badge != null && badge > 0 && (
+          <View style={badgeStyles.dot}>
+            <Ionicons name="ellipse" size={8} color={ColorDanger.danger600} />
+          </View>
+        )}
       </YStack>
     </TouchableOpacity>
   );
 }
+
+const badgeStyles = StyleSheet.create({
+  dot: {
+    position: "absolute",
+    top: 2,
+    right: 2,
+  },
+});

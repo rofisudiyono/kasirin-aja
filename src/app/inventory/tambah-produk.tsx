@@ -1,5 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { useAtom } from "jotai";
 import React, { useState } from "react";
 import { Alert, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
@@ -25,24 +25,37 @@ import type {
 
 export default function TambahProdukPage() {
   const router = useRouter();
-  const [, setUserProducts] = useAtom(userProductsAtom);
+  const { editId } = useLocalSearchParams<{ editId?: string }>();
+  const [userProducts, setUserProducts] = useAtom(userProductsAtom);
+
+  // If editing, find the existing product
+  const editingProduct = editId ? userProducts.find((p) => p.id === editId) : undefined;
+  const isEditMode = !!editingProduct;
 
   const [photos, setPhotos] = useState<string[]>(["1", "2"]);
-  const [namaProduk, setNamaProduk] = useState("Kopi Susu");
-  const [sku, setSku] = useState("KPS-001");
+  const [namaProduk, setNamaProduk] = useState(editingProduct?.name ?? "Kopi Susu");
+  const [sku, setSku] = useState(editingProduct?.sku ?? "KPS-001");
   const [barcode, setBarcode] = useState("");
-  const [kategori, setKategori] = useState<TambahProdukCategory>("Minuman");
+  const [kategori, setKategori] = useState<TambahProdukCategory>(
+    (editingProduct?.category as TambahProdukCategory) ?? "Minuman",
+  );
   const [deskripsi, setDeskripsi] = useState("");
   const [hargaModal, setHargaModal] = useState("8000");
-  const [hargaJual, setHargaJual] = useState("15000");
-  const [hasVariant, setHasVariant] = useState(true);
+  const [hargaJual, setHargaJual] = useState(
+    editingProduct ? String(Number(editingProduct.price.replace(/[^0-9]/g, ""))) : "15000",
+  );
+  const [hasVariant, setHasVariant] = useState(editingProduct?.hasVariant ?? true);
   const [variantGroups, setVariantGroups] = useState<TambahProdukVariantGroup[]>([
     { name: "Ukuran", values: ["Small", "Medium", "Large"] },
   ]);
-  const [stokAwal, setStokAwal] = useState("100");
+  const [stokAwal, setStokAwal] = useState(
+    editingProduct ? String(editingProduct.stock) : "100",
+  );
   const [minAlert, setMinAlert] = useState("10");
   const [satuan, setSatuan] = useState("pcs");
-  const [isActive, setIsActive] = useState(true);
+  const [isActive, setIsActive] = useState(
+    editingProduct ? editingProduct.stockStatus !== "inactive" : true,
+  );
 
   function removeVariantValue(groupIdx: number, valIdx: number) {
     setVariantGroups((prev) =>
@@ -63,19 +76,50 @@ export default function TambahProdukPage() {
       Alert.alert("Nama produk tidak boleh kosong.");
       return;
     }
-    const product = buildProduct({
-      name: namaProduk.trim(),
-      sku: sku.trim() || `SKU-${Date.now()}`,
-      kategori,
-      hargaJual,
-      stokAwal,
-      hasVariant,
-      isActive,
-    });
-    setUserProducts((prev) => [product, ...prev]);
-    Alert.alert("Berhasil", `Produk "${namaProduk}" berhasil disimpan.`, [
-      { text: "OK", onPress: () => router.back() },
-    ]);
+
+    if (isEditMode && editingProduct) {
+      // Update existing product
+      setUserProducts((prev) =>
+        prev.map((p) =>
+          p.id === editingProduct.id
+            ? {
+                ...p,
+                name: namaProduk.trim(),
+                sku: sku.trim() || p.sku,
+                category: kategori as typeof p.category,
+                price: `Rp ${Number(hargaJual).toLocaleString("id-ID")}`,
+                stock: Number(stokAwal) || 0,
+                stockStatus: !isActive
+                  ? "inactive"
+                  : Number(stokAwal) === 0
+                    ? "empty"
+                    : Number(stokAwal) <= 5
+                      ? "low"
+                      : "normal",
+                hasVariant,
+              }
+            : p,
+        ),
+      );
+      Alert.alert("Berhasil", `Produk "${namaProduk}" berhasil diperbarui.`, [
+        { text: "OK", onPress: () => router.back() },
+      ]);
+    } else {
+      // Create new product
+      const product = buildProduct({
+        name: namaProduk.trim(),
+        sku: sku.trim() || `SKU-${Date.now()}`,
+        kategori,
+        hargaJual,
+        stokAwal,
+        hasVariant,
+        isActive,
+      });
+      setUserProducts((prev) => [product, ...prev]);
+      Alert.alert("Berhasil", `Produk "${namaProduk}" berhasil disimpan.`, [
+        { text: "OK", onPress: () => router.back() },
+      ]);
+    }
   }
 
   return (
@@ -105,7 +149,7 @@ export default function TambahProdukPage() {
         </TouchableOpacity>
 
         <TextH3 fontWeight="700" flex={1} textAlign="center">
-          Tambah Produk
+          {isEditMode ? "Edit Produk" : "Tambah Produk"}
         </TextH3>
 
         <AppButton
@@ -167,7 +211,7 @@ export default function TambahProdukPage() {
           variant="primary"
           size="lg"
           fullWidth
-          title="Simpan Produk"
+          title={isEditMode ? "Simpan Perubahan" : "Simpan Produk"}
           onPress={handleSimpan}
         />
         <TextCaption
