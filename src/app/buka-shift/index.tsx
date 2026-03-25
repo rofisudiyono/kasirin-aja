@@ -1,5 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
+import { useAtom } from "jotai";
 import React, { useState } from "react";
 import { StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -14,6 +15,7 @@ import {
   TextH1,
   TextH3,
 } from "@/components";
+import { isShiftStartedAtom } from "@/store/shift";
 import {
   ColorBase,
   ColorDanger,
@@ -38,6 +40,7 @@ export default function BukaShiftPage() {
   const router = useRouter();
   const [inputValue, setInputValue] = useState("500000");
   const [note, setNote] = useState("");
+  const [, setIsShiftStarted] = useAtom(isShiftStartedAtom);
 
   const amount = Number(inputValue);
 
@@ -63,6 +66,7 @@ export default function BukaShiftPage() {
   }
 
   function handleMulaiShift() {
+    setIsShiftStarted(true);
     // Navigate back to home or to the active shift screen
     router.replace("/(tabs)");
   }

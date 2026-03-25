@@ -21,6 +21,7 @@ export default function TabsLayout() {
         headerShown: false,
         tabBarIcon: ({ focused }) => {
           const icons = TAB_ICONS[route.name];
+          if (!icons) return null;
           return (
             <Ionicons
               name={focused ? icons.active : icons.inactive}
@@ -60,7 +61,7 @@ export default function TabsLayout() {
     >
       <Tabs.Screen name="index" />
       <Tabs.Screen name="transaksi" />
-      <Tabs.Screen name="inventori" />
+      <Tabs.Screen name="inventory" />
       <Tabs.Screen name="pengaturan" />
     </Tabs>
   );
