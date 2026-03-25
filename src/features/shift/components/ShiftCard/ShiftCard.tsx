@@ -1,8 +1,15 @@
 import { Ionicons } from "@expo/vector-icons";
+import { useAtomValue } from "jotai";
 import React from "react";
 import { XStack, YStack } from "tamagui";
 
-import { AppButton, TextBodyLg, TextBodySm, TextCaption } from "@/shared/components";
+import { shiftDataAtom } from "@/features/shift/store/shift.store";
+import {
+  AppButton,
+  TextBodyLg,
+  TextBodySm,
+  TextCaption,
+} from "@/shared/components";
 import {
   ColorBase,
   ColorNeutral,
@@ -13,7 +20,13 @@ import {
 
 import { ShiftCardProps } from "./ShiftCard.types";
 
-export function ShiftCard({ isShiftStarted, onClose, onStart }: ShiftCardProps) {
+export function ShiftCard({
+  isShiftStarted,
+  onClose,
+  onStart,
+}: ShiftCardProps) {
+  const shiftData = useAtomValue(shiftDataAtom);
+
   if (isShiftStarted) {
     return (
       <YStack
@@ -34,7 +47,9 @@ export function ShiftCard({ isShiftStarted, onClose, onStart }: ShiftCardProps) 
           </TextBodyLg>
         </XStack>
 
-        <TextBodySm color={ColorPrimary.primary200}>Mulai: 08:00 WIB</TextBodySm>
+        <TextBodySm color={ColorPrimary.primary200}>
+          Mulai: {shiftData?.startTime ?? "08:00 WIB"}
+        </TextBodySm>
 
         <XStack gap="$2">
           <YStack
@@ -44,7 +59,9 @@ export function ShiftCard({ isShiftStarted, onClose, onStart }: ShiftCardProps) 
             padding="$3"
             gap={4}
           >
-            <TextBodySm color={ColorPrimary.primary200}>Total Transaksi</TextBodySm>
+            <TextBodySm color={ColorPrimary.primary200}>
+              Total Transaksi
+            </TextBodySm>
             <TextBodyLg fontWeight="700" color={ColorBase.white}>
               24
             </TextBodyLg>
@@ -57,7 +74,11 @@ export function ShiftCard({ isShiftStarted, onClose, onStart }: ShiftCardProps) 
             gap={4}
           >
             <TextBodySm color={ColorPrimary.primary200}>Pendapatan</TextBodySm>
-            <TextBodyLg fontWeight="700" color={ColorBase.white} numberOfLines={1}>
+            <TextBodyLg
+              fontWeight="700"
+              color={ColorBase.white}
+              numberOfLines={1}
+            >
               Rp 1.250....
             </TextBodyLg>
           </YStack>
@@ -106,7 +127,8 @@ export function ShiftCard({ isShiftStarted, onClose, onStart }: ShiftCardProps) 
       </XStack>
 
       <TextBodySm color={ColorPrimary.primary200}>
-        Siapkan modal awal dan cek perangkat kasir sebelum mulai menerima transaksi.
+        Siapkan modal awal dan cek perangkat kasir sebelum mulai menerima
+        transaksi.
       </TextBodySm>
 
       <XStack gap="$2">
@@ -129,8 +151,14 @@ export function ShiftCard({ isShiftStarted, onClose, onStart }: ShiftCardProps) 
           padding="$3"
           gap={4}
         >
-          <TextBodySm color={ColorPrimary.primary200}>Kasir Bertugas</TextBodySm>
-          <TextBodyLg fontWeight="700" color={ColorBase.white} numberOfLines={1}>
+          <TextBodySm color={ColorPrimary.primary200}>
+            Kasir Bertugas
+          </TextBodySm>
+          <TextBodyLg
+            fontWeight="700"
+            color={ColorBase.white}
+            numberOfLines={1}
+          >
             Budi Santo...
           </TextBodyLg>
         </YStack>
@@ -156,7 +184,8 @@ export function ShiftCard({ isShiftStarted, onClose, onStart }: ShiftCardProps) 
               Modal awal direkomendasikan Rp 500.000
             </TextBodySm>
             <TextCaption color={ColorPrimary.primary200}>
-              Jumlah ini akan dipakai sebagai saldo awal laci kasir saat shift dibuka.
+              Jumlah ini akan dipakai sebagai saldo awal laci kasir saat shift
+              dibuka.
             </TextCaption>
           </YStack>
         </XStack>
@@ -167,7 +196,9 @@ export function ShiftCard({ isShiftStarted, onClose, onStart }: ShiftCardProps) 
         size="lg"
         fullWidth
         title="Mulai Shift Sekarang"
-        icon={<Ionicons name="play-outline" size={18} color={ColorBase.white} />}
+        icon={
+          <Ionicons name="play-outline" size={18} color={ColorBase.white} />
+        }
         onPress={onStart}
       />
     </YStack>

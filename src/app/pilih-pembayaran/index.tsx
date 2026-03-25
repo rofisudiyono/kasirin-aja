@@ -43,11 +43,15 @@ export default function PilihPembayaranPage() {
     total: string;
     totalItems: string;
     discount: string;
+    items: string;
+    customerLabel: string;
   }>();
 
   const total = Number(params.total ?? 0);
   const totalItems = Number(params.totalItems ?? 0);
   const discount = Number(params.discount ?? 0);
+  const items = params.items ?? "";
+  const customerLabel = params.customerLabel ?? "";
 
   const [selectedMethod, setSelectedMethod] = useState<PaymentMethod>("qris");
   const [qrTimer, setQrTimer] = useState(QR_DURATION);
@@ -90,33 +94,45 @@ export default function PilihPembayaranPage() {
   });
 
   function handleProcess() {
+    const baseParams = {
+      total: String(total),
+      totalItems: String(totalItems),
+      discount: String(discount),
+      items,
+      customerLabel,
+    };
+
     if (selectedMethod === "tunai") {
-      router.push({
-        pathname: "/pembayaran-tunai",
-        params: {
-          total: String(total),
-          totalItems: String(totalItems),
-          discount: String(discount),
-        },
-      });
+      router.push({ pathname: "/pembayaran-tunai", params: baseParams });
       return;
     }
 
+    const methodLabel =
+      selectedMethod === "qris"
+        ? "QRIS"
+        : selectedMethod === "transfer"
+          ? "Transfer Bank"
+          : "EDC / Kartu";
+
+    const instructionMap: Record<string, string> = {
+      qris: "Minta pelanggan scan QR di atas, lalu konfirmasi pembayaran diterima.",
+      transfer: "Minta pelanggan transfer ke rekening toko, lalu konfirmasi.",
+      edc: "Minta pelanggan tap/gesek kartu di mesin EDC, lalu konfirmasi.",
+    };
+
     Alert.alert(
-      "Konfirmasi Pembayaran",
-      `Metode: ${selectedMethod.toUpperCase()}\nTotal: ${formatPrice(total)}`,
+      `Konfirmasi ${methodLabel}`,
+      `Total: ${formatPrice(total)}\n\n${instructionMap[selectedMethod] ?? ""}`,
       [
         { text: "Batal", style: "cancel" },
         {
-          text: "Konfirmasi",
+          text: "Pembayaran Diterima",
           onPress: () => {
             router.push({
               pathname: "/pembayaran-sukses",
               params: {
-                total: String(total),
-                totalItems: String(totalItems),
-                discount: String(discount),
-                method: selectedMethod.toUpperCase(),
+                ...baseParams,
+                method: methodLabel,
                 received: String(total),
                 change: "0",
               },
@@ -220,6 +236,108 @@ export default function PilihPembayaranPage() {
                       </Animated.View>
                     </TouchableOpacity>
                   </XStack>
+                  <TextBodySm
+                    color="$colorSecondary"
+                    marginTop={8}
+                    textAlign="center"
+                  >
+                    Setelah pelanggan scan, tekan{" "}
+                    <TextBodySm fontWeight="700">
+                      "Proses Pembayaran"
+                    </TextBodySm>{" "}
+                    untuk konfirmasi.
+                  </TextBodySm>
+                </View>
+              )}
+
+              {/* Transfer panel */}
+              {method.id === "transfer" && selectedMethod === "transfer" && (
+                <View style={styles.infoPanel}>
+                  <XStack alignItems="center" gap={10} marginBottom={8}>
+                    <Ionicons
+                      name="business-outline"
+                      size={20}
+                      color="#3B82F6"
+                    />
+                    <TextBodyLg fontWeight="700">Rekening Toko</TextBodyLg>
+                  </XStack>
+                  <YStack gap={6}>
+                    {[
+                      { bank: "BCA", no: "1234567890", name: "Toko Makmur" },
+                      {
+                        bank: "Mandiri",
+                        no: "0987654321",
+                        name: "Toko Makmur",
+                      },
+                    ].map((r) => (
+                      <XStack
+                        key={r.bank}
+                        justifyContent="space-between"
+                        alignItems="center"
+                        backgroundColor="$backgroundSecondary"
+                        borderRadius={10}
+                        padding={10}
+                      >
+                        <YStack>
+                          <TextBodySm fontWeight="700">{r.bank}</TextBodySm>
+                          <TextBodySm color="$colorSecondary">
+                            {r.no}
+                          </TextBodySm>
+                          <TextCaption color="$colorSecondary">
+                            a.n. {r.name}
+                          </TextCaption>
+                        </YStack>
+                        <Ionicons
+                          name="copy-outline"
+                          size={16}
+                          color={ColorNeutral.neutral400}
+                        />
+                      </XStack>
+                    ))}
+                  </YStack>
+                  <TextBodySm
+                    color="$colorSecondary"
+                    marginTop={10}
+                    textAlign="center"
+                  >
+                    Minta pelanggan transfer lalu tekan{" "}
+                    <TextBodySm fontWeight="700">Proses Pembayaran</TextBodySm>.
+                  </TextBodySm>
+                </View>
+              )}
+
+              {/* EDC panel */}
+              {method.id === "edc" && selectedMethod === "edc" && (
+                <View style={styles.infoPanel}>
+                  <XStack alignItems="center" gap={10} marginBottom={8}>
+                    <Ionicons name="card-outline" size={20} color="#8B5CF6" />
+                    <TextBodyLg fontWeight="700">Mesin EDC</TextBodyLg>
+                  </XStack>
+                  <YStack gap={8}>
+                    {[
+                      {
+                        step: "1",
+                        text: "Masukkan jumlah tagihan di mesin EDC",
+                      },
+                      { step: "2", text: "Minta pelanggan tap / gesek kartu" },
+                      { step: "3", text: "Tunggu konfirmasi dari mesin EDC" },
+                      {
+                        step: "4",
+                        text: "Tekan Proses Pembayaran setelah berhasil",
+                      },
+                    ].map((s) => (
+                      <XStack key={s.step} alignItems="flex-start" gap={10}>
+                        <View style={styles.stepBadge}>
+                          <TextBodySm fontWeight="700" color="#8B5CF6">
+                            {s.step}
+                          </TextBodySm>
+                        </View>
+                        <TextBodySm flex={1} color="$colorSecondary">
+                          {s.text}
+                        </TextBodySm>
+                      </XStack>
+                    ))}
+                  </YStack>
                 </View>
               )}
             </React.Fragment>
@@ -290,6 +408,26 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.08,
     shadowRadius: 8,
     elevation: 3,
+  },
+  infoPanel: {
+    backgroundColor: ColorBase.white,
+    borderRadius: 16,
+    padding: 16,
+    shadowColor: ColorBase.black,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 6,
+    elevation: 2,
+    marginTop: -4,
+  },
+  stepBadge: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    backgroundColor: "#EDE9FE",
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 1,
   },
   bottomBar: {
     position: "absolute",

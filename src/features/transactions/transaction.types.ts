@@ -23,4 +23,5 @@ export interface Transaction {
   amount: string;
   status: TxStatus;
   items?: string;
+  paymentMethod?: string;
 }

@@ -156,16 +156,22 @@ export default function KeranjangPage() {
       <BottomActionBar
         cartLength={cart.length}
         onHoldOrder={() => Alert.alert("Tahan Order", "Pesanan ditahan.")}
-        onPay={() =>
+        onPay={() => {
+          const itemsSummary = cart
+            .map((c) => `${c.productName}${c.variantLabel ? ` (${c.variantLabel})` : ""} x${c.quantity}`)
+            .join(", ");
+          const label = customerName || tableNumber || orderType;
           router.push({
             pathname: "/pilih-pembayaran",
             params: {
               total: String(total),
               totalItems: String(totalItems),
               discount: String(discount),
+              items: itemsSummary,
+              customerLabel: label,
             },
-          })
-        }
+          });
+        }}
       />
     </SafeAreaView>
   );

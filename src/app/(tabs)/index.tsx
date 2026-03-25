@@ -18,7 +18,7 @@ import { ColorBase, ColorNeutral } from "@/shared/themes/Colors";
 
 export default function HomePage() {
   const router = useRouter();
-  const [isShiftStarted, setIsShiftStarted] = useAtom(isShiftStartedAtom);
+  const [isShiftStarted] = useAtom(isShiftStartedAtom);
 
   return (
     <SafeAreaView
@@ -31,7 +31,7 @@ export default function HomePage() {
         <YStack gap="$3" paddingHorizontal="$4" paddingBottom="$6">
           <ShiftCard
             isShiftStarted={isShiftStarted}
-            onClose={() => setIsShiftStarted(false)}
+            onClose={() => router.push("/tutup-shift")}
             onStart={() => router.push("/buka-shift")}
           />
 

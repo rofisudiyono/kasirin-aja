@@ -15,7 +15,7 @@ import {
   TextH1,
   TextH3,
 } from "@/shared/components";
-import { isShiftStartedAtom } from "@/features/shift/store/shift.store";
+import { isShiftStartedAtom, shiftDataAtom } from "@/features/shift/store/shift.store";
 import {
   ColorBase,
   ColorDanger,
@@ -41,6 +41,7 @@ export default function BukaShiftPage() {
   const [inputValue, setInputValue] = useState("500000");
   const [note, setNote] = useState("");
   const [, setIsShiftStarted] = useAtom(isShiftStartedAtom);
+  const [, setShiftData] = useAtom(shiftDataAtom);
 
   const amount = Number(inputValue);
 
@@ -66,8 +67,11 @@ export default function BukaShiftPage() {
   }
 
   function handleMulaiShift() {
+    const now = new Date();
+    const startTime =
+      now.toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" }) + " WIB";
+    setShiftData({ openingCash: amount, startTime, cashierName: "Budi Santoso", note });
     setIsShiftStarted(true);
-    // Navigate back to home or to the active shift screen
     router.replace("/(tabs)");
   }
 

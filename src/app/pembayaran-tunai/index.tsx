@@ -5,6 +5,7 @@ import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { XStack, YStack } from "tamagui";
 
+import { cashNumpadRows } from "@/features/payment/api/payment.data";
 import {
   AppButton,
   NumpadButton,
@@ -15,7 +16,6 @@ import {
   TextCaption,
   TextH1,
 } from "@/shared/components";
-import { cashNumpadRows } from "@/features/payment/api/payment.data";
 import {
   ColorBase,
   ColorDanger,
@@ -34,11 +34,15 @@ export default function PembayaranTunaiPage() {
     total: string;
     totalItems: string;
     discount: string;
+    items: string;
+    customerLabel: string;
   }>();
 
   const total = Number(params.total ?? 88800);
   const totalItems = Number(params.totalItems ?? 0);
   const discount = Number(params.discount ?? 0);
+  const items = params.items ?? "";
+  const customerLabel = params.customerLabel ?? "";
 
   const [inputValue, setInputValue] = useState("0");
 
@@ -79,6 +83,8 @@ export default function PembayaranTunaiPage() {
         method: "Tunai",
         received: String(receivedAmount),
         change: String(change > 0 ? change : 0),
+        items,
+        customerLabel,
       },
     });
   }

@@ -79,6 +79,7 @@ export const enum ColorNeutral {
   neutral300 = "#D1D5DB",
   neutral400 = "#9CA3AF",
   neutral500 = "#6B7280",
+  neutral600 = "#4B5563",
   neutral700 = "#374151",
   neutral800 = "#1F2937",
   neutral900 = "#111827",

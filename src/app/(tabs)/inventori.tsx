@@ -1,5 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
+import { useAtomValue } from "jotai";
 import React, { useCallback, useState } from "react";
 import { FlatList, ListRenderItem, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -10,8 +11,9 @@ import { categoryFilters } from "@/features/catalog/api/category.data";
 import { CategoryBadge } from "@/features/catalog/components/CategoryBadge";
 import {
   inventorySortOptions,
-  products,
+  products as mockProducts,
 } from "@/features/inventory/api/inventory.data";
+import { userProductsAtom } from "@/features/inventory/store/inventory.store";
 import { StockBadge } from "@/features/inventory/components/StockBadge";
 import { StatsRow } from "@/features/shift/components/StatsRow";
 import {
@@ -156,11 +158,14 @@ const MemoProductRow = React.memo(ProductRow);
 export default function InventoriPage() {
   const [categoryFilter, setCategoryFilter] = useState<CategoryFilter>("Semua");
   const [sortOption, setSortOption] = useState<SortOption>("Nama A-Z");
+  const userProducts = useAtomValue(userProductsAtom);
+
+  const allProducts = [...userProducts, ...mockProducts];
 
   const filtered =
     categoryFilter === "Semua"
-      ? products
-      : products.filter((p) => p.category === categoryFilter);
+      ? allProducts
+      : allProducts.filter((p) => p.category === categoryFilter);
 
   const renderItem = useCallback<ListRenderItem<Product>>(
     ({ item, index }) => <MemoProductRow product={item} isFirst={index === 0} />,
@@ -215,9 +220,9 @@ export default function InventoriPage() {
         <StatsRow
           variant="light"
           items={[
-            { label: "Total Produk", value: "48", valueColor: "$primary" },
-            { label: "Stok Habis", value: "3", valueColor: "$danger" },
-            { label: "Kategori", value: "5", valueColor: "$success" },
+            { label: "Total Produk", value: String(allProducts.length), valueColor: "$primary" },
+            { label: "Stok Habis", value: String(allProducts.filter((p) => p.stockStatus === "empty").length), valueColor: "$danger" },
+            { label: "Kategori", value: String(new Set(allProducts.map((p) => p.category)).size), valueColor: "$success" },
           ]}
         />
       </ShadowCard>

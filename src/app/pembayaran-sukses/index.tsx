@@ -1,11 +1,20 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { useSetAtom } from "jotai";
+import { useAtom, useSetAtom } from "jotai";
 import React from "react";
 import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { XStack, YStack } from "tamagui";
 
+import { cartAtom } from "@/features/cart/store/cart.store";
+import {
+  mockReceiptItems,
+  storeInfo,
+} from "@/features/payment/api/receipt.data";
+import {
+  buildTransaction,
+  transactionsAtom,
+} from "@/features/transactions/store/transaction.store";
 import {
   BarcodePlaceholder,
   DottedSeparator,
@@ -15,8 +24,6 @@ import {
   TextCaption,
   TextH2,
 } from "@/shared/components";
-import { mockReceiptItems, storeInfo } from "@/features/payment/api/receipt.data";
-import { cartAtom } from "@/features/cart/store/cart.store";
 import {
   ColorBase,
   ColorDanger,
@@ -24,13 +31,18 @@ import {
   ColorNeutral,
   ColorPrimary,
 } from "@/shared/themes/Colors";
-import { formatPrice, generateOrderNumber, getCurrentDateTime } from "@/shared/utils";
+import {
+  formatPrice,
+  generateOrderNumber,
+  getCurrentDateTime,
+} from "@/shared/utils";
 
 // ─── Main Page ────────────────────────────────────────────────────────────────
 
 export default function PembayaranSuksesPage() {
   const router = useRouter();
   const setCart = useSetAtom(cartAtom);
+  const [transactions, setTransactions] = useAtom(transactionsAtom);
   const params = useLocalSearchParams<{
     total: string;
     totalItems: string;
@@ -38,6 +50,8 @@ export default function PembayaranSuksesPage() {
     method: string;
     received: string;
     change: string;
+    items: string;
+    customerLabel: string;
   }>();
 
   const total = Number(params.total ?? 0);
@@ -45,9 +59,23 @@ export default function PembayaranSuksesPage() {
   const method = params.method ?? "Tunai";
   const received = Number(params.received ?? 0);
   const change = Number(params.change ?? 0);
+  const items = params.items ?? "";
+  const customerLabel = params.customerLabel ?? "";
 
   const orderNumber = React.useMemo(() => generateOrderNumber(), []);
   const dateTime = React.useMemo(() => getCurrentDateTime(), []);
+
+  // Save transaction once on mount
+  const savedRef = React.useRef(false);
+  React.useEffect(() => {
+    if (savedRef.current || total === 0) return;
+    savedRef.current = true;
+    const tx = buildTransaction(
+      { total, items, method, customerName: customerLabel },
+      transactions.length,
+    );
+    setTransactions((prev) => [tx, ...prev]);
+  }, []);
 
   // Calculate subtotal from total (reverse: total = (subtotal - discount) * 1.11)
   const subtotal = mockReceiptItems.reduce((s, item) => s + item.price, 0);

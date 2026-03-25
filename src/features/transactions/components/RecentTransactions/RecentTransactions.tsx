@@ -1,3 +1,4 @@
+import { useAtomValue } from "jotai";
 import React from "react";
 import { View } from "react-native";
 import { XStack, YStack } from "tamagui";
@@ -5,6 +6,7 @@ import { XStack, YStack } from "tamagui";
 import { ShadowCard, TextBodyLg, TextBodySm, TextCaption, TextH3 } from "@/shared/components";
 import { ColorDanger, ColorGreen, ColorNeutral, ColorSuccess } from "@/shared/themes/Colors";
 import { recentTransactions } from "@/features/transactions/api/transactions.data";
+import { transactionsAtom } from "@/features/transactions/store/transaction.store";
 
 function StatusBadge({ status }: { status: string }) {
   const isVoid = status === "Void";
@@ -27,11 +29,15 @@ function StatusBadge({ status }: { status: string }) {
 }
 
 export function RecentTransactions() {
+  const storedTxs = useAtomValue(transactionsAtom);
+  // Show stored transactions first, fallback to mock if none
+  const displayList = storedTxs.length > 0 ? storedTxs.slice(0, 5) : recentTransactions;
+
   return (
     <YStack gap="$2">
       <TextH3 fontWeight="700">Transaksi Terakhir</TextH3>
       <ShadowCard overflow="hidden">
-        {recentTransactions.map((trx, idx) => (
+        {displayList.map((trx, idx) => (
           <React.Fragment key={trx.id}>
             {idx > 0 && (
               <View

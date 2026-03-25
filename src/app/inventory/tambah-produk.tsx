@@ -1,12 +1,14 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
+import { useAtom } from "jotai";
 import React, { useState } from "react";
-import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Alert, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { XStack } from "tamagui";
 
 import { AppButton, TextBodySm, TextCaption, TextH3 } from "@/shared/components";
 import { ColorBase, ColorNeutral } from "@/shared/themes/Colors";
+import { userProductsAtom, buildProduct } from "@/features/inventory/store/inventory.store";
 
 import {
   FotoProdukSection,
@@ -23,6 +25,7 @@ import type {
 
 export default function TambahProdukPage() {
   const router = useRouter();
+  const [, setUserProducts] = useAtom(userProductsAtom);
 
   const [photos, setPhotos] = useState<string[]>(["1", "2"]);
   const [namaProduk, setNamaProduk] = useState("Kopi Susu");
@@ -53,6 +56,26 @@ export default function TambahProdukPage() {
 
   function removePhoto(idx: number) {
     setPhotos((prev) => prev.filter((_, i) => i !== idx));
+  }
+
+  function handleSimpan() {
+    if (!namaProduk.trim()) {
+      Alert.alert("Nama produk tidak boleh kosong.");
+      return;
+    }
+    const product = buildProduct({
+      name: namaProduk.trim(),
+      sku: sku.trim() || `SKU-${Date.now()}`,
+      kategori,
+      hargaJual,
+      stokAwal,
+      hasVariant,
+      isActive,
+    });
+    setUserProducts((prev) => [product, ...prev]);
+    Alert.alert("Berhasil", `Produk "${namaProduk}" berhasil disimpan.`, [
+      { text: "OK", onPress: () => router.back() },
+    ]);
   }
 
   return (
@@ -89,7 +112,7 @@ export default function TambahProdukPage() {
           variant="primary"
           size="sm"
           title="Simpan"
-          onPress={() => router.back()}
+          onPress={handleSimpan}
         />
       </XStack>
 
@@ -145,7 +168,7 @@ export default function TambahProdukPage() {
           size="lg"
           fullWidth
           title="Simpan Produk"
-          onPress={() => router.back()}
+          onPress={handleSimpan}
         />
         <TextCaption
           color={ColorNeutral.neutral400}
