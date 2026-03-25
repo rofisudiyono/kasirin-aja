@@ -33,7 +33,7 @@ export default function TransaksiPage() {
       : transactionListMock.filter((t) => t.status === activeFilter);
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: ColorBase.bgScreen }}>
+    <SafeAreaView edges={['top']} style={{ flex: 1, backgroundColor: ColorBase.bgScreen }}>
       {/* ── Header ── */}
       <PageHeader
         title="Riwayat Transaksi"

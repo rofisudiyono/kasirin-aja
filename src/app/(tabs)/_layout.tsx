@@ -61,7 +61,7 @@ export default function TabsLayout() {
     >
       <Tabs.Screen name="index" />
       <Tabs.Screen name="transaksi" />
-      <Tabs.Screen name="inventory" />
+      <Tabs.Screen name="inventori" />
       <Tabs.Screen name="pengaturan" />
     </Tabs>
   );

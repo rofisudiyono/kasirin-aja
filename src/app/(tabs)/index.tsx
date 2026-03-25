@@ -83,7 +83,7 @@ export default function HomePage() {
   const [isShiftStarted, setIsShiftStarted] = useAtom(isShiftStartedAtom);
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: ColorBase.bgScreen }}>
+    <SafeAreaView edges={['top']} style={{ flex: 1, backgroundColor: ColorBase.bgScreen }}>
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* ── Header ── */}
         <XStack

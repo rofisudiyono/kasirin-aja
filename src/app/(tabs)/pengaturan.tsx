@@ -40,7 +40,7 @@ export default function PengaturanPage() {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: ColorBase.bgScreen }}>
+    <SafeAreaView edges={['top']} style={{ flex: 1, backgroundColor: ColorBase.bgScreen }}>
       {/* ── Header ── */}
       <XStack
         paddingHorizontal="$4"

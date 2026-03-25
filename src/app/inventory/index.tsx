@@ -131,6 +131,7 @@ export default function InventoryPage() {
                   paddingVertical="$3"
                   alignItems="center"
                   gap="$3"
+                  onPress={() => router.push(`/(tabs)/inventory/${product.id}`)}
                   backgroundColor={
                     product.stockStatus === "empty"
                       ? ColorDanger.danger25
