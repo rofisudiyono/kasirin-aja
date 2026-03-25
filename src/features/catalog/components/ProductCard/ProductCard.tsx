@@ -1,5 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
-import React from "react";
+import React, { useMemo } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { XStack, YStack } from "tamagui";
 
@@ -29,10 +29,16 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 2,
   },
+  cardEmpty: {
+    opacity: 0.85,
+  },
   cardImageArea: {
     height: 140,
     alignItems: "center",
     justifyContent: "center",
+  },
+  cardImageAreaEmpty: {
+    opacity: 0.5,
   },
   stockBadge: {
     position: "absolute",
@@ -42,6 +48,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 4,
   },
+  stockBadgeLow: {
+    backgroundColor: ColorWarning.warning500,
+  },
+  stockBadgeEmpty: {
+    backgroundColor: ColorNeutral.neutral400,
+  },
   addButton: {
     width: 34,
     height: 34,
@@ -49,9 +61,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  addButtonEnabled: {
+    backgroundColor: ColorPrimary.primary600,
+  },
+  addButtonDisabled: {
+    backgroundColor: ColorNeutral.neutral200,
+  },
 });
 
-export function ProductCard({
+export const ProductCard = React.memo(function ProductCard({
   name,
   basePrice,
   categoryIcon,
@@ -65,24 +83,35 @@ export function ProductCard({
   const isEmpty = stockStatus === "empty";
   const isLow = stockStatus === "low";
 
+  const cardStyle = useMemo(
+    () => [styles.card, { width }, isEmpty && styles.cardEmpty, style],
+    [width, isEmpty, style],
+  );
+
+  const imageAreaStyle = useMemo(
+    () => [
+      styles.cardImageArea,
+      { backgroundColor: categoryIconBg },
+      isEmpty && styles.cardImageAreaEmpty,
+    ],
+    [categoryIconBg, isEmpty],
+  );
+
+  const addButtonStyle = useMemo(
+    () => [
+      styles.addButton,
+      isEmpty ? styles.addButtonDisabled : styles.addButtonEnabled,
+    ],
+    [isEmpty],
+  );
+
   return (
-    <View style={[styles.card, { width }, isEmpty && { opacity: 0.85 }, style]}>
-      <View
-        style={[
-          styles.cardImageArea,
-          { backgroundColor: categoryIconBg },
-          isEmpty && { opacity: 0.5 },
-        ]}
-      >
+    <View style={cardStyle}>
+      <View style={imageAreaStyle}>
         <Ionicons name={categoryIcon} size={52} color={categoryIconColor} />
 
         {isLow && (
-          <View
-            style={[
-              styles.stockBadge,
-              { backgroundColor: ColorWarning.warning500 },
-            ]}
-          >
+          <View style={[styles.stockBadge, styles.stockBadgeLow]}>
             <TextCaption fontWeight="700" color={ColorBase.white} fontSize={11}>
               Stok Tipis
             </TextCaption>
@@ -90,12 +119,7 @@ export function ProductCard({
         )}
 
         {isEmpty && (
-          <View
-            style={[
-              styles.stockBadge,
-              { backgroundColor: ColorNeutral.neutral400 },
-            ]}
-          >
+          <View style={[styles.stockBadge, styles.stockBadgeEmpty]}>
             <TextCaption fontWeight="700" color={ColorBase.white} fontSize={11}>
               Habis
             </TextCaption>
@@ -126,16 +150,7 @@ export function ProductCard({
             disabled={isEmpty}
             activeOpacity={0.7}
           >
-            <View
-              style={[
-                styles.addButton,
-                {
-                  backgroundColor: isEmpty
-                    ? ColorNeutral.neutral200
-                    : ColorPrimary.primary600,
-                },
-              ]}
-            >
+            <View style={addButtonStyle}>
               <Ionicons
                 name="add"
                 size={20}
@@ -147,4 +162,4 @@ export function ProductCard({
       </YStack>
     </View>
   );
-}
+});

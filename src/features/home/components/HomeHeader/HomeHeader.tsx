@@ -1,11 +1,38 @@
 import { Ionicons } from "@expo/vector-icons";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { XStack, YStack } from "tamagui";
 
 import { IconButton, TextBodyLg, TextBodySm, TextCaption, TextH3 } from "@/shared/components";
 import { ColorPrimary } from "@/shared/themes/Colors";
 
+const DAY_NAMES = ["Min", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab"];
+const MONTH_NAMES = [
+  "Jan", "Feb", "Mar", "Apr", "Mei", "Jun",
+  "Jul", "Agu", "Sep", "Okt", "Nov", "Des",
+];
+
+function formatDate(date: Date) {
+  const day = DAY_NAMES[date.getDay()];
+  const d = date.getDate();
+  const month = MONTH_NAMES[date.getMonth()];
+  const year = date.getFullYear();
+  return `${day}, ${d} ${month} ${year}`;
+}
+
+function formatTime(date: Date) {
+  const h = String(date.getHours()).padStart(2, "0");
+  const m = String(date.getMinutes()).padStart(2, "0");
+  return `${h}:${m} WIB`;
+}
+
 export function HomeHeader() {
+  const [now, setNow] = useState(() => new Date());
+
+  useEffect(() => {
+    const timer = setInterval(() => setNow(new Date()), 60_000);
+    return () => clearInterval(timer);
+  }, []);
+
   return (
     <XStack
       paddingHorizontal="$4"
@@ -30,8 +57,8 @@ export function HomeHeader() {
         <TextBodySm color="$colorSecondary">Toko Makmur</TextBodySm>
       </YStack>
       <YStack alignItems="flex-end" gap={2}>
-        <TextCaption color="$colorSecondary">Sen, 10 Jun 2024</TextCaption>
-        <TextBodyLg fontWeight="700">10:24 WIB</TextBodyLg>
+        <TextCaption color="$colorSecondary">{formatDate(now)}</TextCaption>
+        <TextBodyLg fontWeight="700">{formatTime(now)}</TextBodyLg>
       </YStack>
       <IconButton iconName="notifications-outline" size={40} />
     </XStack>

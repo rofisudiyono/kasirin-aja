@@ -1,5 +1,5 @@
-import React from "react";
-import { Dimensions, ScrollView } from "react-native";
+import React, { useCallback } from "react";
+import { Dimensions, FlatList, ListRenderItem, ScrollView } from "react-native";
 import { XStack } from "tamagui";
 
 import { CATEGORY_COLORS, CATEGORY_ICONS } from "@/config/categoryStyles";
@@ -24,6 +24,24 @@ export function ProductGrid({
   onCategoryChange,
   onAddProduct,
 }: Props) {
+  const renderItem = useCallback<ListRenderItem<CatalogProduct>>(
+    ({ item }) => (
+      <ProductCard
+        name={item.name}
+        basePrice={item.basePrice}
+        categoryIcon={CATEGORY_ICONS[item.category]}
+        categoryIconBg={CATEGORY_COLORS[item.category].bg}
+        categoryIconColor={CATEGORY_COLORS[item.category].color}
+        stockStatus={item.stockStatus}
+        width={CARD_WIDTH}
+        onAdd={() => onAddProduct(item)}
+      />
+    ),
+    [onAddProduct],
+  );
+
+  const keyExtractor = useCallback((item: CatalogProduct) => item.id, []);
+
   return (
     <>
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
@@ -40,21 +58,15 @@ export function ProductGrid({
         </XStack>
       </ScrollView>
 
-      <XStack flexWrap="wrap" gap={12}>
-        {products.map((product) => (
-          <ProductCard
-            key={product.id}
-            name={product.name}
-            basePrice={product.basePrice}
-            categoryIcon={CATEGORY_ICONS[product.category]}
-            categoryIconBg={CATEGORY_COLORS[product.category].bg}
-            categoryIconColor={CATEGORY_COLORS[product.category].color}
-            stockStatus={product.stockStatus}
-            width={CARD_WIDTH}
-            onAdd={() => onAddProduct(product)}
-          />
-        ))}
-      </XStack>
+      <FlatList
+        data={products}
+        keyExtractor={keyExtractor}
+        renderItem={renderItem}
+        numColumns={2}
+        columnWrapperStyle={{ gap: 12 }}
+        contentContainerStyle={{ gap: 12 }}
+        scrollEnabled={false}
+      />
     </>
   );
 }

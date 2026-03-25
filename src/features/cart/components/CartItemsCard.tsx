@@ -1,12 +1,18 @@
 import { Ionicons } from "@expo/vector-icons";
-import React from "react";
-import { StyleSheet, View } from "react-native";
-import { YStack } from "tamagui";
+import React, { useCallback, useState } from "react";
+import {
+  Modal,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { XStack, YStack } from "tamagui";
 
-import { TextBody } from "@/shared/components";
+import { TextBody, TextBodyLg, TextBodySm } from "@/shared/components";
 import type { CartItem } from "@/features/cart/store/cart.store";
 import { CartItemRow } from "./CartItemRow";
-import { ColorBase, ColorNeutral } from "@/shared/themes/Colors";
+import { ColorBase, ColorNeutral, ColorPrimary } from "@/shared/themes/Colors";
 
 interface CartItemsCardProps {
   cart: CartItem[];
@@ -21,27 +27,107 @@ export function CartItemsCard({
   onRemove,
   onUpdateNote,
 }: CartItemsCardProps) {
+  const [activeNoteCartId, setActiveNoteCartId] = useState<string | null>(null);
+  const [noteInput, setNoteInput] = useState("");
+
+  const activeItem = cart.find((i) => i.cartId === activeNoteCartId);
+
+  const handleOpenNote = useCallback((cartId: string) => {
+    const item = cart.find((i) => i.cartId === cartId);
+    setNoteInput(item?.note ?? "");
+    setActiveNoteCartId(cartId);
+  }, [cart]);
+
+  const handleCloseNote = useCallback(() => {
+    setActiveNoteCartId(null);
+    setNoteInput("");
+  }, []);
+
+  const handleSaveNote = useCallback(() => {
+    if (activeNoteCartId) {
+      onUpdateNote(activeNoteCartId, noteInput);
+    }
+    setActiveNoteCartId(null);
+    setNoteInput("");
+  }, [activeNoteCartId, noteInput, onUpdateNote]);
+
   return (
-    <View style={styles.card}>
-      {cart.length === 0 ? (
-        <YStack alignItems="center" paddingVertical={24} gap={8}>
-          <Ionicons name="bag-outline" size={40} color={ColorNeutral.neutral400} />
-          <TextBody color="$colorSecondary">Keranjang masih kosong</TextBody>
-        </YStack>
-      ) : (
-        cart.map((item, index) => (
-          <React.Fragment key={item.cartId}>
-            <CartItemRow
-              item={item}
-              onUpdateQty={onUpdateQty}
-              onRemove={onRemove}
-              onUpdateNote={onUpdateNote}
+    <>
+      <View style={styles.card}>
+        {cart.length === 0 ? (
+          <YStack alignItems="center" paddingVertical={24} gap={8}>
+            <Ionicons name="bag-outline" size={40} color={ColorNeutral.neutral400} />
+            <TextBody color="$colorSecondary">Keranjang masih kosong</TextBody>
+          </YStack>
+        ) : (
+          cart.map((item, index) => (
+            <React.Fragment key={item.cartId}>
+              <CartItemRow
+                item={item}
+                onUpdateQty={onUpdateQty}
+                onRemove={onRemove}
+                onOpenNote={handleOpenNote}
+              />
+              {index < cart.length - 1 && <View style={styles.divider} />}
+            </React.Fragment>
+          ))
+        )}
+      </View>
+
+      {/* Centralized note modal */}
+      <Modal
+        visible={activeNoteCartId !== null}
+        transparent
+        animationType="slide"
+        onRequestClose={handleCloseNote}
+      >
+        <View style={styles.modalOverlay}>
+          <TouchableOpacity
+            style={StyleSheet.absoluteFillObject}
+            activeOpacity={1}
+            onPress={handleCloseNote}
+          />
+          <View style={styles.noteSheet}>
+            <View style={styles.dragHandle} />
+            <TextBodyLg fontWeight="700" marginBottom={12}>
+              Catatan untuk {activeItem?.productName}
+            </TextBodyLg>
+            <TextInput
+              value={noteInput}
+              onChangeText={setNoteInput}
+              placeholder="Contoh: Tidak pedas, kurangi gula..."
+              placeholderTextColor={ColorNeutral.neutral400}
+              style={styles.noteInputText}
+              multiline
             />
-            {index < cart.length - 1 && <View style={styles.divider} />}
-          </React.Fragment>
-        ))
-      )}
-    </View>
+            <XStack gap="$3">
+              <TouchableOpacity
+                style={styles.btnFlex}
+                activeOpacity={0.8}
+                onPress={handleCloseNote}
+              >
+                <View style={styles.btnCancel}>
+                  <TextBodySm fontWeight="600" color="$color">
+                    Batal
+                  </TextBodySm>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.btnFlex}
+                activeOpacity={0.8}
+                onPress={handleSaveNote}
+              >
+                <View style={styles.btnSave}>
+                  <TextBodySm fontWeight="600" color={ColorBase.white}>
+                    Simpan
+                  </TextBodySm>
+                </View>
+              </TouchableOpacity>
+            </XStack>
+          </View>
+        </View>
+      </Modal>
+    </>
   );
 }
 
@@ -60,5 +146,56 @@ const styles = StyleSheet.create({
     height: 1,
     backgroundColor: ColorNeutral.neutral100,
     marginVertical: 12,
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    justifyContent: "flex-end",
+  },
+  noteSheet: {
+    backgroundColor: ColorBase.white,
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
+    paddingHorizontal: 16,
+    paddingTop: 20,
+    paddingBottom: 24,
+  },
+  dragHandle: {
+    width: 40,
+    height: 4,
+    backgroundColor: ColorNeutral.neutral300,
+    borderRadius: 2,
+    alignSelf: "center",
+    marginBottom: 16,
+  },
+  noteInputText: {
+    fontSize: 14,
+    lineHeight: 20,
+    paddingVertical: 12,
+    paddingHorizontal: 12,
+    borderWidth: 1,
+    borderColor: ColorNeutral.neutral200,
+    borderRadius: 10,
+    backgroundColor: ColorNeutral.neutral50,
+    marginBottom: 16,
+    minHeight: 80,
+    textAlignVertical: "top",
+  },
+  btnFlex: {
+    flex: 1,
+  },
+  btnCancel: {
+    borderColor: ColorNeutral.neutral200,
+    borderWidth: 1,
+    backgroundColor: ColorBase.white,
+    paddingVertical: 12,
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  btnSave: {
+    backgroundColor: ColorPrimary.primary600,
+    paddingVertical: 12,
+    borderRadius: 10,
+    alignItems: "center",
   },
 });

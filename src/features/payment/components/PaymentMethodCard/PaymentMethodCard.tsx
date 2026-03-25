@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export function PaymentMethodCard({
+export const PaymentMethodCard = React.memo(function PaymentMethodCard({
   icon,
   iconBg,
   iconColor,
@@ -86,4 +86,4 @@ export function PaymentMethodCard({
       </View>
     </TouchableOpacity>
   );
-}
+});

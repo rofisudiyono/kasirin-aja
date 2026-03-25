@@ -17,6 +17,7 @@ import { useColorScheme } from "react-native";
 import { TamaguiProvider } from "tamagui";
 
 import { AnimatedSplashOverlay } from "@/shared/components/animated-icon";
+import { ErrorBoundary } from "@/shared/components/ErrorBoundary";
 import { tamaguiConfig } from "../../tamagui.config";
 
 export default function RootLayout() {
@@ -30,18 +31,20 @@ export default function RootLayout() {
   });
 
   return (
-    <JotaiProvider>
-      <TamaguiProvider
-        config={tamaguiConfig}
-        defaultTheme={colorScheme === "dark" ? "dark" : "light"}
-      >
-        <ThemeProvider
-          value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
+    <ErrorBoundary>
+      <JotaiProvider>
+        <TamaguiProvider
+          config={tamaguiConfig}
+          defaultTheme={colorScheme === "dark" ? "dark" : "light"}
         >
-          <AnimatedSplashOverlay />
-          <Slot />
-        </ThemeProvider>
-      </TamaguiProvider>
-    </JotaiProvider>
+          <ThemeProvider
+            value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
+          >
+            <AnimatedSplashOverlay />
+            <Slot />
+          </ThemeProvider>
+        </TamaguiProvider>
+      </JotaiProvider>
+    </ErrorBoundary>
   );
 }
