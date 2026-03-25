@@ -4,207 +4,28 @@ import { useAtom } from "jotai";
 import React, { useState } from "react";
 import {
   Alert,
-  Modal,
   ScrollView,
   StyleSheet,
-  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { XStack, YStack } from "tamagui";
+import { YStack } from "tamagui";
 
 import {
-  PageHeader,
-  TextBody,
-  TextBodyLg,
-  TextBodySm,
-  TextCaption,
-  TextH3,
-} from "@/shared/components";
-import { CATEGORY_COLORS, CATEGORY_ICONS } from "@/config/categoryStyles";
-import { orderTypeOptions, promoDefinitions } from "@/features/payment/api/payment.data";
-import { cartAtom, type CartItem } from "@/features/cart/store/cart.store";
-import {
-  ColorBase,
-  ColorDanger,
-  ColorGreen,
-  ColorNeutral,
-  ColorPrimary,
-} from "@/shared/themes/Colors";
+  BottomActionBar,
+  CartItemsCard,
+  CustomerInfoCard,
+  PriceSummaryCard,
+  PromoCard,
+  cartAtom,
+} from "@/features/cart";
+import { promoDefinitions } from "@/features/payment/api/payment.data";
+import { PageHeader } from "@/shared/components";
+import { ColorBase, ColorDanger } from "@/shared/themes/Colors";
 import type { AppliedPromo, OrderType } from "@/shared/types";
-import { formatPrice } from "@/shared/utils";
 
 const PPN_RATE = 0.11;
-
-// ─── Cart Item Row ─────────────────────────────────────────────────────────────
-
-function CartItemRow({
-  item,
-  onUpdateQty,
-  onRemove,
-  onUpdateNote,
-}: {
-  item: CartItem;
-  onUpdateQty: (cartId: string, qty: number) => void;
-  onRemove: (cartId: string) => void;
-  onUpdateNote: (cartId: string, note: string) => void;
-}) {
-  const [noteVisible, setNoteVisible] = useState(false);
-  const [noteInput, setNoteInput] = useState(item.note ?? "");
-
-  function handleNoteSave() {
-    onUpdateNote(item.cartId, noteInput);
-    setNoteVisible(false);
-  }
-
-  return (
-    <>
-      <View style={styles.cartItemRow}>
-        {/* Product icon */}
-        <View
-          style={[
-            styles.itemIcon,
-            {
-              backgroundColor:
-                CATEGORY_COLORS[item.category]?.bg ?? ColorNeutral.neutral100,
-            },
-          ]}
-        >
-          <Ionicons
-            name={CATEGORY_ICONS[item.category] ?? "bag-outline"}
-            size={26}
-            color={
-              CATEGORY_COLORS[item.category]?.color ?? ColorNeutral.neutral500
-            }
-          />
-        </View>
-
-        {/* Info + controls */}
-        <YStack flex={1} gap={4}>
-          <XStack justifyContent="space-between" alignItems="flex-start">
-            <YStack flex={1} gap={2}>
-              <TextBodyLg fontWeight="700" numberOfLines={2} lineHeight={20}>
-                {item.productName}
-              </TextBodyLg>
-              {item.variantLabel && (
-                <TextCaption color="$colorSecondary">
-                  {item.variantLabel}
-                </TextCaption>
-              )}
-              <TouchableOpacity
-                activeOpacity={0.7}
-                onPress={() => setNoteVisible(true)}
-              >
-                <TextCaption
-                  color={item.note ? "$colorSecondary" : "$colorTertiary"}
-                  fontStyle="italic"
-                >
-                  {item.note ? item.note : "Tambah catatan..."}
-                </TextCaption>
-              </TouchableOpacity>
-              <TextCaption color="$colorSecondary">
-                {formatPrice(item.unitPrice)} / item
-              </TextCaption>
-            </YStack>
-
-            {/* Qty controls + price */}
-            <YStack alignItems="flex-end" gap={6} marginLeft={12}>
-              <XStack alignItems="center" gap={10}>
-                <TouchableOpacity
-                  activeOpacity={0.7}
-                  onPress={() =>
-                    item.quantity > 1
-                      ? onUpdateQty(item.cartId, item.quantity - 1)
-                      : onRemove(item.cartId)
-                  }
-                >
-                  <View style={styles.qtyBtn}>
-                    <Ionicons
-                      name="remove"
-                      size={16}
-                      color={ColorNeutral.neutral700}
-                    />
-                  </View>
-                </TouchableOpacity>
-
-                <TextBodyLg fontWeight="700" minWidth={20} textAlign="center">
-                  {item.quantity}
-                </TextBodyLg>
-
-                <TouchableOpacity
-                  activeOpacity={0.7}
-                  onPress={() => onUpdateQty(item.cartId, item.quantity + 1)}
-                >
-                  <View style={[styles.qtyBtn, styles.qtyBtnPrimary]}>
-                    <Ionicons name="add" size={16} color={ColorBase.white} />
-                  </View>
-                </TouchableOpacity>
-              </XStack>
-
-              <TextBodyLg fontWeight="700" color="$primary">
-                {formatPrice(item.unitPrice * item.quantity)}
-              </TextBodyLg>
-
-              <TouchableOpacity
-                activeOpacity={0.7}
-                onPress={() => onRemove(item.cartId)}
-              >
-                <View style={styles.deleteBtn}>
-                  <Ionicons
-                    name="trash-outline"
-                    size={16}
-                    color={ColorDanger.danger600}
-                  />
-                </View>
-              </TouchableOpacity>
-            </YStack>
-          </XStack>
-        </YStack>
-      </View>
-
-      {/* Note modal */}
-      <Modal
-        visible={noteVisible}
-        transparent
-        animationType="slide"
-        onRequestClose={() => setNoteVisible(false)}
-      >
-        <View style={styles.modalOverlay}>
-          <TouchableOpacity
-            style={StyleSheet.absoluteFillObject}
-            activeOpacity={1}
-            onPress={() => setNoteVisible(false)}
-          />
-          <View style={styles.noteSheet}>
-            <View style={styles.dragHandle} />
-            <TextBodyLg fontWeight="700" marginBottom={12}>
-              Catatan untuk {item.productName}
-            </TextBodyLg>
-            <TextInput
-              value={noteInput}
-              onChangeText={setNoteInput}
-              placeholder="Contoh: Tidak pedas, kurangi gula..."
-              placeholderTextColor={ColorNeutral.neutral400}
-              style={styles.noteInputText}
-              multiline
-              autoFocus
-            />
-            <TouchableOpacity activeOpacity={0.85} onPress={handleNoteSave}>
-              <View style={styles.noteSaveBtn}>
-                <TextBodyLg fontWeight="700" color={ColorBase.white}>
-                  Simpan Catatan
-                </TextBodyLg>
-              </View>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
-    </>
-  );
-}
-
-// ─── Main Page ────────────────────────────────────────────────────────────────
 
 export default function KeranjangPage() {
   const router = useRouter();
@@ -275,7 +96,6 @@ export default function KeranjangPage() {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Header */}
       <PageHeader
         title="Keranjang"
         subtitle={`${totalItems} item`}
@@ -299,441 +119,68 @@ export default function KeranjangPage() {
         contentContainerStyle={{ paddingBottom: 120 }}
       >
         <YStack paddingHorizontal={16} gap={12} paddingTop={8}>
-          {/* Customer info card */}
-          <View style={styles.card}>
-            {/* Nama Pelanggan */}
-            <TextCaption color="$colorSecondary" marginBottom={6}>
-              Nama Pelanggan
-            </TextCaption>
-            <TextInput
-              value={customerName}
-              onChangeText={setCustomerName}
-              placeholder="Opsional"
-              placeholderTextColor={ColorNeutral.neutral400}
-              style={styles.inputField}
-            />
+          <CustomerInfoCard
+            customerName={customerName}
+            onCustomerNameChange={setCustomerName}
+            tableNumber={tableNumber}
+            onTableNumberChange={setTableNumber}
+            orderType={orderType}
+            onOrderTypeChange={setOrderType}
+          />
 
-            {/* Nomor Meja */}
-            <TextCaption
-              color="$colorSecondary"
-              marginBottom={6}
-              marginTop={12}
-            >
-              Nomor Meja
-            </TextCaption>
-            <TextInput
-              value={tableNumber}
-              onChangeText={setTableNumber}
-              placeholder="Opsional"
-              placeholderTextColor={ColorNeutral.neutral400}
-              style={styles.inputField}
-              keyboardType="number-pad"
-            />
+          <CartItemsCard
+            cart={cart}
+            onUpdateQty={handleUpdateQty}
+            onRemove={handleRemove}
+            onUpdateNote={handleUpdateNote}
+          />
 
-            {/* Tipe Pesanan */}
-            <TextCaption
-              color="$colorSecondary"
-              marginBottom={8}
-              marginTop={12}
-            >
-              Tipe Pesanan
-            </TextCaption>
-            <View style={styles.segmentControl}>
-              {orderTypeOptions.map((type) => (
-                <TouchableOpacity
-                  key={type}
-                  activeOpacity={0.8}
-                  style={[
-                    styles.segmentBtn,
-                    orderType === type && styles.segmentBtnActive,
-                  ]}
-                  onPress={() => setOrderType(type)}
-                >
-                  <TextBodySm
-                    fontWeight="600"
-                    color={
-                      orderType === type ? ColorBase.white : "$colorSecondary"
-                    }
-                  >
-                    {type}
-                  </TextBodySm>
-                </TouchableOpacity>
-              ))}
-            </View>
-          </View>
+          <PromoCard
+            promoCode={promoCode}
+            onPromoCodeChange={setPromoCode}
+            onApplyPromo={handleApplyPromo}
+            appliedPromo={appliedPromo}
+            promoEnabled={promoEnabled}
+            onTogglePromo={() => setPromoEnabled((v) => !v)}
+          />
 
-          {/* Cart items card */}
-          <View style={styles.card}>
-            {cart.length === 0 ? (
-              <YStack alignItems="center" paddingVertical={24} gap={8}>
-                <Ionicons
-                  name="bag-outline"
-                  size={40}
-                  color={ColorNeutral.neutral400}
-                />
-                <TextBody color="$colorSecondary">
-                  Keranjang masih kosong
-                </TextBody>
-              </YStack>
-            ) : (
-              cart.map((item, index) => (
-                <React.Fragment key={item.cartId}>
-                  <CartItemRow
-                    item={item}
-                    onUpdateQty={handleUpdateQty}
-                    onRemove={handleRemove}
-                    onUpdateNote={handleUpdateNote}
-                  />
-                  {index < cart.length - 1 && <View style={styles.divider} />}
-                </React.Fragment>
-              ))
-            )}
-          </View>
-
-          {/* Promo code card */}
-          <View style={styles.card}>
-            <XStack gap={8} alignItems="center">
-              <View style={styles.promoInputWrapper}>
-                <TextInput
-                  value={promoCode}
-                  onChangeText={setPromoCode}
-                  placeholder="Masukkan kode promo"
-                  placeholderTextColor={ColorNeutral.neutral400}
-                  style={styles.promoInput}
-                  autoCapitalize="characters"
-                />
-              </View>
-              <TouchableOpacity activeOpacity={0.85} onPress={handleApplyPromo}>
-                <View style={styles.promoApplyBtn}>
-                  <TextBodySm fontWeight="700" color={ColorBase.white}>
-                    Pakai
-                  </TextBodySm>
-                </View>
-              </TouchableOpacity>
-            </XStack>
-
-            {appliedPromo && (
-              <XStack
-                alignItems="center"
-                gap={8}
-                marginTop={10}
-                style={styles.promoChip}
-              >
-                <Ionicons
-                  name="pricetag-outline"
-                  size={14}
-                  color={ColorGreen.green600}
-                />
-                <TextCaption
-                  color={ColorGreen.green600}
-                  fontWeight="600"
-                  flex={1}
-                >
-                  {appliedPromo.label}
-                </TextCaption>
-                <TouchableOpacity
-                  activeOpacity={0.7}
-                  onPress={() => setPromoEnabled((v) => !v)}
-                >
-                  <View
-                    style={[
-                      styles.toggleTrack,
-                      promoEnabled && styles.toggleTrackActive,
-                    ]}
-                  >
-                    <View
-                      style={[
-                        styles.toggleThumb,
-                        promoEnabled && styles.toggleThumbActive,
-                      ]}
-                    />
-                  </View>
-                </TouchableOpacity>
-              </XStack>
-            )}
-          </View>
-
-          {/* Price summary */}
-          <View style={styles.card}>
-            <XStack justifyContent="space-between" marginBottom={10}>
-              <TextBody color="$colorSecondary">Subtotal</TextBody>
-              <TextBody fontWeight="600">{formatPrice(subtotal)}</TextBody>
-            </XStack>
-
-            {discount > 0 && (
-              <XStack justifyContent="space-between" marginBottom={10}>
-                <TextBody color="$colorSecondary">Diskon</TextBody>
-                <TextBody fontWeight="600" color={ColorGreen.green600}>
-                  -{formatPrice(discount)}
-                </TextBody>
-              </XStack>
-            )}
-
-            <XStack justifyContent="space-between" marginBottom={16}>
-              <TextBody color="$colorSecondary">PPN 11%</TextBody>
-              <TextBody fontWeight="600">{formatPrice(ppn)}</TextBody>
-            </XStack>
-
-            <View style={styles.divider} />
-
-            <XStack justifyContent="space-between" marginTop={14}>
-              <TextH3 fontWeight="700">Total Bayar</TextH3>
-              <TextH3 fontWeight="700" color="$primary">
-                {formatPrice(total)}
-              </TextH3>
-            </XStack>
-          </View>
+          <PriceSummaryCard
+            subtotal={subtotal}
+            discount={discount}
+            ppn={ppn}
+            total={total}
+          />
         </YStack>
       </ScrollView>
 
-      {/* Bottom action bar */}
-      <View style={styles.bottomBar}>
-        <XStack gap={10}>
-          <TouchableOpacity
-            activeOpacity={0.85}
-            style={styles.holdOrderBtn}
-            onPress={() => Alert.alert("Tahan Order", "Pesanan ditahan.")}
-          >
-            <TextBodyLg fontWeight="700" color="$colorSecondary">
-              Tahan Order
-            </TextBodyLg>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            activeOpacity={0.85}
-            style={[styles.payBtn, cart.length === 0 && { opacity: 0.5 }]}
-            disabled={cart.length === 0}
-            onPress={() =>
-              router.push({
-                pathname: "/pilih-pembayaran",
-                params: {
-                  total: String(total),
-                  totalItems: String(totalItems),
-                  discount: String(discount),
-                },
-              })
-            }
-          >
-            <TextBodyLg fontWeight="700" color={ColorBase.white}>
-              Lanjut Bayar
-            </TextBodyLg>
-          </TouchableOpacity>
-        </XStack>
-      </View>
+      <BottomActionBar
+        cartLength={cart.length}
+        onHoldOrder={() => Alert.alert("Tahan Order", "Pesanan ditahan.")}
+        onPay={() =>
+          router.push({
+            pathname: "/pilih-pembayaran",
+            params: {
+              total: String(total),
+              totalItems: String(totalItems),
+              discount: String(discount),
+            },
+          })
+        }
+      />
     </SafeAreaView>
   );
 }
-
-// ─── Styles ───────────────────────────────────────────────────────────────────
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: ColorBase.bgScreen,
   },
-  card: {
-    backgroundColor: ColorBase.white,
-    borderRadius: 16,
-    padding: 16,
-    shadowColor: ColorBase.black,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.06,
-    shadowRadius: 8,
-    elevation: 2,
-  },
   trashBtn: {
     width: 40,
     height: 40,
     borderRadius: 20,
     backgroundColor: ColorDanger.danger50,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  inputField: {
-    backgroundColor: ColorNeutral.neutral50,
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: ColorNeutral.neutral200,
-    paddingHorizontal: 14,
-    paddingVertical: 12,
-    fontSize: 14,
-    color: ColorNeutral.neutral900,
-    fontFamily: "Poppins_400Regular",
-  },
-  segmentControl: {
-    flexDirection: "row",
-    backgroundColor: ColorNeutral.neutral100,
-    borderRadius: 24,
-    padding: 4,
-  },
-  segmentBtn: {
-    flex: 1,
-    paddingVertical: 8,
-    alignItems: "center",
-    borderRadius: 20,
-  },
-  segmentBtnActive: {
-    backgroundColor: ColorPrimary.primary600,
-  },
-  cartItemRow: {
-    flexDirection: "row",
-    gap: 12,
-    paddingVertical: 4,
-  },
-  itemIcon: {
-    width: 56,
-    height: 56,
-    borderRadius: 12,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  qtyBtn: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    borderWidth: 1.5,
-    borderColor: ColorNeutral.neutral200,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  qtyBtnPrimary: {
-    backgroundColor: ColorPrimary.primary600,
-    borderColor: ColorPrimary.primary600,
-  },
-  deleteBtn: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    borderWidth: 1.5,
-    borderColor: ColorDanger.danger100,
-    backgroundColor: ColorDanger.danger50,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  divider: {
-    height: 1,
-    backgroundColor: ColorNeutral.neutral100,
-    marginVertical: 12,
-  },
-  promoInputWrapper: {
-    flex: 1,
-    backgroundColor: ColorNeutral.neutral50,
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: ColorNeutral.neutral200,
-    paddingHorizontal: 14,
-    justifyContent: "center",
-    height: 48,
-  },
-  promoInput: {
-    fontSize: 14,
-    color: ColorNeutral.neutral900,
-    fontFamily: "Poppins_400Regular",
-  },
-  promoApplyBtn: {
-    backgroundColor: ColorPrimary.primary600,
-    borderRadius: 12,
-    paddingHorizontal: 20,
-    height: 48,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  promoChip: {
-    backgroundColor: ColorGreen.green50,
-    borderRadius: 20,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    borderWidth: 1,
-    borderColor: ColorGreen.green200,
-  },
-  toggleTrack: {
-    width: 36,
-    height: 20,
-    borderRadius: 10,
-    backgroundColor: ColorNeutral.neutral300,
-    justifyContent: "center",
-    paddingHorizontal: 2,
-  },
-  toggleTrackActive: {
-    backgroundColor: ColorGreen.green600,
-  },
-  toggleThumb: {
-    width: 16,
-    height: 16,
-    borderRadius: 8,
-    backgroundColor: ColorBase.white,
-    alignSelf: "flex-start",
-  },
-  toggleThumbActive: {
-    alignSelf: "flex-end",
-  },
-  bottomBar: {
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-    right: 0,
-    backgroundColor: ColorBase.white,
-    borderTopWidth: 1,
-    borderTopColor: ColorNeutral.neutral100,
-    paddingHorizontal: 16,
-    paddingTop: 12,
-    paddingBottom: 28,
-  },
-  holdOrderBtn: {
-    flex: 1,
-    height: 52,
-    borderRadius: 14,
-    borderWidth: 1.5,
-    borderColor: ColorNeutral.neutral200,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  payBtn: {
-    flex: 2,
-    height: 52,
-    borderRadius: 14,
-    backgroundColor: ColorPrimary.primary600,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  // Note modal
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.4)",
-    justifyContent: "flex-end",
-  },
-  noteSheet: {
-    backgroundColor: ColorBase.white,
-    borderTopLeftRadius: 24,
-    borderTopRightRadius: 24,
-    paddingHorizontal: 20,
-    paddingBottom: 40,
-    paddingTop: 12,
-  },
-  dragHandle: {
-    width: 40,
-    height: 4,
-    backgroundColor: ColorNeutral.neutral200,
-    borderRadius: 2,
-    alignSelf: "center",
-    marginBottom: 16,
-  },
-  noteInputText: {
-    backgroundColor: ColorNeutral.neutral100,
-    borderRadius: 12,
-    paddingHorizontal: 14,
-    paddingVertical: 12,
-    fontSize: 14,
-    color: ColorNeutral.neutral900,
-    minHeight: 80,
-    textAlignVertical: "top",
-    marginBottom: 16,
-    fontFamily: "Poppins_400Regular",
-  },
-  noteSaveBtn: {
-    backgroundColor: ColorPrimary.primary600,
-    borderRadius: 14,
-    height: 52,
     alignItems: "center",
     justifyContent: "center",
   },

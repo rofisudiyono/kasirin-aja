@@ -1,0 +1,71 @@
+import React from "react";
+import { StyleSheet, View } from "react-native";
+import { XStack } from "tamagui";
+
+import { TextBody, TextH3 } from "@/shared/components";
+import { ColorBase, ColorGreen, ColorNeutral } from "@/shared/themes/Colors";
+import { formatPrice } from "@/shared/utils";
+
+interface PriceSummaryCardProps {
+  subtotal: number;
+  discount: number;
+  ppn: number;
+  total: number;
+}
+
+export function PriceSummaryCard({
+  subtotal,
+  discount,
+  ppn,
+  total,
+}: PriceSummaryCardProps) {
+  return (
+    <View style={styles.card}>
+      <XStack justifyContent="space-between" marginBottom={10}>
+        <TextBody color="$colorSecondary">Subtotal</TextBody>
+        <TextBody fontWeight="600">{formatPrice(subtotal)}</TextBody>
+      </XStack>
+
+      {discount > 0 && (
+        <XStack justifyContent="space-between" marginBottom={10}>
+          <TextBody color="$colorSecondary">Diskon</TextBody>
+          <TextBody fontWeight="600" color={ColorGreen.green600}>
+            -{formatPrice(discount)}
+          </TextBody>
+        </XStack>
+      )}
+
+      <XStack justifyContent="space-between" marginBottom={16}>
+        <TextBody color="$colorSecondary">PPN 11%</TextBody>
+        <TextBody fontWeight="600">{formatPrice(ppn)}</TextBody>
+      </XStack>
+
+      <View style={styles.divider} />
+
+      <XStack justifyContent="space-between" marginTop={14}>
+        <TextH3 fontWeight="700">Total Bayar</TextH3>
+        <TextH3 fontWeight="700" color="$primary">
+          {formatPrice(total)}
+        </TextH3>
+      </XStack>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  card: {
+    backgroundColor: ColorBase.white,
+    borderRadius: 16,
+    padding: 16,
+    shadowColor: ColorBase.black,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.06,
+    shadowRadius: 8,
+    elevation: 2,
+  },
+  divider: {
+    height: 1,
+    backgroundColor: ColorNeutral.neutral100,
+    marginVertical: 12,
+  },
+});

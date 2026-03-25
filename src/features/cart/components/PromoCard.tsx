@@ -1,0 +1,149 @@
+import { Ionicons } from "@expo/vector-icons";
+import React from "react";
+import { StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
+import { XStack } from "tamagui";
+
+import { TextBodySm, TextCaption } from "@/shared/components";
+import {
+  ColorBase,
+  ColorGreen,
+  ColorNeutral,
+  ColorPrimary,
+} from "@/shared/themes/Colors";
+import type { AppliedPromo } from "@/shared/types";
+
+interface PromoCardProps {
+  promoCode: string;
+  onPromoCodeChange: (v: string) => void;
+  onApplyPromo: () => void;
+  appliedPromo: AppliedPromo | null;
+  promoEnabled: boolean;
+  onTogglePromo: () => void;
+}
+
+export function PromoCard({
+  promoCode,
+  onPromoCodeChange,
+  onApplyPromo,
+  appliedPromo,
+  promoEnabled,
+  onTogglePromo,
+}: PromoCardProps) {
+  return (
+    <View style={styles.card}>
+      <XStack gap={8} alignItems="center">
+        <View style={styles.promoInputWrapper}>
+          <TextInput
+            value={promoCode}
+            onChangeText={onPromoCodeChange}
+            placeholder="Masukkan kode promo"
+            placeholderTextColor={ColorNeutral.neutral400}
+            style={styles.promoInput}
+            autoCapitalize="characters"
+          />
+        </View>
+        <TouchableOpacity activeOpacity={0.85} onPress={onApplyPromo}>
+          <View style={styles.promoApplyBtn}>
+            <TextBodySm fontWeight="700" color={ColorBase.white}>
+              Pakai
+            </TextBodySm>
+          </View>
+        </TouchableOpacity>
+      </XStack>
+
+      {appliedPromo && (
+        <XStack
+          alignItems="center"
+          gap={8}
+          marginTop={10}
+          style={styles.promoChip}
+        >
+          <Ionicons name="pricetag-outline" size={14} color={ColorGreen.green600} />
+          <TextCaption color={ColorGreen.green600} fontWeight="600" flex={1}>
+            {appliedPromo.label}
+          </TextCaption>
+          <TouchableOpacity activeOpacity={0.7} onPress={onTogglePromo}>
+            <View
+              style={[
+                styles.toggleTrack,
+                promoEnabled && styles.toggleTrackActive,
+              ]}
+            >
+              <View
+                style={[
+                  styles.toggleThumb,
+                  promoEnabled && styles.toggleThumbActive,
+                ]}
+              />
+            </View>
+          </TouchableOpacity>
+        </XStack>
+      )}
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  card: {
+    backgroundColor: ColorBase.white,
+    borderRadius: 16,
+    padding: 16,
+    shadowColor: ColorBase.black,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.06,
+    shadowRadius: 8,
+    elevation: 2,
+  },
+  promoInputWrapper: {
+    flex: 1,
+    backgroundColor: ColorNeutral.neutral50,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: ColorNeutral.neutral200,
+    paddingHorizontal: 14,
+    justifyContent: "center",
+    height: 48,
+  },
+  promoInput: {
+    fontSize: 14,
+    color: ColorNeutral.neutral900,
+    fontFamily: "Poppins_400Regular",
+  },
+  promoApplyBtn: {
+    backgroundColor: ColorPrimary.primary600,
+    borderRadius: 12,
+    paddingHorizontal: 20,
+    height: 48,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  promoChip: {
+    backgroundColor: ColorGreen.green50,
+    borderRadius: 20,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderWidth: 1,
+    borderColor: ColorGreen.green200,
+  },
+  toggleTrack: {
+    width: 36,
+    height: 20,
+    borderRadius: 10,
+    backgroundColor: ColorNeutral.neutral300,
+    justifyContent: "center",
+    paddingHorizontal: 2,
+  },
+  toggleTrackActive: {
+    backgroundColor: ColorGreen.green600,
+  },
+  toggleThumb: {
+    width: 16,
+    height: 16,
+    borderRadius: 8,
+    backgroundColor: ColorBase.white,
+    alignSelf: "flex-start",
+  },
+  toggleThumbActive: {
+    alignSelf: "flex-end",
+  },
+});
