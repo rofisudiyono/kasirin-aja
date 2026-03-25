@@ -1,15 +1,10 @@
 import React from "react";
 import { StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
-import { YStack } from "tamagui";
 
-import { TextBodySm, TextCaption } from "@/shared/components";
 import { orderTypeOptions } from "@/features/payment/api/payment.data";
-import {
-  ColorBase,
-  ColorNeutral,
-  ColorPrimary,
-} from "@/shared/themes/Colors";
-import type { OrderType } from "@/shared/types";
+import { TextBodySm, TextCaption } from "@/components";
+import { ColorBase, ColorNeutral, ColorPrimary } from "@/themes/Colors";
+import type { OrderType } from "@/types";
 
 interface CustomerInfoCardProps {
   customerName: string;

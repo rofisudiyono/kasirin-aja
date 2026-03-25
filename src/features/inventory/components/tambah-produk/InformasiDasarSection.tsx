@@ -3,8 +3,8 @@ import React from "react";
 import { ScrollView, StyleSheet, TouchableOpacity } from "react-native";
 import { XStack, YStack } from "tamagui";
 
-import { TextBodySm } from "@/shared/components";
-import { ColorBase, ColorNeutral, ColorPrimary } from "@/shared/themes/Colors";
+import { TextBodySm } from "@/components";
+import { ColorBase, ColorNeutral, ColorPrimary } from "@/themes/Colors";
 
 import { FormField } from "./FormField";
 import { SectionHeader } from "./SectionHeader";

@@ -2,11 +2,11 @@ import React from "react";
 import { TextInput } from "react-native";
 import { XStack, YStack } from "tamagui";
 
-import { TextBodySm } from "@/shared/components";
-import { ColorBase, ColorNeutral } from "@/shared/themes/Colors";
+import { TextBodySm } from "@/components";
+import { ColorBase, ColorNeutral } from "@/themes/Colors";
 
-import { inputStyle } from "./shared.styles";
 import { SectionHeader } from "./SectionHeader";
+import { inputStyle } from "./shared.styles";
 
 interface StokSectionProps {
   stokAwal: string;

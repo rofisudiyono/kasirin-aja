@@ -3,7 +3,7 @@
  * Used in transaksi-baru (create new transaction) page
  */
 
-import type { CatalogProduct } from "@/shared/types";
+import type { CatalogProduct } from "@/types";
 
 export const catalogProducts: CatalogProduct[] = [
   {

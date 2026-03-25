@@ -1,6 +1,6 @@
 import { Redirect } from "expo-router";
 
-import { useAuth } from "@/shared/lib/auth";
+import { useAuth } from "@/lib/auth";
 
 export default function Index() {
   const { isLoggedIn } = useAuth();

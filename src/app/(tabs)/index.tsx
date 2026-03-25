@@ -13,8 +13,8 @@ import { ShiftCard } from "@/features/shift/components/ShiftCard";
 import { ShiftPreparation } from "@/features/shift/components/ShiftPreparation";
 import { isShiftStartedAtom } from "@/features/shift/store/shift.store";
 import { RecentTransactions } from "@/features/transactions/components/RecentTransactions";
-import { AppButton, TextBodySm } from "@/shared/components";
-import { ColorBase, ColorNeutral } from "@/shared/themes/Colors";
+import { AppButton, TextBodySm } from "@/components";
+import { ColorBase, ColorNeutral } from "@/themes/Colors";
 
 export default function HomePage() {
   const router = useRouter();

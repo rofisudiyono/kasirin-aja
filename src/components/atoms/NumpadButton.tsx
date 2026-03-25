@@ -7,7 +7,7 @@ import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import { StyleSheet, TouchableOpacity } from "react-native";
 
-import { ColorDanger, ColorNeutral } from "@/shared/themes/Colors";
+import { ColorDanger, ColorNeutral } from "@/themes/Colors";
 
 import type { NumpadButtonProps } from "./NumpadButton/NumpadButton.types";
 import { TextH3 } from "./Typography";

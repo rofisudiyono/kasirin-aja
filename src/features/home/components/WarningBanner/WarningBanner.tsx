@@ -3,12 +3,15 @@ import React from "react";
 import { TouchableOpacity } from "react-native";
 import { XStack } from "tamagui";
 
-import { TextBodySm } from "@/shared/components";
-import { ColorAccentOrange } from "@/shared/themes/Colors";
+import { TextBodySm } from "@/components";
+import { ColorAccentOrange } from "@/themes/Colors";
 
 import { WarningBannerProps } from "./WarningBanner.types";
 
-export function WarningBanner({ isShiftStarted, onViewInventory }: WarningBannerProps) {
+export function WarningBanner({
+  isShiftStarted,
+  onViewInventory,
+}: WarningBannerProps) {
   if (isShiftStarted) {
     return (
       <XStack
@@ -18,8 +21,16 @@ export function WarningBanner({ isShiftStarted, onViewInventory }: WarningBanner
         alignItems="center"
         gap="$2"
       >
-        <Ionicons name="warning-outline" size={18} color={ColorAccentOrange.orange600} />
-        <TextBodySm fontWeight="500" color={ColorAccentOrange.orange700} flex={1}>
+        <Ionicons
+          name="warning-outline"
+          size={18}
+          color={ColorAccentOrange.orange600}
+        />
+        <TextBodySm
+          fontWeight="500"
+          color={ColorAccentOrange.orange700}
+          flex={1}
+        >
           3 produk stok hampir habis
         </TextBodySm>
         <TouchableOpacity onPress={onViewInventory} activeOpacity={0.7}>

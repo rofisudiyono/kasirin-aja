@@ -21,7 +21,7 @@ import {
   TextCaption,
   TextH1,
   TextH3,
-} from "@/shared/components";
+} from "@/components";
 import {
   ColorBase,
   ColorDanger,
@@ -30,8 +30,8 @@ import {
   ColorPrimary,
   ColorSuccess,
   ColorWarning,
-} from "@/shared/themes/Colors";
-import { formatPrice } from "@/shared/utils";
+} from "@/themes/Colors";
+import { formatPrice } from "@/utils";
 
 const NUMPAD_ROWS = [
   ["1", "2", "3"],

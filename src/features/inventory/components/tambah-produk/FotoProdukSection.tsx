@@ -1,8 +1,8 @@
 import React from "react";
 import { XStack, YStack } from "tamagui";
 
-import { TextCaption } from "@/shared/components";
-import { ColorBase, ColorNeutral } from "@/shared/themes/Colors";
+import { TextCaption } from "@/components";
+import { ColorBase, ColorNeutral } from "@/themes/Colors";
 
 import { AddPhotoSlot, FilledPhotoSlot } from "./PhotoSlot";
 import { SectionHeader } from "./SectionHeader";

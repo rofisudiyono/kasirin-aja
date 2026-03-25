@@ -6,6 +6,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Separator, XStack, YStack } from "tamagui";
 
 import { SettingRow } from "@/features/settings/components/SettingRow";
+import { useAuth } from "@/lib/auth";
 import {
   AppButton,
   IconButton,
@@ -15,8 +16,7 @@ import {
   TextCaption,
   TextH3,
   TextMicro,
-} from "@/shared/components";
-import { useAuth } from "@/shared/lib/auth";
+} from "@/components";
 import {
   ColorAccentOrange,
   ColorAccentPurple,
@@ -25,8 +25,8 @@ import {
   ColorNeutral,
   ColorPrimary,
   ColorWarning,
-} from "@/shared/themes/Colors";
-import type { IoniconName } from "@/shared/types";
+} from "@/themes/Colors";
+import type { IoniconName } from "@/types";
 
 export default function PengaturanPage() {
   const { logout } = useAuth();

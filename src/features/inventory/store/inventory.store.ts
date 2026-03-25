@@ -1,5 +1,5 @@
-import { atomWithMMKV } from "@/shared/store/storage";
-import type { Product } from "@/shared/types";
+import { atomWithMMKV } from "@/store/storage";
+import type { Product } from "@/types";
 
 // Persisted list of user-added products
 export const userProductsAtom = atomWithMMKV<Product[]>("userProducts", []);

@@ -7,7 +7,7 @@ import React from "react";
 import { TouchableOpacity } from "react-native";
 import { YStack } from "tamagui";
 
-import { ColorBase } from "@/shared/themes/Colors";
+import { ColorBase } from "@/themes/Colors";
 
 import { TextBodySm } from "../atoms/Typography";
 

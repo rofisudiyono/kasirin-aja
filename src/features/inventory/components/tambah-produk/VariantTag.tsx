@@ -3,8 +3,8 @@ import React from "react";
 import { TouchableOpacity } from "react-native";
 import { XStack } from "tamagui";
 
-import { TextBodySm } from "@/shared/components";
-import { ColorNeutral } from "@/shared/themes/Colors";
+import { TextBodySm } from "@/components";
+import { ColorNeutral } from "@/themes/Colors";
 
 interface VariantTagProps {
   label: string;

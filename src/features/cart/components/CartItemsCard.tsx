@@ -9,10 +9,10 @@ import {
 } from "react-native";
 import { XStack, YStack } from "tamagui";
 
-import { TextBody, TextBodyLg, TextBodySm } from "@/shared/components";
 import type { CartItem } from "@/features/cart/store/cart.store";
+import { TextBody, TextBodyLg, TextBodySm } from "@/components";
+import { ColorBase, ColorNeutral, ColorPrimary } from "@/themes/Colors";
 import { CartItemRow } from "./CartItemRow";
-import { ColorBase, ColorNeutral, ColorPrimary } from "@/shared/themes/Colors";
 
 interface CartItemsCardProps {
   cart: CartItem[];
@@ -32,11 +32,14 @@ export function CartItemsCard({
 
   const activeItem = cart.find((i) => i.cartId === activeNoteCartId);
 
-  const handleOpenNote = useCallback((cartId: string) => {
-    const item = cart.find((i) => i.cartId === cartId);
-    setNoteInput(item?.note ?? "");
-    setActiveNoteCartId(cartId);
-  }, [cart]);
+  const handleOpenNote = useCallback(
+    (cartId: string) => {
+      const item = cart.find((i) => i.cartId === cartId);
+      setNoteInput(item?.note ?? "");
+      setActiveNoteCartId(cartId);
+    },
+    [cart],
+  );
 
   const handleCloseNote = useCallback(() => {
     setActiveNoteCartId(null);
@@ -56,7 +59,11 @@ export function CartItemsCard({
       <View style={styles.card}>
         {cart.length === 0 ? (
           <YStack alignItems="center" paddingVertical={24} gap={8}>
-            <Ionicons name="bag-outline" size={40} color={ColorNeutral.neutral400} />
+            <Ionicons
+              name="bag-outline"
+              size={40}
+              color={ColorNeutral.neutral400}
+            />
             <TextBody color="$colorSecondary">Keranjang masih kosong</TextBody>
           </YStack>
         ) : (

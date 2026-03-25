@@ -1,8 +1,8 @@
 import React from "react";
 import { XStack, YStack } from "tamagui";
 
-import { TextBodySm } from "@/shared/components";
-import { ColorNeutral } from "@/shared/themes/Colors";
+import { TextBodySm } from "@/components";
+import { ColorNeutral } from "@/themes/Colors";
 
 interface FormFieldProps {
   label: string;

@@ -1,14 +1,22 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useAtom } from "jotai";
 import React, { useCallback, useState } from "react";
-import { Alert, FlatList, ListRenderItem, Modal, StyleSheet, TouchableOpacity, View } from "react-native";
+import {
+  Alert,
+  FlatList,
+  ListRenderItem,
+  Modal,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { XStack, YStack } from "tamagui";
 
 import { StatsRow } from "@/features/shift/components/StatsRow";
 import { transactionListMock } from "@/features/transactions/api/transactions.data";
-import { transactionsAtom } from "@/features/transactions/store/transaction.store";
 import { StatusBadge } from "@/features/transactions/components/StatusBadge";
+import { transactionsAtom } from "@/features/transactions/store/transaction.store";
 import {
   AppButton,
   FilterChip,
@@ -21,14 +29,14 @@ import {
   TextBodySm,
   TextCaption,
   TextH3,
-} from "@/shared/components";
+} from "@/components";
 import {
   ColorBase,
   ColorDanger,
   ColorNeutral,
   ColorPrimary,
-} from "@/shared/themes/Colors";
-import type { FilterTab, Transaction } from "@/shared/types";
+} from "@/themes/Colors";
+import type { FilterTab, Transaction } from "@/types";
 
 const FILTERS: FilterTab[] = ["Semua", "Lunas", "Void", "Refund"];
 
@@ -75,7 +83,11 @@ function TransactionCard({
           ) : null}
         </XStack>
         {tx.items ? (
-          <TextBodySm color="$colorSecondary" fontStyle="italic" numberOfLines={1}>
+          <TextBodySm
+            color="$colorSecondary"
+            fontStyle="italic"
+            numberOfLines={1}
+          >
             {tx.items}
           </TextBodySm>
         ) : null}
@@ -138,7 +150,9 @@ function VoidRefundModal({
             <ShadowCard padding="$3" gap="$2">
               <XStack justifyContent="space-between">
                 <TextBodySm color="$colorSecondary">No. Order</TextBodySm>
-                <TextBodyLg fontWeight="700" color="$primary">{tx.id}</TextBodyLg>
+                <TextBodyLg fontWeight="700" color="$primary">
+                  {tx.id}
+                </TextBodyLg>
               </XStack>
               <XStack justifyContent="space-between">
                 <TextBodySm color="$colorSecondary">Waktu</TextBodySm>
@@ -153,7 +167,12 @@ function VoidRefundModal({
               {tx.items ? (
                 <XStack justifyContent="space-between" gap={8}>
                   <TextBodySm color="$colorSecondary">Item</TextBodySm>
-                  <TextBodySm fontWeight="600" flex={1} textAlign="right" numberOfLines={2}>
+                  <TextBodySm
+                    fontWeight="600"
+                    flex={1}
+                    textAlign="right"
+                    numberOfLines={2}
+                  >
                     {tx.items}
                   </TextBodySm>
                 </XStack>
@@ -176,7 +195,13 @@ function VoidRefundModal({
                   size="md"
                   fullWidth
                   title="Refund"
-                  icon={<Ionicons name="return-up-back-outline" size={16} color={ColorBase.white} />}
+                  icon={
+                    <Ionicons
+                      name="return-up-back-outline"
+                      size={16}
+                      color={ColorBase.white}
+                    />
+                  }
                   onPress={() => {
                     onClose();
                     Alert.alert(
@@ -197,7 +222,13 @@ function VoidRefundModal({
                   size="md"
                   fullWidth
                   title="Void (Batalkan)"
-                  icon={<Ionicons name="close-circle-outline" size={16} color={ColorBase.white} />}
+                  icon={
+                    <Ionicons
+                      name="close-circle-outline"
+                      size={16}
+                      color={ColorBase.white}
+                    />
+                  }
                   onPress={() => {
                     onClose();
                     Alert.alert(
@@ -217,7 +248,8 @@ function VoidRefundModal({
               </YStack>
             ) : (
               <TextCaption color={ColorNeutral.neutral500} textAlign="center">
-                Transaksi ini sudah di-{tx.status.toLowerCase()} dan tidak dapat diubah.
+                Transaksi ini sudah di-{tx.status.toLowerCase()} dan tidak dapat
+                diubah.
               </TextCaption>
             )}
 
@@ -270,9 +302,7 @@ export default function TransaksiPage() {
   }
 
   const renderItem = useCallback<ListRenderItem<Transaction>>(
-    ({ item }) => (
-      <MemoTransactionCard tx={item} onPress={handleTxPress} />
-    ),
+    ({ item }) => <MemoTransactionCard tx={item} onPress={handleTxPress} />,
     [],
   );
 
@@ -386,7 +416,11 @@ export default function TransaksiPage() {
         renderItem={renderItem}
         ListHeaderComponent={ListHeader}
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 24, gap: 12 }}
+        contentContainerStyle={{
+          paddingHorizontal: 16,
+          paddingBottom: 24,
+          gap: 12,
+        }}
         ItemSeparatorComponent={() => <View style={{ height: 0 }} />}
       />
 

@@ -1,10 +1,9 @@
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
-import { StyleSheet } from "react-native";
 import { XStack } from "tamagui";
 
-import { TextBodyLg } from "@/shared/components";
-import { ColorBase, ColorNeutral } from "@/shared/themes/Colors";
+import { TextBodyLg } from "@/components";
+import { ColorBase, ColorNeutral } from "@/themes/Colors";
 
 export function SearchBar() {
   return (
@@ -18,11 +17,19 @@ export function SearchBar() {
       borderWidth={1}
       borderColor="$borderColor"
     >
-      <Ionicons name="search-outline" size={18} color={ColorNeutral.neutral400} />
+      <Ionicons
+        name="search-outline"
+        size={18}
+        color={ColorNeutral.neutral400}
+      />
       <TextBodyLg color="$colorTertiary" flex={1}>
         Cari produk atau scan barcode...
       </TextBodyLg>
-      <Ionicons name="barcode-outline" size={20} color={ColorNeutral.neutral500} />
+      <Ionicons
+        name="barcode-outline"
+        size={20}
+        color={ColorNeutral.neutral500}
+      />
     </XStack>
   );
 }

@@ -2,8 +2,18 @@ import React from "react";
 import { View } from "react-native";
 import { XStack, YStack } from "tamagui";
 
-import { ShadowCard, TextBodyLg, TextBodySm, TextH3 } from "@/shared/components";
-import { ColorGreen, ColorNeutral, ColorSuccess, ColorWarning } from "@/shared/themes/Colors";
+import {
+  ShadowCard,
+  TextBodyLg,
+  TextBodySm,
+  TextH3,
+} from "@/components";
+import {
+  ColorGreen,
+  ColorNeutral,
+  ColorSuccess,
+  ColorWarning,
+} from "@/themes/Colors";
 
 const preparationItems = [
   {
@@ -23,9 +33,16 @@ const preparationItems = [
   },
 ];
 
-function PrepBadge({ label, type }: { label: string; type: "green" | "orange" }) {
+function PrepBadge({
+  label,
+  type,
+}: {
+  label: string;
+  type: "green" | "orange";
+}) {
   const bg = type === "green" ? ColorGreen.green100 : ColorWarning.warning100;
-  const color = type === "green" ? ColorSuccess.success600 : ColorWarning.warning700;
+  const color =
+    type === "green" ? ColorSuccess.success600 : ColorWarning.warning700;
   return (
     <View
       style={{

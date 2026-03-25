@@ -2,13 +2,29 @@ import { Ionicons } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
 import { XStack, YStack } from "tamagui";
 
-import { IconButton, TextBodyLg, TextBodySm, TextCaption, TextH3 } from "@/shared/components";
-import { ColorPrimary } from "@/shared/themes/Colors";
+import {
+  IconButton,
+  TextBodyLg,
+  TextBodySm,
+  TextCaption,
+  TextH3,
+} from "@/components";
+import { ColorPrimary } from "@/themes/Colors";
 
 const DAY_NAMES = ["Min", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab"];
 const MONTH_NAMES = [
-  "Jan", "Feb", "Mar", "Apr", "Mei", "Jun",
-  "Jul", "Agu", "Sep", "Okt", "Nov", "Des",
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "Mei",
+  "Jun",
+  "Jul",
+  "Agu",
+  "Sep",
+  "Okt",
+  "Nov",
+  "Des",
 ];
 
 function formatDate(date: Date) {

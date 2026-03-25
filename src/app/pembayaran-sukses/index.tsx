@@ -1,10 +1,17 @@
 import { Ionicons } from "@expo/vector-icons";
 import * as Print from "expo-print";
-import * as Sharing from "expo-sharing";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import * as Sharing from "expo-sharing";
 import { useAtom, useSetAtom } from "jotai";
 import React from "react";
-import { Alert, ScrollView, Share, StyleSheet, TouchableOpacity, View } from "react-native";
+import {
+  Alert,
+  ScrollView,
+  Share,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { XStack, YStack } from "tamagui";
 
@@ -26,19 +33,15 @@ import {
   TextBodySm,
   TextCaption,
   TextH2,
-} from "@/shared/components";
+} from "@/components";
 import {
   ColorBase,
   ColorDanger,
   ColorGreen,
   ColorNeutral,
   ColorPrimary,
-} from "@/shared/themes/Colors";
-import {
-  formatPrice,
-  generateOrderNumber,
-  getCurrentDateTime,
-} from "@/shared/utils";
+} from "@/themes/Colors";
+import { formatPrice, generateOrderNumber, getCurrentDateTime } from "@/utils";
 
 // ─── Main Page ────────────────────────────────────────────────────────────────
 
@@ -163,10 +166,16 @@ export default function PembayaranSuksesPage() {
 
   async function handlePrint() {
     try {
-      const { uri } = await Print.printToFileAsync({ html: buildReceiptHtml(), base64: false });
+      const { uri } = await Print.printToFileAsync({
+        html: buildReceiptHtml(),
+        base64: false,
+      });
       const canShare = await Sharing.isAvailableAsync();
       if (canShare) {
-        await Sharing.shareAsync(uri, { mimeType: "application/pdf", dialogTitle: "Cetak / Bagikan Struk" });
+        await Sharing.shareAsync(uri, {
+          mimeType: "application/pdf",
+          dialogTitle: "Cetak / Bagikan Struk",
+        });
       } else {
         await Print.printAsync({ uri });
       }
@@ -176,7 +185,9 @@ export default function PembayaranSuksesPage() {
   }
 
   async function handleShare() {
-    const itemsText = mockReceiptItems.map((i) => `${i.name} x${i.qty}  ${formatPrice(i.price)}`).join("\n");
+    const itemsText = mockReceiptItems
+      .map((i) => `${i.name} x${i.qty}  ${formatPrice(i.price)}`)
+      .join("\n");
     const text = `🧾 STRUK PEMBAYARAN\n${storeInfo.name}\n${storeInfo.address}\n\nNo. Order: ${orderNumber}\n\n${itemsText}\n\nSubtotal: ${formatPrice(subtotal)}\nPPN 11%: ${formatPrice(ppn)}\nTOTAL: ${formatPrice(total)}\nMetode: ${method}\n\nTerima kasih!`;
     await Share.share({ message: text, title: "Struk Pembayaran" });
   }
@@ -367,7 +378,12 @@ export default function PembayaranSuksesPage() {
               style={styles.outlineBtn}
               onPress={handlePrint}
             >
-              <Ionicons name="print-outline" size={18} color={ColorNeutral.neutral700} style={{ marginRight: 6 }} />
+              <Ionicons
+                name="print-outline"
+                size={18}
+                color={ColorNeutral.neutral700}
+                style={{ marginRight: 6 }}
+              />
               <TextBodyLg fontWeight="700" color={ColorNeutral.neutral700}>
                 Cetak Struk
               </TextBodyLg>
@@ -377,7 +393,12 @@ export default function PembayaranSuksesPage() {
               style={styles.outlineBtn}
               onPress={handleShare}
             >
-              <Ionicons name="share-outline" size={18} color={ColorNeutral.neutral700} style={{ marginRight: 6 }} />
+              <Ionicons
+                name="share-outline"
+                size={18}
+                color={ColorNeutral.neutral700}
+                style={{ marginRight: 6 }}
+              />
               <TextBodyLg fontWeight="700" color={ColorNeutral.neutral700}>
                 Bagikan
               </TextBodyLg>

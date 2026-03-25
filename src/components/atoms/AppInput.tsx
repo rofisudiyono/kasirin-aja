@@ -19,7 +19,7 @@ import {
   ColorGreen,
   ColorNeutral,
   ColorPrimary,
-} from "@/shared/themes/Colors";
+} from "@/themes/Colors";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 export type AppInputState =

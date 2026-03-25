@@ -13,7 +13,7 @@ import React from "react";
 import { ActivityIndicator } from "react-native";
 import { Button, Text } from "tamagui";
 
-import { ColorBase } from "@/shared/themes/Colors";
+import { ColorBase } from "@/themes/Colors";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 export type AppButtonVariant =

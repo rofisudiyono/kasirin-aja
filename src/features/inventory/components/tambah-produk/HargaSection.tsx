@@ -2,16 +2,16 @@ import React from "react";
 import { TextInput } from "react-native";
 import { XStack, YStack } from "tamagui";
 
-import { TextBodySm } from "@/shared/components";
+import { TextBodySm } from "@/components";
 import {
   ColorBase,
   ColorGreen,
   ColorNeutral,
   ColorSuccess,
-} from "@/shared/themes/Colors";
+} from "@/themes/Colors";
 
-import { inputStyle } from "./shared.styles";
 import { SectionHeader } from "./SectionHeader";
+import { inputStyle } from "./shared.styles";
 
 function formatRp(val: string) {
   const num = parseInt(val.replace(/\D/g, "") || "0", 10);

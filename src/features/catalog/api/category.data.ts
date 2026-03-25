@@ -1,4 +1,4 @@
-import type { CategoryFilter } from "@/shared/types";
+import type { CategoryFilter } from "@/types";
 
 export const categoryFilters: CategoryFilter[] = [
   "Semua",

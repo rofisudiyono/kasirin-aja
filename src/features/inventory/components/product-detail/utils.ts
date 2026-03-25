@@ -1,6 +1,6 @@
 import { CATEGORY_COLORS } from "@/config/categoryStyles";
-import { ColorNeutral } from "@/shared/themes/Colors";
-import type { ProductCategory } from "@/shared/types";
+import { ColorNeutral } from "@/themes/Colors";
+import type { ProductCategory } from "@/types";
 
 export function heroBgColor(category: ProductCategory): string {
   return CATEGORY_COLORS[category]?.bg ?? ColorNeutral.neutral100;

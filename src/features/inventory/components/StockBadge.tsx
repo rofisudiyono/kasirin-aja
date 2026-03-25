@@ -7,8 +7,8 @@ import React from "react";
 import { YStack } from "tamagui";
 
 import { STOCK_BADGE } from "@/config/categoryStyles";
-import type { StockStatus } from "@/shared/types";
-import { TextCaption } from "@/shared/components/atoms/Typography";
+import { TextCaption } from "@/components/atoms/Typography";
+import type { StockStatus } from "@/types";
 
 interface StockBadgeProps {
   stockStatus: StockStatus;

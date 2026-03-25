@@ -2,8 +2,8 @@ import React from "react";
 import { Switch } from "react-native";
 import { XStack, YStack } from "tamagui";
 
-import { TextBodyLg, TextCaption } from "@/shared/components";
-import { ColorBase, ColorNeutral, ColorSuccess } from "@/shared/themes/Colors";
+import { TextBodyLg, TextCaption } from "@/components";
+import { ColorBase, ColorNeutral, ColorSuccess } from "@/themes/Colors";
 
 import { SectionHeader } from "./SectionHeader";
 

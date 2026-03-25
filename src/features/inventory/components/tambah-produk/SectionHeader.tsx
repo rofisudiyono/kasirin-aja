@@ -1,7 +1,7 @@
 import React from "react";
 
-import { TextCaption } from "@/shared/components";
-import { ColorNeutral } from "@/shared/themes/Colors";
+import { TextCaption } from "@/components";
+import { ColorNeutral } from "@/themes/Colors";
 
 export function SectionHeader({ title }: { title: string }) {
   return (

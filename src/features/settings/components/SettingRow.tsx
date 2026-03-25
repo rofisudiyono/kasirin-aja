@@ -9,9 +9,9 @@ import React from "react";
 import { Switch, TouchableOpacity } from "react-native";
 import { XStack, YStack } from "tamagui";
 
-import { ColorGreen, ColorNeutral, ColorPrimary } from "@/shared/themes/Colors";
-import type { SettingRowProps } from "@/shared/types";
-import { TextBodyLg, TextBodySm } from "@/shared/components/atoms/Typography";
+import { TextBodyLg, TextBodySm } from "@/components/atoms/Typography";
+import { ColorGreen, ColorNeutral, ColorPrimary } from "@/themes/Colors";
+import type { SettingRowProps } from "@/types";
 
 export function SettingRow({
   iconName,

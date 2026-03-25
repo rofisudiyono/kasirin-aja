@@ -2,7 +2,7 @@
  * Settings page types
  */
 
-import type { IoniconName } from "@/shared/types/icons.types";
+import type { IoniconName } from "@/types/icons.types";
 
 export type { IoniconName };
 

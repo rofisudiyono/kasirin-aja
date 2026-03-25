@@ -1,9 +1,9 @@
 import React from "react";
 import { TouchableOpacity, View } from "react-native";
 
-import { TextBodySm } from "@/shared/components/atoms/Typography";
-import { ColorBase, ColorNeutral, ColorPrimary } from "@/shared/themes/Colors";
-import { formatPrice } from "@/shared/utils";
+import { TextBodySm } from "@/components/atoms/Typography";
+import { ColorBase, ColorNeutral, ColorPrimary } from "@/themes/Colors";
+import { formatPrice } from "@/utils";
 
 import type { SuggestionChipProps } from "./SuggestionChip.types";
 

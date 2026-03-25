@@ -2,9 +2,14 @@ import { Ionicons } from "@expo/vector-icons";
 import { YStack } from "tamagui";
 
 import { CATEGORY_ICONS } from "@/config/categoryStyles";
-import { TextMicro } from "@/shared/components";
-import { ColorBase, ColorGreen, ColorNeutral, ColorPrimary } from "@/shared/themes/Colors";
-import type { ProductCategory } from "@/shared/types";
+import { TextMicro } from "@/components";
+import type { ProductCategory } from "@/types";
+import {
+  ColorBase,
+  ColorGreen,
+  ColorNeutral,
+  ColorPrimary,
+} from "@/themes/Colors";
 
 import { heroBgColor, heroBgIconColor } from "./utils";
 

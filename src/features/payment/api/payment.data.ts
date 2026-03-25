@@ -3,7 +3,7 @@ import type {
   OrderType,
   PaymentMethodOption,
   PromoConfig,
-} from "@/shared/types";
+} from "@/types";
 
 export const orderTypeOptions: OrderType[] = [
   "Dine In",

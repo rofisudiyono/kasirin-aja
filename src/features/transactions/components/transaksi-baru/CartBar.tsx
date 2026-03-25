@@ -3,9 +3,9 @@ import React from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { YStack } from "tamagui";
 
-import { TextBodyLg, TextBodySm } from "@/shared/components";
-import { ColorBase, ColorNeutral, ColorPrimary } from "@/shared/themes/Colors";
-import { formatPrice } from "@/shared/utils";
+import { TextBodyLg, TextBodySm } from "@/components";
+import { ColorBase, ColorNeutral, ColorPrimary } from "@/themes/Colors";
+import { formatPrice } from "@/utils";
 
 type Props = {
   totalItems: number;
@@ -20,7 +20,11 @@ export function CartBar({ totalItems, totalPrice, onPress }: Props) {
     <View style={styles.cartBar}>
       <View style={styles.cartBarInner}>
         <View style={styles.cartBarIcon}>
-          <Ionicons name="bag-outline" size={20} color={ColorPrimary.primary600} />
+          <Ionicons
+            name="bag-outline"
+            size={20}
+            color={ColorPrimary.primary600}
+          />
         </View>
         <YStack flex={1} gap={2}>
           <TextBodySm color="$colorSecondary">{totalItems} item</TextBodySm>

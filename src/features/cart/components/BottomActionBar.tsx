@@ -1,9 +1,9 @@
 import React from "react";
-import { Alert, StyleSheet, TouchableOpacity, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { XStack } from "tamagui";
 
-import { TextBodyLg } from "@/shared/components";
-import { ColorBase, ColorNeutral, ColorPrimary } from "@/shared/themes/Colors";
+import { TextBodyLg } from "@/components";
+import { ColorBase, ColorNeutral, ColorPrimary } from "@/themes/Colors";
 
 interface BottomActionBarProps {
   cartLength: number;

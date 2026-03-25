@@ -8,8 +8,8 @@ import React from "react";
 import { TouchableOpacity, View } from "react-native";
 
 import type { SuggestionChipProps } from "@/features/catalog/components/SuggestionChip/SuggestionChip.types";
-import { ColorBase, ColorNeutral, ColorPrimary } from "@/shared/themes/Colors";
-import { formatPrice } from "@/shared/utils";
+import { ColorBase, ColorNeutral, ColorPrimary } from "@/themes/Colors";
+import { formatPrice } from "@/utils";
 import { TextBodySm } from "../atoms/Typography";
 
 export function SuggestionChip({

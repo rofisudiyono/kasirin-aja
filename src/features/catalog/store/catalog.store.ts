@@ -4,7 +4,7 @@
  * Initialized from catalog default stock values; decremented after each transaction.
  */
 
-import { atomWithMMKV } from "@/shared/store/storage";
+import { atomWithMMKV } from "@/store/storage";
 import { catalogProducts } from "../api/catalog.data";
 
 // Default stock by status

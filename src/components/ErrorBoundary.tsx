@@ -2,8 +2,8 @@ import React from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { YStack } from "tamagui";
 
-import { ColorBase, ColorDanger, ColorNeutral } from "@/shared/themes/Colors";
-import { TextBodyLg, TextBodySm } from "@/shared/components/atoms/Typography";
+import { TextBodyLg, TextBodySm } from "@/components/atoms/Typography";
+import { ColorBase, ColorDanger, ColorNeutral } from "@/themes/Colors";
 
 interface State {
   hasError: boolean;
@@ -56,7 +56,10 @@ export class ErrorBoundary extends React.Component<Props, State> {
             <TextBodySm color={ColorNeutral.neutral500} textAlign="center">
               {this.state.error?.message ?? "Silakan coba lagi."}
             </TextBodySm>
-            <TouchableOpacity onPress={this.handleReset} style={styles.retryBtn}>
+            <TouchableOpacity
+              onPress={this.handleReset}
+              style={styles.retryBtn}
+            >
               <TextBodySm fontWeight="600" color={ColorBase.white}>
                 Coba Lagi
               </TextBodySm>

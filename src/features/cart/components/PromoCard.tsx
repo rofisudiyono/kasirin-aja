@@ -3,14 +3,14 @@ import React from "react";
 import { StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
 import { XStack } from "tamagui";
 
-import { TextBodySm, TextCaption } from "@/shared/components";
+import { TextBodySm, TextCaption } from "@/components";
 import {
   ColorBase,
   ColorGreen,
   ColorNeutral,
   ColorPrimary,
-} from "@/shared/themes/Colors";
-import type { AppliedPromo } from "@/shared/types";
+} from "@/themes/Colors";
+import type { AppliedPromo } from "@/types";
 
 interface PromoCardProps {
   promoCode: string;
@@ -58,7 +58,11 @@ export function PromoCard({
           marginTop={10}
           style={styles.promoChip}
         >
-          <Ionicons name="pricetag-outline" size={14} color={ColorGreen.green600} />
+          <Ionicons
+            name="pricetag-outline"
+            size={14}
+            color={ColorGreen.green600}
+          />
           <TextCaption color={ColorGreen.green600} fontWeight="600" flex={1}>
             {appliedPromo.label}
           </TextCaption>

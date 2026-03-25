@@ -1,6 +1,5 @@
-import { atomWithMMKV } from "@/shared/store/storage";
-import { useAtom } from "jotai";
-import type { Transaction, TxStatus } from "@/shared/types";
+import { atomWithMMKV } from "@/store/storage";
+import type { Transaction } from "@/types";
 
 export const transactionsAtom = atomWithMMKV<Transaction[]>("transactions", []);
 

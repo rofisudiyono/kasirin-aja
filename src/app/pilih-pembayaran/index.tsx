@@ -21,15 +21,15 @@ import {
   TextBodySm,
   TextCaption,
   TextH2,
-} from "@/shared/components";
+} from "@/components";
 import {
   ColorBase,
   ColorDanger,
   ColorNeutral,
   ColorPrimary,
-} from "@/shared/themes/Colors";
-import type { PaymentMethod } from "@/shared/types";
-import { formatPrice, formatTimer } from "@/shared/utils";
+} from "@/themes/Colors";
+import type { PaymentMethod } from "@/types";
+import { formatPrice, formatTimer } from "@/utils";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 

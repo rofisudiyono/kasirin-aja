@@ -3,9 +3,9 @@ import React from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { YStack } from "tamagui";
 
-import { ColorBase, ColorNeutral, ColorPrimary } from "@/shared/themes/Colors";
+import { ColorBase, ColorNeutral, ColorPrimary } from "@/themes/Colors";
 
-import { TextBodyLg, TextCaption } from "@/shared/components/atoms/Typography";
+import { TextBodyLg, TextCaption } from "@/components/atoms/Typography";
 
 import type { PaymentMethodCardProps } from "./PaymentMethodCard.types";
 

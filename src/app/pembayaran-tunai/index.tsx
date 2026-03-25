@@ -15,7 +15,7 @@ import {
   TextBodySm,
   TextCaption,
   TextH1,
-} from "@/shared/components";
+} from "@/components";
 import {
   ColorBase,
   ColorDanger,
@@ -23,8 +23,8 @@ import {
   ColorNeutral,
   ColorPrimary,
   ColorSky,
-} from "@/shared/themes/Colors";
-import { formatPrice, getCashSuggestions } from "@/shared/utils";
+} from "@/themes/Colors";
+import { formatPrice, getCashSuggestions } from "@/utils";
 
 // ─── Main Page ────────────────────────────────────────────────────────────────
 

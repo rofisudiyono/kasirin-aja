@@ -2,9 +2,9 @@ import React from "react";
 import { StyleSheet, View } from "react-native";
 import { XStack } from "tamagui";
 
-import { TextBody, TextH3 } from "@/shared/components";
-import { ColorBase, ColorGreen, ColorNeutral } from "@/shared/themes/Colors";
-import { formatPrice } from "@/shared/utils";
+import { TextBody, TextH3 } from "@/components";
+import { ColorBase, ColorGreen, ColorNeutral } from "@/themes/Colors";
+import { formatPrice } from "@/utils";
 
 interface PriceSummaryCardProps {
   subtotal: number;

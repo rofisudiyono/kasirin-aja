@@ -3,10 +3,21 @@ import React from "react";
 import { View } from "react-native";
 import { XStack, YStack } from "tamagui";
 
-import { ShadowCard, TextBodyLg, TextBodySm, TextCaption, TextH3 } from "@/shared/components";
-import { ColorDanger, ColorGreen, ColorNeutral, ColorSuccess } from "@/shared/themes/Colors";
 import { recentTransactions } from "@/features/transactions/api/transactions.data";
 import { transactionsAtom } from "@/features/transactions/store/transaction.store";
+import {
+  ShadowCard,
+  TextBodyLg,
+  TextBodySm,
+  TextCaption,
+  TextH3,
+} from "@/components";
+import {
+  ColorDanger,
+  ColorGreen,
+  ColorNeutral,
+  ColorSuccess,
+} from "@/themes/Colors";
 
 function StatusBadge({ status }: { status: string }) {
   const isVoid = status === "Void";
@@ -31,7 +42,8 @@ function StatusBadge({ status }: { status: string }) {
 export function RecentTransactions() {
   const storedTxs = useAtomValue(transactionsAtom);
   // Show stored transactions first, fallback to mock if none
-  const displayList = storedTxs.length > 0 ? storedTxs.slice(0, 5) : recentTransactions;
+  const displayList =
+    storedTxs.length > 0 ? storedTxs.slice(0, 5) : recentTransactions;
 
   return (
     <YStack gap="$2">
@@ -48,7 +60,11 @@ export function RecentTransactions() {
                 }}
               />
             )}
-            <XStack paddingHorizontal="$4" paddingVertical="$3" alignItems="center">
+            <XStack
+              paddingHorizontal="$4"
+              paddingVertical="$3"
+              alignItems="center"
+            >
               <YStack flex={1} gap={2}>
                 <TextBodyLg fontWeight="700">{trx.id}</TextBodyLg>
                 <TextCaption color="$colorSecondary">{trx.time}</TextCaption>

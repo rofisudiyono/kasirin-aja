@@ -1,4 +1,4 @@
-import { atomWithMMKV } from "@/shared/store/storage";
+import { atomWithMMKV } from "@/store/storage";
 
 export interface ShiftData {
   openingCash: number;

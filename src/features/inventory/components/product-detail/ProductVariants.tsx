@@ -3,20 +3,15 @@ import React from "react";
 import { TouchableOpacity } from "react-native";
 import { Separator, XStack, YStack } from "tamagui";
 
-import {
-  ShadowCard,
-  TextBodyLg,
-  TextBodySm,
-  TextMicro,
-} from "@/shared/components";
+import { ShadowCard, TextBodyLg, TextBodySm } from "@/components";
 import {
   ColorBase,
   ColorGreen,
   ColorNeutral,
   ColorPrimary,
   ColorWarning,
-} from "@/shared/themes/Colors";
-import type { ProductDetail, ProductVariantGroup } from "@/shared/types";
+} from "@/themes/Colors";
+import type { ProductDetail, ProductVariantGroup } from "@/types";
 
 import { formatRupiah } from "./utils";
 

@@ -8,7 +8,7 @@ import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import { XStack } from "tamagui";
 
-import { ColorNeutral } from "@/shared/themes/Colors";
+import { ColorNeutral } from "@/themes/Colors";
 
 import { TextBodyLg } from "../atoms/Typography";
 

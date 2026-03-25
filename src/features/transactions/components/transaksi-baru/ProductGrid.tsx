@@ -5,8 +5,8 @@ import { XStack } from "tamagui";
 import { CATEGORY_COLORS, CATEGORY_ICONS } from "@/config/categoryStyles";
 import { categoryFilters } from "@/features/catalog/api/category.data";
 import { ProductCard } from "@/features/catalog/components/ProductCard";
-import { FilterChip } from "@/shared/components";
-import type { CatalogProduct, CategoryFilter } from "@/shared/types";
+import { FilterChip } from "@/components";
+import type { CatalogProduct, CategoryFilter } from "@/types";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 const CARD_WIDTH = (SCREEN_WIDTH - 16 * 2 - 12) / 2;

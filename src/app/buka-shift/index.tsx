@@ -7,6 +7,10 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { ScrollView, XStack, YStack } from "tamagui";
 
 import {
+  isShiftStartedAtom,
+  shiftDataAtom,
+} from "@/features/shift/store/shift.store";
+import {
   AppButton,
   NumpadButton,
   PageHeader,
@@ -14,8 +18,7 @@ import {
   TextCaption,
   TextH1,
   TextH3,
-} from "@/shared/components";
-import { isShiftStartedAtom, shiftDataAtom } from "@/features/shift/store/shift.store";
+} from "@/components";
 import {
   ColorBase,
   ColorDanger,
@@ -24,8 +27,8 @@ import {
   ColorPrimary,
   ColorSky,
   ColorWarning,
-} from "@/shared/themes/Colors";
-import { formatPrice } from "@/shared/utils";
+} from "@/themes/Colors";
+import { formatPrice } from "@/utils";
 
 const PRESET_AMOUNTS = [200_000, 500_000, 1_000_000];
 
@@ -69,8 +72,14 @@ export default function BukaShiftPage() {
   function handleMulaiShift() {
     const now = new Date();
     const startTime =
-      now.toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" }) + " WIB";
-    setShiftData({ openingCash: amount, startTime, cashierName: "Budi Santoso", note });
+      now.toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" }) +
+      " WIB";
+    setShiftData({
+      openingCash: amount,
+      startTime,
+      cashierName: "Budi Santoso",
+      note,
+    });
     setIsShiftStarted(true);
     router.replace("/(tabs)");
   }

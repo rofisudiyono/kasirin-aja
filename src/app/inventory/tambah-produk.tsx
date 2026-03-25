@@ -2,14 +2,32 @@ import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useAtom } from "jotai";
 import React, { useState } from "react";
-import { Alert, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
+import {
+  Alert,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { XStack } from "tamagui";
 
-import { AppButton, TextBodySm, TextCaption, TextH3 } from "@/shared/components";
-import { ColorBase, ColorNeutral } from "@/shared/themes/Colors";
-import { userProductsAtom, buildProduct } from "@/features/inventory/store/inventory.store";
+import {
+  buildProduct,
+  userProductsAtom,
+} from "@/features/inventory/store/inventory.store";
+import {
+  AppButton,
+  TextBodySm,
+  TextCaption,
+  TextH3,
+} from "@/components";
+import { ColorBase, ColorNeutral } from "@/themes/Colors";
 
+import type {
+  TambahProdukCategory,
+  TambahProdukVariantGroup,
+} from "@/features/inventory/components/tambah-produk";
 import {
   FotoProdukSection,
   HargaSection,
@@ -18,10 +36,6 @@ import {
   StokSection,
   VariantProdukSection,
 } from "@/features/inventory/components/tambah-produk";
-import type {
-  TambahProdukCategory,
-  TambahProdukVariantGroup,
-} from "@/features/inventory/components/tambah-produk";
 
 export default function TambahProdukPage() {
   const router = useRouter();
@@ -29,11 +43,15 @@ export default function TambahProdukPage() {
   const [userProducts, setUserProducts] = useAtom(userProductsAtom);
 
   // If editing, find the existing product
-  const editingProduct = editId ? userProducts.find((p) => p.id === editId) : undefined;
+  const editingProduct = editId
+    ? userProducts.find((p) => p.id === editId)
+    : undefined;
   const isEditMode = !!editingProduct;
 
   const [photos, setPhotos] = useState<string[]>(["1", "2"]);
-  const [namaProduk, setNamaProduk] = useState(editingProduct?.name ?? "Kopi Susu");
+  const [namaProduk, setNamaProduk] = useState(
+    editingProduct?.name ?? "Kopi Susu",
+  );
   const [sku, setSku] = useState(editingProduct?.sku ?? "KPS-001");
   const [barcode, setBarcode] = useState("");
   const [kategori, setKategori] = useState<TambahProdukCategory>(
@@ -42,12 +60,16 @@ export default function TambahProdukPage() {
   const [deskripsi, setDeskripsi] = useState("");
   const [hargaModal, setHargaModal] = useState("8000");
   const [hargaJual, setHargaJual] = useState(
-    editingProduct ? String(Number(editingProduct.price.replace(/[^0-9]/g, ""))) : "15000",
+    editingProduct
+      ? String(Number(editingProduct.price.replace(/[^0-9]/g, "")))
+      : "15000",
   );
-  const [hasVariant, setHasVariant] = useState(editingProduct?.hasVariant ?? true);
-  const [variantGroups, setVariantGroups] = useState<TambahProdukVariantGroup[]>([
-    { name: "Ukuran", values: ["Small", "Medium", "Large"] },
-  ]);
+  const [hasVariant, setHasVariant] = useState(
+    editingProduct?.hasVariant ?? true,
+  );
+  const [variantGroups, setVariantGroups] = useState<
+    TambahProdukVariantGroup[]
+  >([{ name: "Ukuran", values: ["Small", "Medium", "Large"] }]);
   const [stokAwal, setStokAwal] = useState(
     editingProduct ? String(editingProduct.stock) : "100",
   );

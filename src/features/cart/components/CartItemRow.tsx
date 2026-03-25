@@ -6,23 +6,19 @@
  */
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
-import {
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { XStack, YStack } from "tamagui";
 
 import { CATEGORY_COLORS, CATEGORY_ICONS } from "@/config/categoryStyles";
 import type { CartItem } from "@/features/cart/store/cart.store";
+import { TextBodyLg, TextCaption } from "@/components/atoms/Typography";
 import {
   ColorBase,
   ColorDanger,
   ColorNeutral,
   ColorPrimary,
-} from "@/shared/themes/Colors";
-import { formatPrice } from "@/shared/utils";
-import { TextBodyLg, TextCaption } from "@/shared/components/atoms/Typography";
+} from "@/themes/Colors";
+import { formatPrice } from "@/utils";
 
 const styles = StyleSheet.create({
   cartItemRow: {

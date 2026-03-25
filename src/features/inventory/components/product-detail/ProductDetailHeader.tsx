@@ -1,8 +1,8 @@
 import { useRouter } from "expo-router";
 import { XStack } from "tamagui";
 
-import { IconButton, TextH3 } from "@/shared/components";
-import { ColorBase } from "@/shared/themes/Colors";
+import { IconButton, TextH3 } from "@/components";
+import { ColorBase } from "@/themes/Colors";
 
 export function ProductDetailHeader() {
   const router = useRouter();

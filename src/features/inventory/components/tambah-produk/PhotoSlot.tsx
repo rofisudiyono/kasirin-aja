@@ -3,8 +3,8 @@ import React from "react";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import { YStack } from "tamagui";
 
-import { TextCaption } from "@/shared/components";
-import { ColorBase, ColorNeutral, ColorPrimary } from "@/shared/themes/Colors";
+import { TextCaption } from "@/components";
+import { ColorBase, ColorNeutral, ColorPrimary } from "@/themes/Colors";
 
 export function AddPhotoSlot() {
   return (
@@ -25,7 +25,11 @@ export function AddPhotoSlot() {
         size={22}
         color={ColorPrimary.primary400}
       />
-      <TextCaption fontWeight="500" color={ColorPrimary.primary600} fontSize={10}>
+      <TextCaption
+        fontWeight="500"
+        color={ColorPrimary.primary600}
+        fontSize={10}
+      >
         + Foto
       </TextCaption>
     </YStack>

@@ -2,7 +2,7 @@ import { Image } from "expo-image";
 import { StyleSheet, View } from "react-native";
 import Animated, { Easing, Keyframe } from "react-native-reanimated";
 
-import { ColorIconGradient } from "@/shared/themes/Colors";
+import { ColorIconGradient } from "@/themes/Colors";
 import classes from "./animated-icon.module.css";
 const DURATION = 300;
 

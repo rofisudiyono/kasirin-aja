@@ -1,13 +1,9 @@
-/**
- * BarcodePlaceholder — Placeholder barcode visual for receipts
- *
- * Used in pembayaran-sukses (payment success) page
- */
 import React from "react";
 import { StyleSheet, View } from "react-native";
 
 import { barcodeBars } from "@/features/catalog/api/barcode.data";
-import { ColorBase, ColorNeutral } from "@/shared/themes/Colors";
+import { ColorBase, ColorNeutral } from "@/themes/Colors";
+import type { BarcodePlaceholderProps } from "./BarcodePlaceholder.types";
 
 const styles = StyleSheet.create({
   container: {
@@ -21,9 +17,9 @@ const styles = StyleSheet.create({
   },
 });
 
-export function BarcodePlaceholder() {
+export function BarcodePlaceholder({ style }: BarcodePlaceholderProps) {
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, style]}>
       {barcodeBars.map((width, index) => (
         <View
           key={index}

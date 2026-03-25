@@ -7,14 +7,14 @@ import {
   TextBodyLg,
   TextBodySm,
   TextCaption,
-} from "@/shared/components/atoms/Typography";
+} from "@/components/atoms/Typography";
 import {
   ColorBase,
   ColorNeutral,
   ColorPrimary,
   ColorWarning,
-} from "@/shared/themes/Colors";
-import { formatPrice } from "@/shared/utils";
+} from "@/themes/Colors";
+import { formatPrice } from "@/utils";
 
 import type { ProductCardProps } from "./ProductCard.types";
 

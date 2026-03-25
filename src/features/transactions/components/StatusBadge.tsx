@@ -7,14 +7,14 @@
 import React from "react";
 import { YStack } from "tamagui";
 
+import { TextBodySm } from "@/components/atoms/Typography";
 import {
   ColorAccentOrange,
   ColorDanger,
   ColorGreen,
   ColorNeutral,
-} from "@/shared/themes/Colors";
-import type { TxStatus } from "@/shared/types";
-import { TextBodySm } from "@/shared/components/atoms/Typography";
+} from "@/themes/Colors";
+import type { TxStatus } from "@/types";
 
 const STATUS_MAP: Record<TxStatus, { bg: string; color: string }> = {
   Lunas: { bg: ColorGreen.green100, color: ColorGreen.green600 },

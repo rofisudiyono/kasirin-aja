@@ -1,4 +1,4 @@
-import type { ReceiptItem, StoreInfo } from "@/shared/types";
+import type { ReceiptItem, StoreInfo } from "@/types";
 
 export const mockReceiptItems: ReceiptItem[] = [
   { name: "Kopi Susu (Medium, Ice)", qty: 2, price: 44000 },

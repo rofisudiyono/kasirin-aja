@@ -15,9 +15,9 @@ import {
   ColorPrimary,
   ColorSky,
   ColorSuccess,
-} from "@/shared/themes/Colors";
+} from "@/themes/Colors";
 
-import { TextBodyLg, TextCaption } from "@/shared/components/atoms/Typography";
+import { TextBodyLg, TextCaption } from "@/components/atoms/Typography";
 import type { PaymentMethodCardProps } from "./PaymentMethodCard/PaymentMethodCard.types";
 
 const styles = StyleSheet.create({

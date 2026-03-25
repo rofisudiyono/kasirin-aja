@@ -2,20 +2,36 @@ import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useAtom } from "jotai";
 import React from "react";
-import { Alert, FlatList, StyleSheet, TouchableOpacity, View } from "react-native";
+import {
+  Alert,
+  FlatList,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { XStack, YStack } from "tamagui";
 
-import { cartAtom, heldOrdersAtom, type HeldOrder } from "@/features/cart/store/cart.store";
-import { PageHeader, TextBody, TextBodySm, TextCaption, TextH3 } from "@/shared/components";
+import {
+  cartAtom,
+  heldOrdersAtom,
+  type HeldOrder,
+} from "@/features/cart/store/cart.store";
+import {
+  PageHeader,
+  TextBody,
+  TextBodySm,
+  TextCaption,
+  TextH3,
+} from "@/components";
 import {
   ColorBase,
   ColorDanger,
   ColorGreen,
   ColorNeutral,
   ColorPrimary,
-} from "@/shared/themes/Colors";
-import { formatPrice } from "@/shared/utils";
+} from "@/themes/Colors";
+import { formatPrice } from "@/utils";
 
 // ─── Main Page ────────────────────────────────────────────────────────────────
 
@@ -25,37 +41,30 @@ export default function PesananDitahanPage() {
   const [, setCart] = useAtom(cartAtom);
 
   function handleResume(order: HeldOrder) {
-    Alert.alert(
-      "Lanjutkan Pesanan",
-      `Lanjutkan pesanan "${order.label}"?`,
-      [
-        { text: "Batal", style: "cancel" },
-        {
-          text: "Lanjutkan",
-          onPress: () => {
-            setCart(order.items);
-            setHeldOrders((prev) => prev.filter((o) => o.id !== order.id));
-            router.back();
-            router.push("/keranjang" as never);
-          },
+    Alert.alert("Lanjutkan Pesanan", `Lanjutkan pesanan "${order.label}"?`, [
+      { text: "Batal", style: "cancel" },
+      {
+        text: "Lanjutkan",
+        onPress: () => {
+          setCart(order.items);
+          setHeldOrders((prev) => prev.filter((o) => o.id !== order.id));
+          router.back();
+          router.push("/keranjang" as never);
         },
-      ],
-    );
+      },
+    ]);
   }
 
   function handleDelete(order: HeldOrder) {
-    Alert.alert(
-      "Hapus Pesanan",
-      `Hapus pesanan "${order.label}"?`,
-      [
-        { text: "Batal", style: "cancel" },
-        {
-          text: "Hapus",
-          style: "destructive",
-          onPress: () => setHeldOrders((prev) => prev.filter((o) => o.id !== order.id)),
-        },
-      ],
-    );
+    Alert.alert("Hapus Pesanan", `Hapus pesanan "${order.label}"?`, [
+      { text: "Batal", style: "cancel" },
+      {
+        text: "Hapus",
+        style: "destructive",
+        onPress: () =>
+          setHeldOrders((prev) => prev.filter((o) => o.id !== order.id)),
+      },
+    ]);
   }
 
   return (
@@ -69,11 +78,19 @@ export default function PesananDitahanPage() {
 
       {heldOrders.length === 0 ? (
         <YStack flex={1} alignItems="center" justifyContent="center" gap={12}>
-          <Ionicons name="time-outline" size={56} color={ColorNeutral.neutral300} />
+          <Ionicons
+            name="time-outline"
+            size={56}
+            color={ColorNeutral.neutral300}
+          />
           <TextH3 fontWeight="700" color={ColorNeutral.neutral400}>
             Tidak Ada Pesanan Ditahan
           </TextH3>
-          <TextBodySm color={ColorNeutral.neutral400} textAlign="center" paddingHorizontal={40}>
+          <TextBodySm
+            color={ColorNeutral.neutral400}
+            textAlign="center"
+            paddingHorizontal={40}
+          >
             Pesanan yang ditahan dari keranjang akan muncul di sini.
           </TextBodySm>
         </YStack>
@@ -82,7 +99,13 @@ export default function PesananDitahanPage() {
           data={heldOrders}
           keyExtractor={(item) => item.id}
           contentContainerStyle={styles.list}
-          renderItem={({ item }) => <HeldOrderCard order={item} onResume={handleResume} onDelete={handleDelete} />}
+          renderItem={({ item }) => (
+            <HeldOrderCard
+              order={item}
+              onResume={handleResume}
+              onDelete={handleDelete}
+            />
+          )}
         />
       )}
     </SafeAreaView>
@@ -99,16 +122,27 @@ interface HeldOrderCardProps {
 
 function HeldOrderCard({ order, onResume, onDelete }: HeldOrderCardProps) {
   const totalItems = order.items.reduce((s, c) => s + c.quantity, 0);
-  const subtotal = order.items.reduce((s, c) => s + c.unitPrice * c.quantity, 0);
+  const subtotal = order.items.reduce(
+    (s, c) => s + c.unitPrice * c.quantity,
+    0,
+  );
   const itemsSummary = order.items
     .slice(0, 2)
-    .map((c) => `${c.productName}${c.variantLabel ? ` (${c.variantLabel})` : ""} x${c.quantity}`)
+    .map(
+      (c) =>
+        `${c.productName}${c.variantLabel ? ` (${c.variantLabel})` : ""} x${c.quantity}`,
+    )
     .join(", ");
-  const more = order.items.length > 2 ? ` +${order.items.length - 2} lainnya` : "";
+  const more =
+    order.items.length > 2 ? ` +${order.items.length - 2} lainnya` : "";
 
   return (
     <View style={styles.card}>
-      <XStack justifyContent="space-between" alignItems="flex-start" marginBottom={8}>
+      <XStack
+        justifyContent="space-between"
+        alignItems="flex-start"
+        marginBottom={8}
+      >
         <YStack flex={1} gap={2}>
           <XStack alignItems="center" gap={6}>
             <View style={styles.holdBadge}>
@@ -120,23 +154,36 @@ function HeldOrderCard({ order, onResume, onDelete }: HeldOrderCardProps) {
             {order.orderType} · Ditahan {order.createdAt}
           </TextCaption>
         </YStack>
-        <TouchableOpacity style={styles.deleteBtn} onPress={() => onDelete(order)}>
-          <Ionicons name="trash-outline" size={16} color={ColorDanger.danger600} />
+        <TouchableOpacity
+          style={styles.deleteBtn}
+          onPress={() => onDelete(order)}
+        >
+          <Ionicons
+            name="trash-outline"
+            size={16}
+            color={ColorDanger.danger600}
+          />
         </TouchableOpacity>
       </XStack>
 
       <TextBodySm color={ColorNeutral.neutral600} numberOfLines={2}>
-        {itemsSummary}{more}
+        {itemsSummary}
+        {more}
       </TextBodySm>
 
       <XStack justifyContent="space-between" alignItems="center" marginTop={12}>
         <YStack>
-          <TextCaption color={ColorNeutral.neutral500}>{totalItems} item</TextCaption>
+          <TextCaption color={ColorNeutral.neutral500}>
+            {totalItems} item
+          </TextCaption>
           <TextBody fontWeight="700" color={ColorGreen.green600}>
             {formatPrice(subtotal)}
           </TextBody>
         </YStack>
-        <TouchableOpacity style={styles.resumeBtn} onPress={() => onResume(order)}>
+        <TouchableOpacity
+          style={styles.resumeBtn}
+          onPress={() => onResume(order)}
+        >
           <Ionicons name="play" size={14} color={ColorBase.white} />
           <TextBodySm fontWeight="700" color={ColorBase.white}>
             Lanjutkan

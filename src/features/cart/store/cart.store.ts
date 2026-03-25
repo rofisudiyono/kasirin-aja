@@ -1,6 +1,6 @@
-import type { OrderType, ProductCategory } from "@/shared/types";
+import { atomWithMMKV } from "@/store/storage";
+import type { OrderType, ProductCategory } from "@/types";
 import { atom } from "jotai";
-import { atomWithMMKV } from "@/shared/store/storage";
 
 export interface CartItem {
   cartId: string;

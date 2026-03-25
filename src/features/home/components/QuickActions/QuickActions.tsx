@@ -1,12 +1,8 @@
 import React from "react";
 import { XStack } from "tamagui";
 
-import { ActionCardButton } from "@/shared/components/atoms/ActionCardButton";
-import {
-  ColorAccentPurple,
-  ColorGreen,
-  ColorWarning,
-} from "@/shared/themes/Colors";
+import { ActionCardButton } from "@/components/atoms/ActionCardButton";
+import { ColorAccentPurple, ColorGreen, ColorWarning } from "@/themes/Colors";
 
 import { QuickActionsProps } from "./QuickActions.types";
 

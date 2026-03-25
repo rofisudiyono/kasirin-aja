@@ -2,8 +2,8 @@ import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import { StyleSheet, View } from "react-native";
 
-import { TextCaption } from "@/shared/components";
-import { ColorBase, ColorNeutral, ColorPrimary } from "@/shared/themes/Colors";
+import { TextCaption } from "@/components";
+import { ColorBase, ColorNeutral, ColorPrimary } from "@/themes/Colors";
 
 type Props = {
   totalItems: number;
@@ -13,7 +13,11 @@ export function CartIconButton({ totalItems }: Props) {
   return (
     <View style={styles.wrapper}>
       <View style={styles.btn}>
-        <Ionicons name="cart-outline" size={20} color={ColorNeutral.neutral700} />
+        <Ionicons
+          name="cart-outline"
+          size={20}
+          color={ColorNeutral.neutral700}
+        />
       </View>
       {totalItems > 0 && (
         <View style={styles.badge}>

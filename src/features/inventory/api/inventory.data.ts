@@ -2,7 +2,7 @@
  * Product inventory mock data
  */
 
-import type { Product, ProductDetail, SortOption } from "@/shared/types";
+import type { Product, ProductDetail, SortOption } from "@/types";
 
 export const products: Product[] = [
   {
@@ -104,7 +104,8 @@ export const productDetails: Record<string, ProductDetail> = {
     costPrice: 12000,
     sellPrice: 25000,
     status: "active",
-    description: "Nasi goreng spesial dengan bumbu rahasia dan telur mata sapi.",
+    description:
+      "Nasi goreng spesial dengan bumbu rahasia dan telur mata sapi.",
     totalStock: 4,
     lowStockThreshold: 5,
     createdAt: "5 Feb 2025",

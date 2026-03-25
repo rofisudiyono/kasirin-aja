@@ -4,7 +4,7 @@
  */
 
 import { Colors } from '@/config/theme';
-import { useColorScheme } from '@/shared/hooks/use-color-scheme';
+import { useColorScheme } from '@/hooks/use-color-scheme';
 
 export function useTheme() {
   const scheme = useColorScheme();

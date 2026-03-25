@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
 
-import { ColorBase, ColorNeutral } from "@/shared/themes/Colors";
+import { ColorBase, ColorNeutral } from "@/themes/Colors";
 import type { QRCodePlaceholderProps } from "./QRCodePlaceholder.types";
 
 const styles = StyleSheet.create({

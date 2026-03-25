@@ -8,9 +8,9 @@ import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import { XStack, YStack } from "tamagui";
 
-import { ColorBase, ColorPrimary } from "@/shared/themes/Colors";
+import { ColorBase, ColorPrimary } from "@/themes/Colors";
 
-import { TextBodySm, TextH3 } from "@/shared/components/atoms/Typography";
+import { TextBodySm, TextH3 } from "@/components/atoms/Typography";
 
 interface ProfileCardProps {
   name: string;

@@ -2,7 +2,7 @@
  * Tab navigation configuration
  */
 
-import type { TabConfig } from "@/shared/types";
+import type { TabConfig } from "@/types";
 
 export const TAB_ICONS: Record<string, TabConfig> = {
   index: { active: "home", inactive: "home-outline" },

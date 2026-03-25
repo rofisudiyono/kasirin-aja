@@ -6,7 +6,7 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
 
-import { ColorNeutral } from "@/shared/themes/Colors";
+import { ColorNeutral } from "@/themes/Colors";
 
 const styles = StyleSheet.create({
   dottedLine: {

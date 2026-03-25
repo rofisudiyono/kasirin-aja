@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 
-import { ColorNeutral } from "@/shared/themes/Colors";
+import { ColorNeutral } from "@/themes/Colors";
 
 export const inputStyle = StyleSheet.create({
   input: {

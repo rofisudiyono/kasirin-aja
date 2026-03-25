@@ -6,10 +6,9 @@
       "@/*": ["./src/*"],
       "@/assets/*": ["./assets/*"],
       "@/features/*": ["./src/features/*"],
-      "@/shared/*": ["./src/shared/*"],
       "@/config/*": ["./src/config/*"],
-      "@/design-system": ["./src/shared/components/index.ts"],
-      "@/design-system/*": ["./src/shared/components/*"]
+      "@/design-system": ["./src/components/index.ts"],
+      "@/design-system/*": ["./src/components/*"]
     }
   },
   "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts"]

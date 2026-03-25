@@ -6,7 +6,7 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
 
-import { ColorBase, ColorNeutral } from "@/shared/themes/Colors";
+import { ColorBase, ColorNeutral } from "@/themes/Colors";
 
 const styles = StyleSheet.create({
   container: {

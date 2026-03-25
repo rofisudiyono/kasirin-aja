@@ -9,14 +9,14 @@ import {
   TextBodyLg,
   TextBodySm,
   TextCaption,
-} from "@/shared/components";
+} from "@/components";
 import {
   ColorBase,
   ColorNeutral,
   ColorPrimary,
   ColorSuccess,
   ColorWarning,
-} from "@/shared/themes/Colors";
+} from "@/themes/Colors";
 
 import { ShiftCardProps } from "./ShiftCard.types";
 

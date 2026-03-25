@@ -3,7 +3,7 @@
  * Used across product listings, cart, and menu
  */
 
-import type { ProductCategory } from "@/shared/types";
+import type { ProductCategory } from "@/types";
 import type { Ionicons } from "@expo/vector-icons";
 import type React from "react";
 

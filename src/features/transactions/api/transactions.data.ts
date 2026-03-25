@@ -3,7 +3,7 @@
  * Used in both home page and transaksi page
  */
 
-import type { Transaction } from "@/shared/types";
+import type { Transaction } from "@/types";
 
 export const recentTransactions: Transaction[] = [
   { id: "#0021", time: "10:12 WIB", amount: "Rp 120.000", status: "Lunas" },

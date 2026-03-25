@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
 
-import { ColorNeutral } from "@/shared/themes/Colors";
+import { ColorNeutral } from "@/themes/Colors";
 import type { DottedSeparatorProps } from "./DottedSeparator.types";
 
 const styles = StyleSheet.create({

@@ -6,17 +6,17 @@ import React, { useState } from "react";
 import {
   Alert,
   StyleSheet,
+  TextInput,
   TouchableOpacity,
   View,
-  TextInput,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { YStack } from "tamagui";
 
-import { catalogProducts } from "@/features/catalog/api/catalog.data";
+import { TextBody, TextBodySm, TextH3 } from "@/components";
 import { scannedBarcodeAtom } from "@/features/cart/store/cart.store";
-import { TextBody, TextBodySm, TextH3 } from "@/shared/components";
-import { ColorBase, ColorNeutral, ColorPrimary } from "@/shared/themes/Colors";
+import { catalogProducts } from "@/features/catalog/api/catalog.data";
+import { ColorBase, ColorNeutral, ColorPrimary } from "@/themes/Colors";
 
 // ─── Main Page ────────────────────────────────────────────────────────────────
 
@@ -59,8 +59,18 @@ export default function BarcodeScannerPage() {
   if (!permission.granted) {
     return (
       <SafeAreaView style={styles.container}>
-        <YStack flex={1} alignItems="center" justifyContent="center" gap={16} paddingHorizontal={32}>
-          <Ionicons name="camera-outline" size={64} color={ColorNeutral.neutral300} />
+        <YStack
+          flex={1}
+          alignItems="center"
+          justifyContent="center"
+          gap={16}
+          paddingHorizontal={32}
+        >
+          <Ionicons
+            name="camera-outline"
+            size={64}
+            color={ColorNeutral.neutral300}
+          />
           <TextH3 fontWeight="700" textAlign="center">
             Izin Kamera Diperlukan
           </TextH3>
@@ -85,7 +95,9 @@ export default function BarcodeScannerPage() {
       <CameraView
         style={StyleSheet.absoluteFillObject}
         facing="back"
-        barcodeScannerSettings={{ barcodeTypes: ["ean13", "ean8", "code128", "qr"] }}
+        barcodeScannerSettings={{
+          barcodeTypes: ["ean13", "ean8", "code128", "qr"],
+        }}
         onBarcodeScanned={scanned ? undefined : handleBarCodeScanned}
       />
 
@@ -94,7 +106,10 @@ export default function BarcodeScannerPage() {
         {/* Top bar */}
         <SafeAreaView edges={["top"]}>
           <View style={styles.topBar}>
-            <TouchableOpacity style={styles.closeBtn} onPress={() => router.back()}>
+            <TouchableOpacity
+              style={styles.closeBtn}
+              onPress={() => router.back()}
+            >
               <Ionicons name="close" size={24} color={ColorBase.white} />
             </TouchableOpacity>
             <TextH3 fontWeight="700" color={ColorBase.white}>
@@ -120,7 +135,11 @@ export default function BarcodeScannerPage() {
 
         {/* Manual input */}
         <View style={styles.manualContainer}>
-          <TextBodySm color={ColorBase.white} marginBottom={8} textAlign="center">
+          <TextBodySm
+            color={ColorBase.white}
+            marginBottom={8}
+            textAlign="center"
+          >
             Atau masukkan kode manual:
           </TextBodySm>
           <View style={styles.manualRow}>
@@ -134,14 +153,24 @@ export default function BarcodeScannerPage() {
               returnKeyType="search"
               onSubmitEditing={handleManualInput}
             />
-            <TouchableOpacity style={styles.manualBtn} onPress={handleManualInput}>
+            <TouchableOpacity
+              style={styles.manualBtn}
+              onPress={handleManualInput}
+            >
               <Ionicons name="search" size={20} color={ColorBase.white} />
             </TouchableOpacity>
           </View>
 
           {scanned && (
-            <TouchableOpacity style={styles.rescanBtn} onPress={() => setScanned(false)}>
-              <Ionicons name="refresh" size={18} color={ColorPrimary.primary600} />
+            <TouchableOpacity
+              style={styles.rescanBtn}
+              onPress={() => setScanned(false)}
+            >
+              <Ionicons
+                name="refresh"
+                size={18}
+                color={ColorPrimary.primary600}
+              />
               <TextBodySm fontWeight="700" color={ColorPrimary.primary600}>
                 Scan Ulang
               </TextBodySm>

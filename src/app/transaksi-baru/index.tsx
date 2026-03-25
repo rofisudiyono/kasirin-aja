@@ -5,7 +5,12 @@ import { ScrollView, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { YStack } from "tamagui";
 
-import { cartAtom, heldOrdersAtom, scannedBarcodeAtom, type CartItem } from "@/features/cart/store/cart.store";
+import {
+  cartAtom,
+  heldOrdersAtom,
+  scannedBarcodeAtom,
+  type CartItem,
+} from "@/features/cart/store/cart.store";
 import { catalogProducts } from "@/features/catalog/api/catalog.data";
 import { catalogStockAtom } from "@/features/catalog/store/catalog.store";
 import {
@@ -15,9 +20,9 @@ import {
   SearchBar,
   VariantSheet,
 } from "@/features/transactions/components/transaksi-baru";
-import { IconButton, PageHeader } from "@/shared/components";
-import { ColorBase } from "@/shared/themes/Colors";
-import type { CatalogProduct, CategoryFilter } from "@/shared/types";
+import { IconButton, PageHeader } from "@/components";
+import { ColorBase } from "@/themes/Colors";
+import type { CatalogProduct, CategoryFilter } from "@/types";
 
 export default function TransaksiBaruPage() {
   const router = useRouter();
@@ -26,7 +31,9 @@ export default function TransaksiBaruPage() {
   const [scannedBarcode, setScannedBarcode] = useAtom(scannedBarcodeAtom);
   const [heldOrders] = useAtom(heldOrdersAtom);
   const [catalogStock] = useAtom(catalogStockAtom);
-  const [variantProduct, setVariantProduct] = useState<CatalogProduct | null>(null);
+  const [variantProduct, setVariantProduct] = useState<CatalogProduct | null>(
+    null,
+  );
   const [sheetVisible, setSheetVisible] = useState(false);
 
   // Handle scanned barcode from scanner screen
@@ -100,7 +107,10 @@ export default function TransaksiBaruPage() {
         onBack={() => router.back()}
         actions={
           <>
-            <IconButton iconName="scan-outline" onPress={() => router.push("/barcode-scanner" as never)} />
+            <IconButton
+              iconName="scan-outline"
+              onPress={() => router.push("/barcode-scanner" as never)}
+            />
             <IconButton
               iconName="time-outline"
               onPress={() => router.push("/pesanan-ditahan" as never)}

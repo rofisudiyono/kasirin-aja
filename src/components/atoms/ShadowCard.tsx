@@ -5,7 +5,7 @@
  */
 import { styled, YStack } from "tamagui";
 
-import { ColorNeutral } from "@/shared/themes/Colors";
+import { ColorNeutral } from "@/themes/Colors";
 
 export const ShadowCard = styled(YStack, {
   name: "ShadowCard",

@@ -1,7 +1,7 @@
 import type { Ionicons } from "@expo/vector-icons";
 import type { StyleProp, ViewStyle } from "react-native";
 
-import type { PaymentMethod } from "@/shared/types";
+import type { PaymentMethod } from "@/types";
 
 export interface PaymentMethodCardProps {
   id: PaymentMethod;

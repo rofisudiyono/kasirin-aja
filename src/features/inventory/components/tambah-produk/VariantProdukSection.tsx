@@ -3,8 +3,8 @@ import React from "react";
 import { Switch, TouchableOpacity } from "react-native";
 import { XStack, YStack } from "tamagui";
 
-import { TextBodyLg, TextBodySm, TextCaption } from "@/shared/components";
-import { ColorBase, ColorNeutral, ColorPrimary } from "@/shared/themes/Colors";
+import { TextBodyLg, TextBodySm, TextCaption } from "@/components";
+import { ColorBase, ColorNeutral, ColorPrimary } from "@/themes/Colors";
 
 import { SectionHeader } from "./SectionHeader";
 import type { TambahProdukVariantGroup } from "./tambah-produk.types";
@@ -86,7 +86,10 @@ export function VariantProdukSection({
                       size={14}
                       color={ColorPrimary.primary600}
                     />
-                    <TextBodySm fontWeight="600" color={ColorPrimary.primary600}>
+                    <TextBodySm
+                      fontWeight="600"
+                      color={ColorPrimary.primary600}
+                    >
                       Tambah
                     </TextBodySm>
                   </XStack>

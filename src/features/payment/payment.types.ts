@@ -2,7 +2,7 @@
  * Payment types
  */
 
-import type { IoniconName } from "@/shared/types/icons.types";
+import type { IoniconName } from "@/types/icons.types";
 
 export type PaymentMethod = "tunai" | "qris" | "transfer" | "edc";
 export type OrderType = "Dine In" | "Take Away" | "Delivery";

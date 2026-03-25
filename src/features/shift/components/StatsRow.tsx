@@ -7,9 +7,13 @@
 import React from "react";
 import { XStack, YStack } from "tamagui";
 
-import { ColorBase, ColorPrimary } from "@/shared/themes/Colors";
+import { ColorBase, ColorPrimary } from "@/themes/Colors";
 
-import { TextBodySm, TextH2, TextH3 } from "@/shared/components/atoms/Typography";
+import {
+  TextBodySm,
+  TextH2,
+  TextH3,
+} from "@/components/atoms/Typography";
 
 export interface StatItem {
   label: string;

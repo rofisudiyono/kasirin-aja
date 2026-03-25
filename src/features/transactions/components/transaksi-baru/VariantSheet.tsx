@@ -11,14 +11,10 @@ import { XStack, YStack } from "tamagui";
 
 import { CATEGORY_COLORS, CATEGORY_ICONS } from "@/config/categoryStyles";
 import { type CartItem } from "@/features/cart/store/cart.store";
-import {
-  TextBodyLg,
-  TextBodySm,
-  TextH3,
-} from "@/shared/components";
-import { ColorBase, ColorNeutral, ColorPrimary } from "@/shared/themes/Colors";
-import type { CatalogProduct } from "@/shared/types";
-import { formatPrice } from "@/shared/utils";
+import { TextBodyLg, TextBodySm, TextH3 } from "@/components";
+import { ColorBase, ColorNeutral, ColorPrimary } from "@/themes/Colors";
+import type { CatalogProduct } from "@/types";
+import { formatPrice } from "@/utils";
 
 type Props = {
   product: CatalogProduct | null;
@@ -27,8 +23,15 @@ type Props = {
   onAddToCart: (item: Omit<CartItem, "cartId">) => void;
 };
 
-export function VariantSheet({ product, visible, onClose, onAddToCart }: Props) {
-  const [selectedVariants, setSelectedVariants] = useState<Record<string, string>>({});
+export function VariantSheet({
+  product,
+  visible,
+  onClose,
+  onAddToCart,
+}: Props) {
+  const [selectedVariants, setSelectedVariants] = useState<
+    Record<string, string>
+  >({});
   const [note, setNote] = useState("");
   const [qty, setQty] = useState(1);
 
@@ -188,7 +191,11 @@ export function VariantSheet({ product, visible, onClose, onAddToCart }: Props) 
               onPress={() => setQty((q) => Math.max(1, q - 1))}
             >
               <View style={styles.qtyButton}>
-                <Ionicons name="remove" size={20} color={ColorNeutral.neutral700} />
+                <Ionicons
+                  name="remove"
+                  size={20}
+                  color={ColorNeutral.neutral700}
+                />
               </View>
             </TouchableOpacity>
 
@@ -208,7 +215,11 @@ export function VariantSheet({ product, visible, onClose, onAddToCart }: Props) 
 
           <TouchableOpacity activeOpacity={0.85} onPress={handleAdd}>
             <View style={styles.addToCartButton}>
-              <TextBodyLg fontWeight="700" color={ColorBase.white} fontSize={16}>
+              <TextBodyLg
+                fontWeight="700"
+                color={ColorBase.white}
+                fontSize={16}
+              >
                 Tambah ke Keranjang • {formatPrice(total)}
               </TextBodyLg>
             </View>

@@ -2,7 +2,13 @@ import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useAtom } from "jotai";
 import React from "react";
-import { Alert, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
+import {
+  Alert,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { XStack, YStack } from "tamagui";
 
@@ -15,13 +21,8 @@ import {
   ProductVariants,
 } from "@/features/inventory/components/product-detail";
 import { userProductsAtom } from "@/features/inventory/store/inventory.store";
-import { AppButton, TextBodyLg, TextBodySm } from "@/shared/components";
-import {
-  ColorBase,
-  ColorDanger,
-  ColorNeutral,
-} from "@/shared/themes/Colors";
-
+import { AppButton, TextBodyLg, TextBodySm } from "@/components";
+import { ColorBase, ColorDanger, ColorNeutral } from "@/themes/Colors";
 
 export default function ProductDetailPage() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -35,24 +36,28 @@ export default function ProductDetailPage() {
   const isUserProduct = !!userProduct;
 
   // Build a unified ProductDetail-like object from either source
-  const product = staticProduct ?? (userProduct
-    ? {
-        id: userProduct.id,
-        name: userProduct.name,
-        category: userProduct.category,
-        sku: userProduct.sku,
-        costPrice: 0,
-        sellPrice: Number(userProduct.price.replace(/[^0-9]/g, "")),
-        status: (userProduct.stockStatus === "inactive" ? "inactive" : "active") as "active" | "inactive",
-        description: "",
-        totalStock: userProduct.stock,
-        lowStockThreshold: 5,
-        createdAt: "-",
-        updatedAt: "-",
-        totalSold: 0,
-        variants: undefined,
-      }
-    : undefined);
+  const product =
+    staticProduct ??
+    (userProduct
+      ? {
+          id: userProduct.id,
+          name: userProduct.name,
+          category: userProduct.category,
+          sku: userProduct.sku,
+          costPrice: 0,
+          sellPrice: Number(userProduct.price.replace(/[^0-9]/g, "")),
+          status: (userProduct.stockStatus === "inactive"
+            ? "inactive"
+            : "active") as "active" | "inactive",
+          description: "",
+          totalStock: userProduct.stock,
+          lowStockThreshold: 5,
+          createdAt: "-",
+          updatedAt: "-",
+          totalSold: 0,
+          variants: undefined,
+        }
+      : undefined);
 
   if (!product) {
     return (
@@ -77,14 +82,18 @@ export default function ProductDetailPage() {
     );
   }
 
-  const margin = product.sellPrice > 0
-    ? Math.round(
-        ((product.sellPrice - product.costPrice) / product.sellPrice) * 100,
-      )
-    : 0;
+  const margin =
+    product.sellPrice > 0
+      ? Math.round(
+          ((product.sellPrice - product.costPrice) / product.sellPrice) * 100,
+        )
+      : 0;
 
   function handleEdit() {
-    router.push({ pathname: "/inventory/tambah-produk", params: { editId: id } });
+    router.push({
+      pathname: "/inventory/tambah-produk",
+      params: { editId: id },
+    });
   }
 
   function handleDelete() {
@@ -149,7 +158,11 @@ export default function ProductDetailPage() {
         <XStack gap={12}>
           {isUserProduct && (
             <TouchableOpacity style={styles.deleteBtn} onPress={handleDelete}>
-              <Ionicons name="trash-outline" size={18} color={ColorDanger.danger600} />
+              <Ionicons
+                name="trash-outline"
+                size={18}
+                color={ColorDanger.danger600}
+              />
               <TextBodySm fontWeight="700" color={ColorDanger.danger600}>
                 Hapus
               </TextBodySm>

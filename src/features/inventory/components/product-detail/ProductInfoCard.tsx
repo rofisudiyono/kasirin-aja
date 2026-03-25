@@ -7,9 +7,14 @@ import {
   TextBodySm,
   TextCaption,
   TextH1,
-} from "@/shared/components";
-import { ColorBase, ColorGreen, ColorNeutral, ColorPrimary } from "@/shared/themes/Colors";
-import type { ProductDetail } from "@/shared/types";
+} from "@/components";
+import type { ProductDetail } from "@/types";
+import {
+  ColorBase,
+  ColorGreen,
+  ColorNeutral,
+  ColorPrimary,
+} from "@/themes/Colors";
 
 import { formatRupiah } from "./utils";
 
@@ -92,7 +97,9 @@ export function ProductInfoCard({ product, margin }: Props) {
       {/* Description */}
       <YStack gap="$2">
         <TextBodySm color={ColorNeutral.neutral500}>Deskripsi</TextBodySm>
-        <TextBody color={ColorNeutral.neutral700}>{product.description}</TextBody>
+        <TextBody color={ColorNeutral.neutral700}>
+          {product.description}
+        </TextBody>
       </YStack>
     </YStack>
   );

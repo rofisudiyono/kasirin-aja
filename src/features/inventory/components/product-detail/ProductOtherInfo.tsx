@@ -1,7 +1,7 @@
 import { XStack, YStack } from "tamagui";
 
-import { TextBodyLg, TextBodySm } from "@/shared/components";
-import { ColorBase, ColorNeutral, ColorPrimary } from "@/shared/themes/Colors";
+import { TextBodyLg, TextBodySm } from "@/components";
+import { ColorBase, ColorNeutral, ColorPrimary } from "@/themes/Colors";
 
 type Props = {
   createdAt: string;

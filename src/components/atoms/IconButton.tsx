@@ -4,8 +4,8 @@
  * Replaces the repetitive TouchableOpacity > YStack > Ionicons pattern
  * that appears across every screen header and action area.
  */
-import { ColorNeutral, ColorDanger } from "@/shared/themes/Colors";
-import type { IoniconName } from "@/shared/types";
+import { ColorDanger, ColorNeutral } from "@/themes/Colors";
+import type { IoniconName } from "@/types";
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";

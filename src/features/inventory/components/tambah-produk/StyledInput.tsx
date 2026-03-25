@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { TextInput } from "react-native";
 import { XStack } from "tamagui";
 
-import { ColorBase, ColorNeutral, ColorPrimary } from "@/shared/themes/Colors";
+import { ColorBase, ColorNeutral, ColorPrimary } from "@/themes/Colors";
 
 import { inputStyle } from "./shared.styles";
 

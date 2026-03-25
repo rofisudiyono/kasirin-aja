@@ -2,7 +2,14 @@ import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { useAtomValue } from "jotai";
 import React, { useCallback, useState } from "react";
-import { FlatList, ListRenderItem, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
+import {
+  FlatList,
+  ListRenderItem,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Separator, XStack, YStack } from "tamagui";
 
@@ -13,8 +20,8 @@ import {
   inventorySortOptions,
   products as mockProducts,
 } from "@/features/inventory/api/inventory.data";
-import { userProductsAtom } from "@/features/inventory/store/inventory.store";
 import { StockBadge } from "@/features/inventory/components/StockBadge";
+import { userProductsAtom } from "@/features/inventory/store/inventory.store";
 import { StatsRow } from "@/features/shift/components/StatsRow";
 import {
   AppButton,
@@ -27,7 +34,7 @@ import {
   TextBodySm,
   TextCaption,
   TextMicro,
-} from "@/shared/components";
+} from "@/components";
 import {
   ColorBase,
   ColorDanger,
@@ -36,8 +43,8 @@ import {
   ColorPrimary,
   ColorWarning,
   ColorYellow,
-} from "@/shared/themes/Colors";
-import type { CategoryFilter, Product, SortOption } from "@/shared/types";
+} from "@/themes/Colors";
+import type { CategoryFilter, Product, SortOption } from "@/types";
 
 const styles = StyleSheet.create({
   variantBadge: {
@@ -60,7 +67,13 @@ const styles = StyleSheet.create({
   },
 });
 
-function ProductRow({ product, isFirst }: { product: Product; isFirst: boolean }) {
+function ProductRow({
+  product,
+  isFirst,
+}: {
+  product: Product;
+  isFirst: boolean;
+}) {
   return (
     <>
       {!isFirst && (
@@ -168,7 +181,9 @@ export default function InventoriPage() {
       : allProducts.filter((p) => p.category === categoryFilter);
 
   const renderItem = useCallback<ListRenderItem<Product>>(
-    ({ item, index }) => <MemoProductRow product={item} isFirst={index === 0} />,
+    ({ item, index }) => (
+      <MemoProductRow product={item} isFirst={index === 0} />
+    ),
     [],
   );
 
@@ -220,9 +235,23 @@ export default function InventoriPage() {
         <StatsRow
           variant="light"
           items={[
-            { label: "Total Produk", value: String(allProducts.length), valueColor: "$primary" },
-            { label: "Stok Habis", value: String(allProducts.filter((p) => p.stockStatus === "empty").length), valueColor: "$danger" },
-            { label: "Kategori", value: String(new Set(allProducts.map((p) => p.category)).size), valueColor: "$success" },
+            {
+              label: "Total Produk",
+              value: String(allProducts.length),
+              valueColor: "$primary",
+            },
+            {
+              label: "Stok Habis",
+              value: String(
+                allProducts.filter((p) => p.stockStatus === "empty").length,
+              ),
+              valueColor: "$danger",
+            },
+            {
+              label: "Kategori",
+              value: String(new Set(allProducts.map((p) => p.category)).size),
+              valueColor: "$success",
+            },
           ]}
         />
       </ShadowCard>

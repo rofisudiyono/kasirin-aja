@@ -10,6 +10,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { XStack, YStack } from "tamagui";
 
+import { useAuth } from "@/lib/auth";
 import {
   AppButton,
   AppInput,
@@ -17,8 +18,7 @@ import {
   TextBodySm,
   TextCaption,
   TextH3,
-} from "@/shared/components";
-import { useAuth } from "@/shared/lib/auth";
+} from "@/components";
 import {
   ColorBase,
   ColorGreen,
@@ -26,7 +26,7 @@ import {
   ColorPrimary,
   ColorTeal,
   ColorWarning,
-} from "@/shared/themes/Colors";
+} from "@/themes/Colors";
 
 export default function LoginPage() {
   const { login } = useAuth();

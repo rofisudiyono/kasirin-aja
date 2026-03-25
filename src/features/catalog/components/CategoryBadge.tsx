@@ -7,9 +7,9 @@ import React from "react";
 import { YStack } from "tamagui";
 
 import { CATEGORY_COLORS } from "@/config/categoryStyles";
-import { ColorNeutral } from "@/shared/themes/Colors";
-import type { ProductCategory } from "@/shared/types";
-import { TextCaption } from "@/shared/components/atoms/Typography";
+import { TextCaption } from "@/components/atoms/Typography";
+import { ColorNeutral } from "@/themes/Colors";
+import type { ProductCategory } from "@/types";
 
 interface CategoryBadgeProps {
   category: ProductCategory;
