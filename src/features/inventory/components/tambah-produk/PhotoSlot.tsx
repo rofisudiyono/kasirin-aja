@@ -1,0 +1,69 @@
+import { Ionicons } from "@expo/vector-icons";
+import React from "react";
+import { StyleSheet, TouchableOpacity } from "react-native";
+import { YStack } from "tamagui";
+
+import { TextCaption } from "@/shared/components";
+import { ColorBase, ColorNeutral, ColorPrimary } from "@/shared/themes/Colors";
+
+export function AddPhotoSlot() {
+  return (
+    <YStack
+      width={72}
+      height={72}
+      borderRadius={10}
+      borderWidth={1.5}
+      borderColor={ColorPrimary.primary400 ?? ColorPrimary.primary200}
+      borderStyle="dashed"
+      backgroundColor={ColorPrimary.primary50 ?? ColorPrimary.primary25}
+      alignItems="center"
+      justifyContent="center"
+      gap={4}
+    >
+      <Ionicons
+        name="camera-outline"
+        size={22}
+        color={ColorPrimary.primary400}
+      />
+      <TextCaption fontWeight="500" color={ColorPrimary.primary600} fontSize={10}>
+        + Foto
+      </TextCaption>
+    </YStack>
+  );
+}
+
+export function FilledPhotoSlot({ onRemove }: { onRemove: () => void }) {
+  return (
+    <YStack width={72} height={72} borderRadius={10} overflow="hidden">
+      <YStack
+        flex={1}
+        backgroundColor={ColorNeutral.neutral200}
+        alignItems="center"
+        justifyContent="center"
+      >
+        <Ionicons
+          name="image-outline"
+          size={28}
+          color={ColorNeutral.neutral400}
+        />
+      </YStack>
+      <TouchableOpacity
+        onPress={onRemove}
+        style={styles.photoRemoveBtn}
+        hitSlop={4}
+      >
+        <Ionicons name="close-circle" size={20} color="#DC2626" />
+      </TouchableOpacity>
+    </YStack>
+  );
+}
+
+const styles = StyleSheet.create({
+  photoRemoveBtn: {
+    position: "absolute",
+    top: -6,
+    right: -6,
+    backgroundColor: ColorBase.white,
+    borderRadius: 10,
+  },
+});
