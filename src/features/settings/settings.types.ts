@@ -20,4 +20,5 @@ export interface SettingRowProps {
   toggleValue?: boolean;
   onToggle?: (val: boolean) => void;
   showChevron?: boolean;
+  onPress?: () => void;
 }

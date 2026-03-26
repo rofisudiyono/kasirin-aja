@@ -101,7 +101,7 @@ export default function TutupShiftPage() {
         onPress: () => {
           setIsShiftStarted(false);
           setShiftData(null);
-          router.replace("/(tabs)/index");
+          router.replace("/(tabs)");
         },
       },
     ]);

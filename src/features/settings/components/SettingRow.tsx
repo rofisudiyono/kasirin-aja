@@ -27,9 +27,10 @@ export function SettingRow({
   toggleValue,
   onToggle,
   showChevron = true,
+  onPress,
 }: SettingRowProps) {
   return (
-    <TouchableOpacity disabled={hasToggle}>
+    <TouchableOpacity disabled={hasToggle} onPress={onPress}>
       <XStack
         paddingHorizontal="$4"
         paddingVertical="$3"

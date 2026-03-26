@@ -141,15 +141,17 @@ export default function PengaturanPage() {
                 label: "Profil Toko",
                 sub: "Nama, alamat...",
                 iconColor: ColorPrimary.primary600,
+                route: "/informasi-toko",
               },
               {
                 iconName: "phone-portrait-outline" as IoniconName,
                 label: "Perangkat",
                 sub: "Printer dan sc...",
                 iconColor: ColorGreen.green600,
+                route: null,
               },
             ].map((item) => (
-              <TouchableOpacity key={item.label} style={{ flex: 1 }}>
+              <TouchableOpacity key={item.label} style={{ flex: 1 }} onPress={() => item.route && router.push(item.route as any)}>
                 <XStack
                   backgroundColor="$background"
                   borderRadius={12}
@@ -193,6 +195,7 @@ export default function PengaturanPage() {
               title="Informasi Toko"
               subtitle="Nama usaha, alamat, logo,..."
               value="Lengkap"
+              onPress={() => router.push("/informasi-toko")}
             />
             <Separator borderColor="$borderColor" marginHorizontal="$4" />
             <SettingRow
@@ -213,6 +216,7 @@ export default function PengaturanPage() {
               title="Metode Pembayaran"
               subtitle="Tunai, QRIS, kartu, dan trans..."
               value="4 aktif"
+              onPress={() => router.push("/metode-pembayaran")}
             />
           </SectionCard>
 
