@@ -30,15 +30,13 @@ import {
 } from "@/themes/Colors";
 import type { PaymentMethod } from "@/types";
 import { formatPrice, formatTimer } from "@/utils";
+import { useDeviceLayout } from "@/hooks/useDeviceLayout";
 
-// ─── Constants ────────────────────────────────────────────────────────────────
-
-const QR_DURATION = 5 * 60; // 5 minutes in seconds
-
-// ─── Main Page ────────────────────────────────────────────────────────────────
+const QR_DURATION = 5 * 60;
 
 export default function PilihPembayaranPage() {
   const router = useRouter();
+  const { isTablet } = useDeviceLayout();
   const params = useLocalSearchParams<{
     total: string;
     totalItems: string;
@@ -59,7 +57,6 @@ export default function PilihPembayaranPage() {
 
   const spinAnim = useRef(new Animated.Value(0)).current;
 
-  // QR countdown timer
   useEffect(() => {
     if (selectedMethod !== "qris") return;
     setQrTimer(QR_DURATION);
@@ -114,7 +111,6 @@ export default function PilihPembayaranPage() {
           ? "Transfer Bank"
           : "EDC / Kartu";
 
-    // Confirm payment received — same pattern as cash but without separate page
     Alert.alert(
       "Konfirmasi Pembayaran",
       `Pastikan pembayaran ${methodLabel} sebesar ${formatPrice(total)} sudah diterima.`,
@@ -138,44 +134,219 @@ export default function PilihPembayaranPage() {
     );
   }
 
+  // ── Shared: total tagihan card ─────────────────────────────────────────────
+  const totalCard = (
+    <View style={styles.totalCard}>
+      <TextCaption color="rgba(255,255,255,0.8)" marginBottom={6}>
+        Total Tagihan
+      </TextCaption>
+      <TextH2 fontWeight="700" color={ColorBase.white} marginBottom={6}>
+        {formatPrice(total)}
+      </TextH2>
+      <XStack gap={6} alignItems="center">
+        <TextBodySm color="rgba(255,255,255,0.85)">
+          {totalItems} item
+        </TextBodySm>
+        {discount > 0 && (
+          <>
+            <View style={styles.dotSeparator} />
+            <TextBodySm color="rgba(255,255,255,0.85)">
+              Diskon {formatPrice(discount)}
+            </TextBodySm>
+          </>
+        )}
+      </XStack>
+    </View>
+  );
+
+  // ── Shared: detail panel per method ───────────────────────────────────────
+  const qrisPanel = (
+    <View style={styles.qrisPanel}>
+      <View style={styles.qrWrapper}>
+        <QRCodePlaceholder key={qrKey} />
+      </View>
+      <TextBodyLg fontWeight="700" marginTop={16} marginBottom={4}>
+        Scan QR untuk membayar
+      </TextBodyLg>
+      <XStack alignItems="center" gap={8}>
+        <TextBodySm color="$colorSecondary">
+          QR berlaku{" "}
+          <TextBodySm
+            fontWeight="700"
+            color={qrTimer < 60 ? ColorDanger.danger600 : "$colorSecondary"}
+          >
+            {formatTimer(qrTimer)}
+          </TextBodySm>{" "}
+          menit
+        </TextBodySm>
+        <TouchableOpacity activeOpacity={0.7} onPress={handleRefreshQR}>
+          <Animated.View style={{ transform: [{ rotate: spin }] }}>
+            <Ionicons name="refresh-outline" size={18} color={ColorNeutral.neutral500} />
+          </Animated.View>
+        </TouchableOpacity>
+      </XStack>
+      <TextBodySm color="$colorSecondary" marginTop={8} textAlign="center">
+        Setelah pelanggan scan, tekan{" "}
+        <TextBodySm fontWeight="700">"Proses Pembayaran"</TextBodySm> untuk konfirmasi.
+      </TextBodySm>
+    </View>
+  );
+
+  const transferPanel = (
+    <View style={styles.infoPanel}>
+      <XStack alignItems="center" gap={10} marginBottom={8}>
+        <Ionicons name="business-outline" size={20} color="#3B82F6" />
+        <TextBodyLg fontWeight="700">Rekening Toko</TextBodyLg>
+      </XStack>
+      <YStack gap={6}>
+        {[
+          { bank: "BCA", no: "1234567890", name: "Toko Makmur" },
+          { bank: "Mandiri", no: "0987654321", name: "Toko Makmur" },
+        ].map((r) => (
+          <XStack
+            key={r.bank}
+            justifyContent="space-between"
+            alignItems="center"
+            backgroundColor="$backgroundSecondary"
+            borderRadius={10}
+            padding={10}
+          >
+            <YStack>
+              <TextBodySm fontWeight="700">{r.bank}</TextBodySm>
+              <TextBodySm color="$colorSecondary">{r.no}</TextBodySm>
+              <TextCaption color="$colorSecondary">a.n. {r.name}</TextCaption>
+            </YStack>
+            <Ionicons name="copy-outline" size={16} color={ColorNeutral.neutral400} />
+          </XStack>
+        ))}
+      </YStack>
+      <TextBodySm color="$colorSecondary" marginTop={10} textAlign="center">
+        Minta pelanggan transfer lalu tekan{" "}
+        <TextBodySm fontWeight="700">Proses Pembayaran</TextBodySm>.
+      </TextBodySm>
+    </View>
+  );
+
+  const edcPanel = (
+    <View style={styles.infoPanel}>
+      <XStack alignItems="center" gap={10} marginBottom={8}>
+        <Ionicons name="card-outline" size={20} color="#8B5CF6" />
+        <TextBodyLg fontWeight="700">Mesin EDC</TextBodyLg>
+      </XStack>
+      <YStack gap={8}>
+        {[
+          { step: "1", text: "Masukkan jumlah tagihan di mesin EDC" },
+          { step: "2", text: "Minta pelanggan tap / gesek kartu" },
+          { step: "3", text: "Tunggu konfirmasi dari mesin EDC" },
+          { step: "4", text: "Tekan Proses Pembayaran setelah berhasil" },
+        ].map((s) => (
+          <XStack key={s.step} alignItems="flex-start" gap={10}>
+            <View style={styles.stepBadge}>
+              <TextBodySm fontWeight="700" color="#8B5CF6">
+                {s.step}
+              </TextBodySm>
+            </View>
+            <TextBodySm flex={1} color="$colorSecondary">
+              {s.text}
+            </TextBodySm>
+          </XStack>
+        ))}
+      </YStack>
+    </View>
+  );
+
+  // ── Process button ────────────────────────────────────────────────────────
+  const processButton = (
+    <TouchableOpacity
+      activeOpacity={0.85}
+      style={styles.processBtn}
+      onPress={handleProcess}
+    >
+      <TextBodyLg fontWeight="700" color={ColorBase.white}>
+        Proses Pembayaran
+      </TextBodyLg>
+    </TouchableOpacity>
+  );
+
+  // ── Tablet: 2-column layout ────────────────────────────────────────────────
+  if (isTablet) {
+    const activeDetailPanel =
+      selectedMethod === "qris"
+        ? qrisPanel
+        : selectedMethod === "transfer"
+          ? transferPanel
+          : selectedMethod === "edc"
+            ? edcPanel
+            : null;
+
+    return (
+      <SafeAreaView style={styles.container}>
+        <PageHeader title="Pilih Pembayaran" showBack onBack={() => router.back()} />
+
+        <XStack flex={1}>
+          {/* Left: payment methods */}
+          <ScrollView
+            style={styles.tabletLeft}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{ padding: 16, paddingBottom: 32, gap: 12 }}
+          >
+            {totalCard}
+
+            <TextCaption
+              color="$colorSecondary"
+              fontWeight="700"
+              letterSpacing={0.8}
+              paddingHorizontal={4}
+              marginTop={4}
+            >
+              METODE PEMBAYARAN
+            </TextCaption>
+
+            {paymentMethodOptions.map((method) => (
+              <PaymentMethodCard
+                key={method.id}
+                {...method}
+                selected={selectedMethod === method.id}
+                onPress={() => setSelectedMethod(method.id)}
+              />
+            ))}
+          </ScrollView>
+
+          {/* Divider */}
+          <View style={styles.tabletDivider} />
+
+          {/* Right: detail + process button */}
+          <View style={styles.tabletRight}>
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={{ padding: 16, paddingBottom: 100, gap: 12 }}
+            >
+              {activeDetailPanel}
+            </ScrollView>
+            <View style={styles.tabletBottomBar}>
+              {processButton}
+              <TextCaption color="$colorSecondary" textAlign="center" marginTop={8}>
+                Pastikan pembayaran telah diterima
+              </TextCaption>
+            </View>
+          </View>
+        </XStack>
+      </SafeAreaView>
+    );
+  }
+
+  // ── Phone layout ───────────────────────────────────────────────────────────
   return (
     <SafeAreaView style={styles.container}>
-      {/* Header */}
-      <PageHeader
-        title="Pilih Pembayaran"
-        showBack
-        onBack={() => router.back()}
-      />
+      <PageHeader title="Pilih Pembayaran" showBack onBack={() => router.back()} />
 
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: 120 }}
       >
         <YStack paddingHorizontal={16} gap={12} paddingTop={4}>
-          {/* Total Tagihan card */}
-          <View style={styles.totalCard}>
-            <TextCaption color="rgba(255,255,255,0.8)" marginBottom={6}>
-              Total Tagihan
-            </TextCaption>
-            <TextH2 fontWeight="700" color={ColorBase.white} marginBottom={6}>
-              {formatPrice(total)}
-            </TextH2>
-            <XStack gap={6} alignItems="center">
-              <TextBodySm color="rgba(255,255,255,0.85)">
-                {totalItems} item
-              </TextBodySm>
-              {discount > 0 && (
-                <>
-                  <View style={styles.dotSeparator} />
-                  <TextBodySm color="rgba(255,255,255,0.85)">
-                    Diskon {formatPrice(discount)}
-                  </TextBodySm>
-                </>
-              )}
-            </XStack>
-          </View>
+          {totalCard}
 
-          {/* Payment methods */}
           <TextCaption
             color="$colorSecondary"
             fontWeight="700"
@@ -194,163 +365,16 @@ export default function PilihPembayaranPage() {
                 onPress={() => setSelectedMethod(method.id)}
               />
 
-              {/* QRIS panel */}
-              {method.id === "qris" && selectedMethod === "qris" && (
-                <View style={styles.qrisPanel}>
-                  <View style={styles.qrWrapper}>
-                    <QRCodePlaceholder key={qrKey} />
-                  </View>
-                  <TextBodyLg fontWeight="700" marginTop={16} marginBottom={4}>
-                    Scan QR untuk membayar
-                  </TextBodyLg>
-                  <XStack alignItems="center" gap={8}>
-                    <TextBodySm color="$colorSecondary">
-                      QR berlaku{" "}
-                      <TextBodySm
-                        fontWeight="700"
-                        color={
-                          qrTimer < 60
-                            ? ColorDanger.danger600
-                            : "$colorSecondary"
-                        }
-                      >
-                        {formatTimer(qrTimer)}
-                      </TextBodySm>{" "}
-                      menit
-                    </TextBodySm>
-                    <TouchableOpacity
-                      activeOpacity={0.7}
-                      onPress={handleRefreshQR}
-                    >
-                      <Animated.View style={{ transform: [{ rotate: spin }] }}>
-                        <Ionicons
-                          name="refresh-outline"
-                          size={18}
-                          color={ColorNeutral.neutral500}
-                        />
-                      </Animated.View>
-                    </TouchableOpacity>
-                  </XStack>
-                  <TextBodySm
-                    color="$colorSecondary"
-                    marginTop={8}
-                    textAlign="center"
-                  >
-                    Setelah pelanggan scan, tekan{" "}
-                    <TextBodySm fontWeight="700">
-                      "Proses Pembayaran"
-                    </TextBodySm>{" "}
-                    untuk konfirmasi.
-                  </TextBodySm>
-                </View>
-              )}
-
-              {/* Transfer panel */}
-              {method.id === "transfer" && selectedMethod === "transfer" && (
-                <View style={styles.infoPanel}>
-                  <XStack alignItems="center" gap={10} marginBottom={8}>
-                    <Ionicons
-                      name="business-outline"
-                      size={20}
-                      color="#3B82F6"
-                    />
-                    <TextBodyLg fontWeight="700">Rekening Toko</TextBodyLg>
-                  </XStack>
-                  <YStack gap={6}>
-                    {[
-                      { bank: "BCA", no: "1234567890", name: "Toko Makmur" },
-                      {
-                        bank: "Mandiri",
-                        no: "0987654321",
-                        name: "Toko Makmur",
-                      },
-                    ].map((r) => (
-                      <XStack
-                        key={r.bank}
-                        justifyContent="space-between"
-                        alignItems="center"
-                        backgroundColor="$backgroundSecondary"
-                        borderRadius={10}
-                        padding={10}
-                      >
-                        <YStack>
-                          <TextBodySm fontWeight="700">{r.bank}</TextBodySm>
-                          <TextBodySm color="$colorSecondary">
-                            {r.no}
-                          </TextBodySm>
-                          <TextCaption color="$colorSecondary">
-                            a.n. {r.name}
-                          </TextCaption>
-                        </YStack>
-                        <Ionicons
-                          name="copy-outline"
-                          size={16}
-                          color={ColorNeutral.neutral400}
-                        />
-                      </XStack>
-                    ))}
-                  </YStack>
-                  <TextBodySm
-                    color="$colorSecondary"
-                    marginTop={10}
-                    textAlign="center"
-                  >
-                    Minta pelanggan transfer lalu tekan{" "}
-                    <TextBodySm fontWeight="700">Proses Pembayaran</TextBodySm>.
-                  </TextBodySm>
-                </View>
-              )}
-
-              {/* EDC panel */}
-              {method.id === "edc" && selectedMethod === "edc" && (
-                <View style={styles.infoPanel}>
-                  <XStack alignItems="center" gap={10} marginBottom={8}>
-                    <Ionicons name="card-outline" size={20} color="#8B5CF6" />
-                    <TextBodyLg fontWeight="700">Mesin EDC</TextBodyLg>
-                  </XStack>
-                  <YStack gap={8}>
-                    {[
-                      {
-                        step: "1",
-                        text: "Masukkan jumlah tagihan di mesin EDC",
-                      },
-                      { step: "2", text: "Minta pelanggan tap / gesek kartu" },
-                      { step: "3", text: "Tunggu konfirmasi dari mesin EDC" },
-                      {
-                        step: "4",
-                        text: "Tekan Proses Pembayaran setelah berhasil",
-                      },
-                    ].map((s) => (
-                      <XStack key={s.step} alignItems="flex-start" gap={10}>
-                        <View style={styles.stepBadge}>
-                          <TextBodySm fontWeight="700" color="#8B5CF6">
-                            {s.step}
-                          </TextBodySm>
-                        </View>
-                        <TextBodySm flex={1} color="$colorSecondary">
-                          {s.text}
-                        </TextBodySm>
-                      </XStack>
-                    ))}
-                  </YStack>
-                </View>
-              )}
+              {method.id === "qris" && selectedMethod === "qris" && qrisPanel}
+              {method.id === "transfer" && selectedMethod === "transfer" && transferPanel}
+              {method.id === "edc" && selectedMethod === "edc" && edcPanel}
             </React.Fragment>
           ))}
         </YStack>
       </ScrollView>
 
-      {/* Bottom action */}
       <View style={styles.bottomBar}>
-        <TouchableOpacity
-          activeOpacity={0.85}
-          style={styles.processBtn}
-          onPress={handleProcess}
-        >
-          <TextBodyLg fontWeight="700" color={ColorBase.white}>
-            Proses Pembayaran
-          </TextBodyLg>
-        </TouchableOpacity>
+        {processButton}
         <TextCaption color="$colorSecondary" textAlign="center" marginTop={8}>
           Pastikan pembayaran telah diterima
         </TextCaption>
@@ -358,8 +382,6 @@ export default function PilihPembayaranPage() {
     </SafeAreaView>
   );
 }
-
-// ─── Styles ───────────────────────────────────────────────────────────────────
 
 const styles = StyleSheet.create({
   container: {
@@ -424,6 +446,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginTop: 1,
   },
+  processBtn: {
+    backgroundColor: ColorPrimary.primary600,
+    borderRadius: 14,
+    height: 52,
+    alignItems: "center",
+    justifyContent: "center",
+  },
   bottomBar: {
     position: "absolute",
     bottom: 0,
@@ -436,11 +465,24 @@ const styles = StyleSheet.create({
     paddingTop: 14,
     paddingBottom: 28,
   },
-  processBtn: {
-    backgroundColor: ColorPrimary.primary600,
-    borderRadius: 14,
-    height: 52,
-    alignItems: "center",
-    justifyContent: "center",
+  tabletLeft: {
+    flex: 0.45,
+    backgroundColor: ColorBase.bgScreen,
+  },
+  tabletDivider: {
+    width: 1,
+    backgroundColor: ColorNeutral.neutral200,
+  },
+  tabletRight: {
+    flex: 0.55,
+    backgroundColor: ColorBase.white,
+  },
+  tabletBottomBar: {
+    paddingHorizontal: 16,
+    paddingTop: 14,
+    paddingBottom: 24,
+    borderTopWidth: 1,
+    borderTopColor: ColorNeutral.neutral100,
+    backgroundColor: ColorBase.white,
   },
 });

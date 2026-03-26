@@ -30,6 +30,7 @@ import { StatsRow } from "@/features/shift/components/StatsRow";
 import { transactionListMock } from "@/features/transactions/api/transactions.data";
 import { StatusBadge } from "@/features/transactions/components/StatusBadge";
 import { transactionsAtom } from "@/features/transactions/store/transaction.store";
+import { useDeviceLayout } from "@/hooks/useDeviceLayout";
 import {
   ColorBase,
   ColorDanger,
@@ -43,18 +44,26 @@ const FILTERS: FilterTab[] = ["Semua", "Lunas", "Void", "Refund"];
 function TransactionCard({
   tx,
   onPress,
+  isSelected,
 }: {
   tx: Transaction;
   onPress: (tx: Transaction) => void;
+  isSelected?: boolean;
 }) {
   return (
     <TouchableOpacity onPress={() => onPress(tx)}>
       <ShadowCard
         backgroundColor={
-          tx.status === "Void" ? ColorDanger.danger25 : "$background"
+          isSelected
+            ? ColorPrimary.primary50
+            : tx.status === "Void"
+              ? ColorDanger.danger25
+              : "$background"
         }
         padding="$4"
         gap="$2"
+        borderWidth={isSelected ? 1.5 : 0}
+        borderColor={isSelected ? ColorPrimary.primary300 : "transparent"}
       >
         <XStack alignItems="center" justifyContent="space-between">
           <TextBodyLg fontWeight="700" color="$primary">
@@ -112,6 +121,139 @@ function TransactionCard({
 
 const MemoTransactionCard = React.memo(TransactionCard);
 
+// ─── Transaction Detail Panel (for tablet inline view) ────────────────────────
+
+function TransactionDetailPanel({
+  tx,
+  onVoid,
+  onRefund,
+}: {
+  tx: Transaction | null;
+  onVoid: (id: string) => void;
+  onRefund: (id: string) => void;
+}) {
+  if (!tx) {
+    return (
+      <YStack flex={1} alignItems="center" justifyContent="center" gap={12}>
+        <View style={styles.emptyIcon}>
+          <Ionicons name="receipt-outline" size={32} color={ColorNeutral.neutral400} />
+        </View>
+        <TextBodySm color="$colorSecondary" textAlign="center">
+          Pilih transaksi untuk{"\n"}melihat detail
+        </TextBodySm>
+      </YStack>
+    );
+  }
+
+  return (
+    <YStack flex={1} gap={12} padding={20}>
+      <TextH3 fontWeight="700">Detail Transaksi</TextH3>
+
+      <ShadowCard padding="$3" gap="$2">
+        <XStack justifyContent="space-between">
+          <TextBodySm color="$colorSecondary">No. Order</TextBodySm>
+          <TextBodyLg fontWeight="700" color="$primary">
+            {tx.id}
+          </TextBodyLg>
+        </XStack>
+        <XStack justifyContent="space-between">
+          <TextBodySm color="$colorSecondary">Waktu</TextBodySm>
+          <TextBodySm fontWeight="600">{tx.time}</TextBodySm>
+        </XStack>
+        {tx.table ? (
+          <XStack justifyContent="space-between">
+            <TextBodySm color="$colorSecondary">Pelanggan</TextBodySm>
+            <TextBodySm fontWeight="600">{tx.table}</TextBodySm>
+          </XStack>
+        ) : null}
+        {tx.items ? (
+          <XStack justifyContent="space-between" gap={8}>
+            <TextBodySm color="$colorSecondary">Item</TextBodySm>
+            <TextBodySm
+              fontWeight="600"
+              flex={1}
+              textAlign="right"
+              numberOfLines={2}
+            >
+              {tx.items}
+            </TextBodySm>
+          </XStack>
+        ) : null}
+        <XStack justifyContent="space-between">
+          <TextBodySm color="$colorSecondary">Total</TextBodySm>
+          <TextBodyLg fontWeight="700">{tx.amount}</TextBodyLg>
+        </XStack>
+        <XStack justifyContent="space-between">
+          <TextBodySm color="$colorSecondary">Status</TextBodySm>
+          <StatusBadge status={tx.status} />
+        </XStack>
+      </ShadowCard>
+
+      {tx.status !== "Void" && tx.status !== "Refund" ? (
+        <YStack gap={8}>
+          <AppButton
+            variant="warning"
+            size="md"
+            fullWidth
+            title="Refund"
+            icon={
+              <Ionicons
+                name="return-up-back-outline"
+                size={16}
+                color={ColorBase.white}
+              />
+            }
+            onPress={() => {
+              Alert.alert(
+                "Konfirmasi Refund",
+                `Refund transaksi ${tx.id} sebesar ${tx.amount}?`,
+                [
+                  { text: "Batal", style: "cancel" },
+                  { text: "Refund", onPress: () => onRefund(tx.id) },
+                ],
+              );
+            }}
+          />
+          <AppButton
+            variant="danger"
+            size="md"
+            fullWidth
+            title="Void (Batalkan)"
+            icon={
+              <Ionicons
+                name="close-circle-outline"
+                size={16}
+                color={ColorBase.white}
+              />
+            }
+            onPress={() => {
+              Alert.alert(
+                "Konfirmasi Void",
+                `Batalkan transaksi ${tx.id}? Tindakan ini tidak bisa dibatalkan.`,
+                [
+                  { text: "Batal", style: "cancel" },
+                  {
+                    text: "Void",
+                    style: "destructive",
+                    onPress: () => onVoid(tx.id),
+                  },
+                ],
+              );
+            }}
+          />
+        </YStack>
+      ) : (
+        <TextCaption color={ColorNeutral.neutral500} textAlign="center">
+          Transaksi ini sudah di-{tx.status.toLowerCase()} dan tidak dapat
+          diubah.
+        </TextCaption>
+      )}
+    </YStack>
+  );
+}
+
+// ─── Modal (phone) ────────────────────────────────────────────────────────────
+
 function VoidRefundModal({
   tx,
   visible,
@@ -126,8 +268,6 @@ function VoidRefundModal({
   onRefund: (id: string) => void;
 }) {
   if (!tx) return null;
-  const canVoid = tx.status === "Lunas";
-  const canRefund = tx.status === "Lunas";
 
   return (
     <Modal
@@ -146,7 +286,6 @@ function VoidRefundModal({
           <YStack gap={12} padding={20}>
             <TextH3 fontWeight="700">Detail Transaksi</TextH3>
 
-            {/* Transaction info */}
             <ShadowCard padding="$3" gap="$2">
               <XStack justifyContent="space-between">
                 <TextBodySm color="$colorSecondary">No. Order</TextBodySm>
@@ -187,7 +326,6 @@ function VoidRefundModal({
               </XStack>
             </ShadowCard>
 
-            {/* Actions */}
             {tx.status !== "Void" && tx.status !== "Refund" ? (
               <YStack gap={8}>
                 <AppButton
@@ -265,14 +403,16 @@ function VoidRefundModal({
   );
 }
 
+// ─── Main Page ────────────────────────────────────────────────────────────────
+
 export default function TransaksiPage() {
   const [activeFilter, setActiveFilter] = useState<FilterTab>("Semua");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTx, setSelectedTx] = useState<Transaction | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [storedTxs, setStoredTxs] = useAtom(transactionsAtom);
+  const { isTablet } = useDeviceLayout();
 
-  // Combine mock + real stored transactions
   const allTransactions: Transaction[] = [...storedTxs, ...transactionListMock];
 
   const filtered = allTransactions
@@ -294,38 +434,48 @@ export default function TransaksiPage() {
 
   function handleTxPress(tx: Transaction) {
     setSelectedTx(tx);
-    setModalVisible(true);
+    if (!isTablet) setModalVisible(true);
   }
 
   function handleVoid(id: string) {
     setStoredTxs((prev) =>
       prev.map((t) => (t.id === id ? { ...t, status: "Void" as const } : t)),
     );
+    if (selectedTx?.id === id) {
+      setSelectedTx((prev) => prev ? { ...prev, status: "Void" as const } : null);
+    }
   }
 
   function handleRefund(id: string) {
     setStoredTxs((prev) =>
       prev.map((t) => (t.id === id ? { ...t, status: "Refund" as const } : t)),
     );
+    if (selectedTx?.id === id) {
+      setSelectedTx((prev) => prev ? { ...prev, status: "Refund" as const } : null);
+    }
   }
 
   const renderItem = useCallback<ListRenderItem<Transaction>>(
-    ({ item }) => <MemoTransactionCard tx={item} onPress={handleTxPress} />,
-    [],
+    ({ item }) => (
+      <MemoTransactionCard
+        tx={item}
+        onPress={handleTxPress}
+        isSelected={isTablet && selectedTx?.id === item.id}
+      />
+    ),
+    [isTablet, selectedTx?.id],
   );
 
   const keyExtractor = useCallback((item: Transaction) => item.id, []);
 
   const ListHeader = (
     <YStack gap="$3">
-      {/* ── Search ── */}
       <SearchBar
         placeholder="Cari nomor order atau pelanggan..."
         value={searchQuery}
         onChangeText={setSearchQuery}
       />
 
-      {/* ── Filters ── */}
       <XStack alignItems="center" gap="$2">
         <XStack flex={1} gap="$2">
           {FILTERS.map((f) => (
@@ -365,7 +515,6 @@ export default function TransaksiPage() {
         </TouchableOpacity>
       </XStack>
 
-      {/* ── Summary Card ── */}
       <XStack
         backgroundColor={ColorPrimary.primary600}
         borderRadius={16}
@@ -392,7 +541,6 @@ export default function TransaksiPage() {
         />
       </XStack>
 
-      {/* ── Date Label ── */}
       <TextBodySm color="$colorSecondary" textAlign="center">
         Hari Ini —{" "}
         {new Date().toLocaleDateString("id-ID", {
@@ -405,34 +553,65 @@ export default function TransaksiPage() {
     </YStack>
   );
 
+  const transactionList = (
+    <FlatList
+      data={filtered}
+      keyExtractor={keyExtractor}
+      renderItem={renderItem}
+      ListHeaderComponent={ListHeader}
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={{
+        paddingHorizontal: 16,
+        paddingBottom: 24,
+        gap: 12,
+      }}
+      ItemSeparatorComponent={() => <View style={{ height: 0 }} />}
+    />
+  );
+
+  // ── Tablet: split layout ───────────────────────────────────────────────────
+  if (isTablet) {
+    return (
+      <SafeAreaView
+        edges={["top"]}
+        style={{ flex: 1, backgroundColor: ColorBase.bgScreen }}
+      >
+        <PageHeader
+          title="Riwayat Transaksi"
+          actions={<IconButton iconName="options-outline" />}
+        />
+        <View style={styles.tabletSplit}>
+          {/* Left: transaction list */}
+          <View style={styles.tabletListPanel}>{transactionList}</View>
+
+          {/* Divider */}
+          <View style={styles.panelDivider} />
+
+          {/* Right: detail panel */}
+          <View style={styles.tabletDetailPanel}>
+            <TransactionDetailPanel
+              tx={selectedTx}
+              onVoid={handleVoid}
+              onRefund={handleRefund}
+            />
+          </View>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
+  // ── Phone: modal layout ────────────────────────────────────────────────────
   return (
     <SafeAreaView
       edges={["top"]}
       style={{ flex: 1, backgroundColor: ColorBase.bgScreen }}
     >
-      {/* ── Header ── */}
       <PageHeader
         title="Riwayat Transaksi"
-        actions={
-          <>
-            <IconButton iconName="options-outline" />
-          </>
-        }
+        actions={<IconButton iconName="options-outline" />}
       />
 
-      <FlatList
-        data={filtered}
-        keyExtractor={keyExtractor}
-        renderItem={renderItem}
-        ListHeaderComponent={ListHeader}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{
-          paddingHorizontal: 16,
-          paddingBottom: 24,
-          gap: 12,
-        }}
-        ItemSeparatorComponent={() => <View style={{ height: 0 }} />}
-      />
+      {transactionList}
 
       <VoidRefundModal
         tx={selectedTx}
@@ -469,5 +648,29 @@ const styles = StyleSheet.create({
   closeBtn: {
     alignItems: "center",
     paddingVertical: 10,
+  },
+  tabletSplit: {
+    flex: 1,
+    flexDirection: "row",
+  },
+  tabletListPanel: {
+    flex: 0.55,
+    backgroundColor: ColorBase.bgScreen,
+  },
+  panelDivider: {
+    width: 1,
+    backgroundColor: ColorNeutral.neutral200,
+  },
+  tabletDetailPanel: {
+    flex: 0.45,
+    backgroundColor: ColorBase.white,
+  },
+  emptyIcon: {
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    backgroundColor: ColorNeutral.neutral100,
+    alignItems: "center",
+    justifyContent: "center",
   },
 });

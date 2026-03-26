@@ -10,7 +10,7 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { YStack } from "tamagui";
+import { XStack, YStack } from "tamagui";
 
 import {
   BottomActionBar,
@@ -25,8 +25,9 @@ import {
   heldOrdersAtom,
 } from "@/features/cart/store/cart.store";
 import { promoDefinitions } from "@/features/payment/api/payment.data";
-import { PageHeader } from "@/components";
-import { ColorBase, ColorDanger } from "@/themes/Colors";
+import { AppButton, PageHeader, TextBodyLg, TextCaption } from "@/components";
+import { useDeviceLayout } from "@/hooks/useDeviceLayout";
+import { ColorBase, ColorDanger, ColorPrimary } from "@/themes/Colors";
 import type { AppliedPromo, OrderType } from "@/types";
 
 const PPN_RATE = 0.11;
@@ -36,6 +37,7 @@ export default function KeranjangPage() {
   const [cart, setCart] = useAtom(cartAtom);
   const [, setHeldOrders] = useAtom(heldOrdersAtom);
   const [, setCartSnapshot] = useAtom(cartSnapshotAtom);
+  const { isTablet } = useDeviceLayout();
 
   const [customerName, setCustomerName] = useState("");
   const [tableNumber, setTableNumber] = useState("");
@@ -97,6 +99,154 @@ export default function KeranjangPage() {
     }
   }
 
+  function handleHoldOrder() {
+    if (cart.length === 0) return;
+    const label = customerName || tableNumber || orderType;
+    const now = new Date();
+    const timeStr = now.toLocaleTimeString("id-ID", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+    const held = {
+      id: `hold-${Date.now()}`,
+      items: [...cart],
+      customerName,
+      tableNumber,
+      orderType,
+      createdAt: timeStr,
+      label,
+    };
+    setHeldOrders((prev) => [held, ...prev]);
+    setCart([]);
+    Alert.alert("Pesanan Ditahan", `Pesanan "${label}" telah ditahan.`, [
+      { text: "OK", onPress: () => router.back() },
+    ]);
+  }
+
+  function handlePay() {
+    setCartSnapshot([...cart]);
+    const itemsSummary = cart
+      .map(
+        (c) =>
+          `${c.productName}${c.variantLabel ? ` (${c.variantLabel})` : ""} x${c.quantity}`,
+      )
+      .join(", ");
+    const label = customerName || tableNumber || orderType;
+    router.push({
+      pathname: "/pilih-pembayaran",
+      params: {
+        total: String(total),
+        totalItems: String(totalItems),
+        discount: String(discount),
+        items: itemsSummary,
+        customerLabel: label,
+      },
+    });
+  }
+
+  const trashBtn = (
+    <TouchableOpacity activeOpacity={0.7} onPress={handleClearCart}>
+      <View style={styles.trashBtn}>
+        <Ionicons name="trash-outline" size={18} color={ColorDanger.danger600} />
+      </View>
+    </TouchableOpacity>
+  );
+
+  // ── Tablet: 2-column layout ────────────────────────────────────────────────
+  if (isTablet) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <PageHeader
+          title="Keranjang"
+          subtitle={`${totalItems} item`}
+          showBack
+          onBack={() => router.back()}
+          actions={trashBtn}
+        />
+
+        <XStack flex={1} gap={0}>
+          {/* Left: cart items */}
+          <ScrollView
+            style={styles.tabletLeft}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{ padding: 16, paddingBottom: 32 }}
+          >
+            <CartItemsCard
+              cart={cart}
+              onUpdateQty={handleUpdateQty}
+              onRemove={handleRemove}
+              onUpdateNote={handleUpdateNote}
+            />
+          </ScrollView>
+
+          {/* Divider */}
+          <View style={styles.tabletDivider} />
+
+          {/* Right: summary + actions */}
+          <ScrollView
+            style={styles.tabletRight}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{ padding: 16, paddingBottom: 32 }}
+          >
+            <YStack gap={12}>
+              <CustomerInfoCard
+                customerName={customerName}
+                onCustomerNameChange={setCustomerName}
+                tableNumber={tableNumber}
+                onTableNumberChange={setTableNumber}
+                orderType={orderType}
+                onOrderTypeChange={setOrderType}
+              />
+
+              <PromoCard
+                promoCode={promoCode}
+                onPromoCodeChange={setPromoCode}
+                onApplyPromo={handleApplyPromo}
+                appliedPromo={appliedPromo}
+                promoEnabled={promoEnabled}
+                onTogglePromo={() => setPromoEnabled((v) => !v)}
+              />
+
+              <PriceSummaryCard
+                subtotal={subtotal}
+                discount={discount}
+                ppn={ppn}
+                total={total}
+              />
+
+              {/* Action buttons inline on tablet */}
+              <YStack gap={8}>
+                <AppButton
+                  variant="primary"
+                  size="lg"
+                  fullWidth
+                  title="Bayar Sekarang"
+                  disabled={cart.length === 0}
+                  onPress={handlePay}
+                  icon={
+                    <Ionicons name="card-outline" size={18} color={ColorBase.white} />
+                  }
+                />
+                <AppButton
+                  variant="outline"
+                  size="md"
+                  fullWidth
+                  title="Tahan Pesanan"
+                  disabled={cart.length === 0}
+                  onPress={handleHoldOrder}
+                  icon={
+                    <Ionicons name="pause-circle-outline" size={16} color={ColorPrimary.primary600} />
+                  }
+                />
+              </YStack>
+            </YStack>
+          </ScrollView>
+        </XStack>
+      </SafeAreaView>
+    );
+  }
+
+  // ── Phone layout ───────────────────────────────────────────────────────────
   return (
     <SafeAreaView style={styles.container}>
       <PageHeader
@@ -104,17 +254,7 @@ export default function KeranjangPage() {
         subtitle={`${totalItems} item`}
         showBack
         onBack={() => router.back()}
-        actions={
-          <TouchableOpacity activeOpacity={0.7} onPress={handleClearCart}>
-            <View style={styles.trashBtn}>
-              <Ionicons
-                name="trash-outline"
-                size={18}
-                color={ColorDanger.danger600}
-              />
-            </View>
-          </TouchableOpacity>
-        }
+        actions={trashBtn}
       />
 
       <ScrollView
@@ -158,49 +298,8 @@ export default function KeranjangPage() {
 
       <BottomActionBar
         cartLength={cart.length}
-        onHoldOrder={() => {
-          if (cart.length === 0) return;
-          const label = customerName || tableNumber || orderType;
-          const now = new Date();
-          const timeStr = now.toLocaleTimeString("id-ID", {
-            hour: "2-digit",
-            minute: "2-digit",
-          });
-          const held = {
-            id: `hold-${Date.now()}`,
-            items: [...cart],
-            customerName,
-            tableNumber,
-            orderType,
-            createdAt: timeStr,
-            label,
-          };
-          setHeldOrders((prev) => [held, ...prev]);
-          setCart([]);
-          Alert.alert("Pesanan Ditahan", `Pesanan "${label}" telah ditahan.`, [
-            { text: "OK", onPress: () => router.back() },
-          ]);
-        }}
-        onPay={() => {
-          setCartSnapshot([...cart]);
-          const itemsSummary = cart
-            .map(
-              (c) =>
-                `${c.productName}${c.variantLabel ? ` (${c.variantLabel})` : ""} x${c.quantity}`,
-            )
-            .join(", ");
-          const label = customerName || tableNumber || orderType;
-          router.push({
-            pathname: "/pilih-pembayaran",
-            params: {
-              total: String(total),
-              totalItems: String(totalItems),
-              discount: String(discount),
-              items: itemsSummary,
-              customerLabel: label,
-            },
-          });
-        }}
+        onHoldOrder={handleHoldOrder}
+        onPay={handlePay}
       />
     </SafeAreaView>
   );
@@ -218,5 +317,17 @@ const styles = StyleSheet.create({
     backgroundColor: ColorDanger.danger50,
     alignItems: "center",
     justifyContent: "center",
+  },
+  tabletLeft: {
+    flex: 0.55,
+    backgroundColor: ColorBase.bgScreen,
+  },
+  tabletDivider: {
+    width: 1,
+    backgroundColor: "#E5E7EB",
+  },
+  tabletRight: {
+    flex: 0.45,
+    backgroundColor: ColorBase.white,
   },
 });

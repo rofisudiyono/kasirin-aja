@@ -21,6 +21,7 @@ type Props = {
   emptyCount: number;
   categoryCount: number;
   filteredCount: number;
+  hideCategories?: boolean;
 };
 
 export function InventoriListHeader({
@@ -34,6 +35,7 @@ export function InventoriListHeader({
   emptyCount,
   categoryCount,
   filteredCount,
+  hideCategories = false,
 }: Props) {
   return (
     <YStack gap="$3">
@@ -45,20 +47,22 @@ export function InventoriListHeader({
         onChangeText={onSearchChange}
       />
 
-      {/* ── Category Filters ── */}
-      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-        <XStack gap="$2">
-          {categoryFilters.map((c) => (
-            <FilterChip
-              key={c}
-              label={c}
-              active={categoryFilter === c}
-              onPress={() => onCategoryChange(c)}
-              paddingH={14}
-            />
-          ))}
-        </XStack>
-      </ScrollView>
+      {/* ── Category Filters (hidden on tablet where sidebar handles it) ── */}
+      {!hideCategories && (
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          <XStack gap="$2">
+            {categoryFilters.map((c) => (
+              <FilterChip
+                key={c}
+                label={c}
+                active={categoryFilter === c}
+                onPress={() => onCategoryChange(c)}
+                paddingH={14}
+              />
+            ))}
+          </XStack>
+        </ScrollView>
+      )}
 
       {/* ── Sort Options ── */}
       <XStack alignItems="center" gap="$2">

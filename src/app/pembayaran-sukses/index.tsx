@@ -1,4 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
+import { useDeviceLayout } from "@/hooks/useDeviceLayout";
 import * as Print from "expo-print";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import * as Sharing from "expo-sharing";
@@ -67,6 +68,7 @@ export default function PembayaranSuksesPage() {
   const items = params.items ?? "";
   const customerLabel = params.customerLabel ?? "";
 
+  const { isTablet } = useDeviceLayout();
   const orderNumber = React.useMemo(() => generateOrderNumber(), []);
   const dateTime = React.useMemo(() => getCurrentDateTime(), []);
 
@@ -201,9 +203,14 @@ export default function PembayaranSuksesPage() {
     <SafeAreaView style={styles.container}>
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: 32 }}
+        contentContainerStyle={{ paddingBottom: 32, alignItems: isTablet ? "center" : undefined }}
       >
-        <YStack paddingHorizontal={16} gap={16} paddingTop={24}>
+        <YStack
+          paddingHorizontal={16}
+          gap={16}
+          paddingTop={24}
+          width={isTablet ? 480 : undefined}
+        >
           {/* Success header */}
           <YStack alignItems="center" gap={12}>
             <View style={styles.successIcon}>
