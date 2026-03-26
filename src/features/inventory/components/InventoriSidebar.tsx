@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { YStack } from "tamagui";
 
-import { TextBodyLg, TextBodySm, TextCaption } from "@/components";
+import { TextBody, TextBodySm, TextH3 } from "@/components";
 import { categoryFilters } from "@/features/catalog/api/category.data";
 import {
   ColorBase,
@@ -38,28 +38,28 @@ export function InventoriSidebar({
       {/* Stats summary */}
       <View style={styles.statsCard}>
         <View style={styles.statItem}>
-          <TextCaption color="$colorSecondary">Total Produk</TextCaption>
-          <TextBodyLg fontWeight="700" color="$primary">
+          <TextBodySm color="$colorSecondary">Total Produk</TextBodySm>
+          <TextH3 fontWeight="700" color="$primary">
             {totalProducts}
-          </TextBodyLg>
+          </TextH3>
         </View>
         <View style={styles.statDivider} />
         <View style={styles.statItem}>
-          <TextCaption color="$colorSecondary">Stok Habis</TextCaption>
-          <TextBodyLg fontWeight="700" color={ColorDanger.danger600}>
+          <TextBodySm color="$colorSecondary">Stok Habis</TextBodySm>
+          <TextH3 fontWeight="700" color={ColorDanger.danger600}>
             {emptyCount}
-          </TextBodyLg>
+          </TextH3>
         </View>
         <View style={styles.statDivider} />
         <View style={styles.statItem}>
-          <TextCaption color="$colorSecondary">Kategori</TextCaption>
-          <TextBodyLg fontWeight="700" color={ColorSuccess.success600}>
+          <TextBodySm color="$colorSecondary">Kategori</TextBodySm>
+          <TextH3 fontWeight="700" color={ColorSuccess.success600}>
             {categoryCount}
-          </TextBodyLg>
+          </TextH3>
         </View>
       </View>
 
-      <TextCaption
+      <TextBodySm
         fontWeight="700"
         color="$colorSecondary"
         letterSpacing={0.8}
@@ -67,7 +67,7 @@ export function InventoriSidebar({
         paddingTop={4}
       >
         KATEGORI
-      </TextCaption>
+      </TextBodySm>
 
       <YStack gap={2}>
         {categoryFilters.map((c) => {
@@ -86,28 +86,27 @@ export function InventoriSidebar({
               ]}
               onPress={() => onCategoryChange(c)}
             >
-              <TextBodySm
+              <TextBody
                 fontWeight={isActive ? "700" : "400"}
                 color={isActive ? "$primary" : "$colorSecondary"}
                 flex={1}
               >
                 {c}
-              </TextBodySm>
+              </TextBody>
               <View
                 style={[
                   styles.categoryCount,
                   isActive && styles.categoryCountActive,
                 ]}
               >
-                <TextCaption
+                <TextBodySm
                   fontWeight="600"
                   color={
                     isActive ? ColorPrimary.primary600 : ColorNeutral.neutral500
                   }
-                  fontSize={10}
                 >
                   {count}
-                </TextCaption>
+                </TextBodySm>
               </View>
             </TouchableOpacity>
           );
@@ -119,8 +118,8 @@ export function InventoriSidebar({
 
 const styles = StyleSheet.create({
   sidebar: {
-    width: 192,
-    paddingHorizontal: 12,
+    width: 220,
+    paddingHorizontal: 14,
     paddingTop: 16,
     paddingBottom: 16,
     backgroundColor: ColorBase.white,
@@ -150,7 +149,7 @@ const styles = StyleSheet.create({
   categoryItem: {
     flexDirection: "row",
     alignItems: "center",
-    paddingVertical: 9,
+    paddingVertical: 11,
     paddingHorizontal: 10,
     borderRadius: 10,
     gap: 6,

@@ -7,7 +7,7 @@ import React from "react";
 import { YStack } from "tamagui";
 
 import { CATEGORY_COLORS } from "@/config/categoryStyles";
-import { TextCaption } from "@/components/atoms/Typography";
+import { TextBodySm } from "@/components/atoms/Typography";
 import { ColorNeutral } from "@/themes/Colors";
 import type { ProductCategory } from "@/types";
 
@@ -24,12 +24,12 @@ export function CategoryBadge({ category }: CategoryBadgeProps) {
     <YStack
       backgroundColor={style.bg}
       borderRadius={20}
-      paddingHorizontal={8}
-      paddingVertical={3}
+      paddingHorizontal={9}
+      paddingVertical={4}
     >
-      <TextCaption fontWeight="600" color={style.color}>
+      <TextBodySm fontWeight="600" color={style.color}>
         {category}
-      </TextCaption>
+      </TextBodySm>
     </YStack>
   );
 }

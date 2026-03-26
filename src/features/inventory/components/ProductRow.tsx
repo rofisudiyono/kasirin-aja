@@ -7,7 +7,7 @@ import { Separator, XStack, YStack } from "tamagui";
 import {
   TextBodyLg,
   TextBodySm,
-  TextCaption,
+  TextH3,
   TextMicro,
 } from "@/components";
 import { CATEGORY_ICONS } from "@/config/categoryStyles";
@@ -53,12 +53,12 @@ const styles = StyleSheet.create({
     elevation: 1,
   },
   cardIcon: {
-    width: 48,
-    height: 48,
-    borderRadius: 12,
+    width: 56,
+    height: 56,
+    borderRadius: 14,
     alignItems: "center",
     justifyContent: "center",
-    marginBottom: 10,
+    marginBottom: 12,
   },
   cardFooter: {
     flexDirection: "row",
@@ -98,16 +98,16 @@ function ProductCardGrid({ product }: { product: Product }) {
         >
           <Ionicons
             name={CATEGORY_ICONS[product.category] ?? "cube-outline"}
-            size={24}
+            size={28}
             color={isEmpty ? ColorDanger.danger600 : ColorNeutral.neutral500}
           />
         </View>
 
         {/* Name + Variant badge */}
         <XStack alignItems="flex-start" gap={6} marginBottom={4}>
-          <TextBodyLg fontWeight="700" flex={1} numberOfLines={2}>
+          <TextH3 fontWeight="700" flex={1} numberOfLines={2}>
             {product.name}
-          </TextBodyLg>
+          </TextH3>
           {product.hasVariant && (
             <View style={styles.variantBadge}>
               <TextMicro fontWeight="600" color={ColorPrimary.primary600}>
@@ -129,23 +129,23 @@ function ProductCardGrid({ product }: { product: Product }) {
           )}
         </XStack>
 
-        <TextCaption color="$colorTertiary" marginBottom={2}>
+        <TextBodySm color="$colorTertiary" marginBottom={2}>
           {product.sku}
-        </TextCaption>
+        </TextBodySm>
 
         {/* Footer: price + stock */}
         <View style={styles.cardFooter}>
           <YStack flex={1} gap={2}>
-            <TextBodySm
+            <TextBodyLg
               fontWeight="700"
               color={isEmpty ? "$colorTertiary" : "$primary"}
               textDecorationLine={isEmpty ? "line-through" : "none"}
               numberOfLines={1}
             >
               {product.price}
-            </TextBodySm>
+            </TextBodyLg>
             {product.stockStatus !== "inactive" && (
-              <TextCaption
+              <TextBodySm
                 fontWeight="600"
                 color={
                   isEmpty
@@ -156,7 +156,7 @@ function ProductCardGrid({ product }: { product: Product }) {
                 }
               >
                 Stok: {product.stock}
-              </TextCaption>
+              </TextBodySm>
             )}
           </YStack>
           <StockBadge stockStatus={product.stockStatus} />
@@ -215,7 +215,7 @@ function ProductRow({
           </YStack>
           <YStack flex={1} gap={4}>
             <XStack alignItems="center" gap="$2">
-              <TextBodyLg fontWeight="700">{product.name}</TextBodyLg>
+              <TextH3 fontWeight="700">{product.name}</TextH3>
               {product.hasVariant && (
                 <View style={styles.variantBadge}>
                   <TextMicro fontWeight="600" color={ColorPrimary.primary600}>
@@ -225,8 +225,8 @@ function ProductRow({
               )}
             </XStack>
             <CategoryBadge category={product.category} />
-            <TextCaption color="$colorTertiary">SKU: {product.sku}</TextCaption>
-            <TextBodySm
+            <TextBodySm color="$colorTertiary">SKU: {product.sku}</TextBodySm>
+            <TextBodyLg
               fontWeight="700"
               color={
                 product.stockStatus === "empty" ? "$colorTertiary" : "$primary"
@@ -236,12 +236,12 @@ function ProductRow({
               }
             >
               {product.price}
-            </TextBodySm>
+            </TextBodyLg>
           </YStack>
           <YStack alignItems="flex-end" gap="$1">
             {product.stockStatus !== "inactive" &&
               product.stockStatus !== "empty" && (
-                <TextBodySm
+                <TextBodyLg
                   fontWeight="700"
                   color={
                     product.stockStatus === "low"
@@ -250,12 +250,12 @@ function ProductRow({
                   }
                 >
                   Stok: {product.stock}
-                </TextBodySm>
+                </TextBodyLg>
               )}
             {product.stockStatus === "empty" && (
-              <TextBodySm fontWeight="700" color={ColorDanger.danger600}>
+              <TextBodyLg fontWeight="700" color={ColorDanger.danger600}>
                 Stok: 0
-              </TextBodySm>
+              </TextBodyLg>
             )}
             <StockBadge stockStatus={product.stockStatus} />
             {product.isNew && (

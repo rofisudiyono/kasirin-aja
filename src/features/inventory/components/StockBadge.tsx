@@ -7,7 +7,7 @@ import React from "react";
 import { YStack } from "tamagui";
 
 import { STOCK_BADGE } from "@/config/categoryStyles";
-import { TextCaption } from "@/components/atoms/Typography";
+import { TextBodySm } from "@/components/atoms/Typography";
 import type { StockStatus } from "@/types";
 
 interface StockBadgeProps {
@@ -21,12 +21,12 @@ export function StockBadge({ stockStatus }: StockBadgeProps) {
     <YStack
       backgroundColor={badge.bg}
       borderRadius={20}
-      paddingHorizontal={8}
-      paddingVertical={3}
+      paddingHorizontal={9}
+      paddingVertical={4}
     >
-      <TextCaption fontWeight="600" color={badge.color}>
+      <TextBodySm fontWeight="600" color={badge.color}>
         {badge.label}
-      </TextCaption>
+      </TextBodySm>
     </YStack>
   );
 }

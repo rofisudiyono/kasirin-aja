@@ -3,7 +3,7 @@ import React from "react";
 import { ScrollView, TouchableOpacity } from "react-native";
 import { XStack, YStack } from "tamagui";
 
-import { FilterChip, SearchBar, ShadowCard, TextBodySm, TextCaption } from "@/components";
+import { FilterChip, SearchBar, ShadowCard, TextBody, TextBodySm } from "@/components";
 import { categoryFilters } from "@/features/catalog/api/category.data";
 import { inventorySortOptions } from "@/features/inventory/api/inventory.data";
 import { StatsRow } from "@/features/shift/components/StatsRow";
@@ -48,7 +48,7 @@ export function InventoriListHeader({
           onChangeText={onSearchChange}
         />
         <XStack alignItems="center" gap="$2">
-          <TextBodySm color="$colorSecondary">Urutkan:</TextBodySm>
+          <TextBody color="$colorSecondary">Urutkan:</TextBody>
           {inventorySortOptions.map((s) => (
             <FilterChip
               key={s}
@@ -59,9 +59,9 @@ export function InventoriListHeader({
             />
           ))}
           <YStack flex={1} />
-          <TextCaption color="$colorTertiary">
+          <TextBodySm color="$colorTertiary">
             {filteredCount} produk
-          </TextCaption>
+          </TextBodySm>
         </XStack>
       </YStack>
     );
