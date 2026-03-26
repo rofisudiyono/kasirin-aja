@@ -63,7 +63,7 @@ function TransactionCard({
         padding="$4"
         gap="$2"
         borderWidth={isSelected ? 1.5 : 0}
-        borderColor={isSelected ? ColorPrimary.primary300 : "transparent"}
+        borderColor={isSelected ? ColorPrimary.primary400 : "transparent"}
       >
         <XStack alignItems="center" justifyContent="space-between">
           <TextBodyLg fontWeight="700" color="$primary">
@@ -136,7 +136,11 @@ function TransactionDetailPanel({
     return (
       <YStack flex={1} alignItems="center" justifyContent="center" gap={12}>
         <View style={styles.emptyIcon}>
-          <Ionicons name="receipt-outline" size={32} color={ColorNeutral.neutral400} />
+          <Ionicons
+            name="receipt-outline"
+            size={32}
+            color={ColorNeutral.neutral400}
+          />
         </View>
         <TextBodySm color="$colorSecondary" textAlign="center">
           Pilih transaksi untuk{"\n"}melihat detail
@@ -442,7 +446,9 @@ export default function TransaksiPage() {
       prev.map((t) => (t.id === id ? { ...t, status: "Void" as const } : t)),
     );
     if (selectedTx?.id === id) {
-      setSelectedTx((prev) => prev ? { ...prev, status: "Void" as const } : null);
+      setSelectedTx((prev) =>
+        prev ? { ...prev, status: "Void" as const } : null,
+      );
     }
   }
 
@@ -451,7 +457,9 @@ export default function TransaksiPage() {
       prev.map((t) => (t.id === id ? { ...t, status: "Refund" as const } : t)),
     );
     if (selectedTx?.id === id) {
-      setSelectedTx((prev) => prev ? { ...prev, status: "Refund" as const } : null);
+      setSelectedTx((prev) =>
+        prev ? { ...prev, status: "Refund" as const } : null,
+      );
     }
   }
 

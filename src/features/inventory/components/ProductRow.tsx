@@ -14,6 +14,7 @@ import { CATEGORY_ICONS } from "@/config/categoryStyles";
 import { CategoryBadge } from "@/features/catalog/components/CategoryBadge";
 import { StockBadge } from "@/features/inventory/components/StockBadge";
 import {
+  ColorBase,
   ColorDanger,
   ColorGreen,
   ColorNeutral,
@@ -35,17 +36,148 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     paddingHorizontal: 6,
     paddingVertical: 2,
-    marginTop: 2,
+  },
+  // Card variant (tablet grid)
+  cardWrapper: {
+    flex: 1,
+    margin: 4,
+  },
+  card: {
+    flex: 1,
+    borderRadius: 14,
+    padding: 14,
+    borderWidth: 1,
+    shadowColor: ColorNeutral.neutralShadow,
+    shadowOpacity: 0.12,
+    shadowRadius: 6,
+    elevation: 1,
+  },
+  cardIcon: {
+    width: 48,
+    height: 48,
+    borderRadius: 12,
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 10,
+  },
+  cardFooter: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginTop: 8,
+    borderTopWidth: 1,
+    borderTopColor: ColorNeutral.neutral100,
+    paddingTop: 8,
   },
 });
 
+// ── Card variant for tablet 2-column grid ─────────────────────────────────────
+function ProductCardGrid({ product }: { product: Product }) {
+  const isEmpty = product.stockStatus === "empty";
+  return (
+    <TouchableOpacity
+      activeOpacity={0.7}
+      style={styles.cardWrapper}
+      onPress={() => router.push(`/inventory/${product.id}`)}
+    >
+      <View
+        style={[
+          styles.card,
+          {
+            backgroundColor: isEmpty ? ColorDanger.danger25 : ColorBase.white,
+            borderColor: isEmpty ? ColorDanger.danger200 : ColorNeutral.neutral200,
+          },
+        ]}
+      >
+        {/* Icon */}
+        <View
+          style={[
+            styles.cardIcon,
+            { backgroundColor: isEmpty ? ColorDanger.danger100 : ColorNeutral.neutral100 },
+          ]}
+        >
+          <Ionicons
+            name={CATEGORY_ICONS[product.category] ?? "cube-outline"}
+            size={24}
+            color={isEmpty ? ColorDanger.danger600 : ColorNeutral.neutral500}
+          />
+        </View>
+
+        {/* Name + Variant badge */}
+        <XStack alignItems="flex-start" gap={6} marginBottom={4}>
+          <TextBodyLg fontWeight="700" flex={1} numberOfLines={2}>
+            {product.name}
+          </TextBodyLg>
+          {product.hasVariant && (
+            <View style={styles.variantBadge}>
+              <TextMicro fontWeight="600" color={ColorPrimary.primary600}>
+                Var
+              </TextMicro>
+            </View>
+          )}
+        </XStack>
+
+        {/* Category + New badge */}
+        <XStack gap={4} alignItems="center" marginBottom={4}>
+          <CategoryBadge category={product.category} />
+          {product.isNew && (
+            <View style={styles.newBadge}>
+              <TextMicro fontWeight="700" color={ColorYellow.yellow600}>
+                Baru
+              </TextMicro>
+            </View>
+          )}
+        </XStack>
+
+        <TextCaption color="$colorTertiary" marginBottom={2}>
+          {product.sku}
+        </TextCaption>
+
+        {/* Footer: price + stock */}
+        <View style={styles.cardFooter}>
+          <YStack flex={1} gap={2}>
+            <TextBodySm
+              fontWeight="700"
+              color={isEmpty ? "$colorTertiary" : "$primary"}
+              textDecorationLine={isEmpty ? "line-through" : "none"}
+              numberOfLines={1}
+            >
+              {product.price}
+            </TextBodySm>
+            {product.stockStatus !== "inactive" && (
+              <TextCaption
+                fontWeight="600"
+                color={
+                  isEmpty
+                    ? ColorDanger.danger600
+                    : product.stockStatus === "low"
+                      ? ColorWarning.warning600
+                      : ColorGreen.green600
+                }
+              >
+                Stok: {product.stock}
+              </TextCaption>
+            )}
+          </YStack>
+          <StockBadge stockStatus={product.stockStatus} />
+        </View>
+      </View>
+    </TouchableOpacity>
+  );
+}
+
+// ── List row variant (phone / default) ────────────────────────────────────────
 function ProductRow({
   product,
   isFirst,
+  isCard = false,
 }: {
   product: Product;
   isFirst: boolean;
+  isCard?: boolean;
 }) {
+  if (isCard) return <ProductCardGrid product={product} />;
+
   return (
     <>
       {!isFirst && (

@@ -22,6 +22,7 @@ import {
   TextCaption,
   TextH3,
 } from "@/components";
+import { useDeviceLayout } from "@/hooks/useDeviceLayout";
 import { ColorBase, ColorNeutral, ColorPrimary } from "@/themes/Colors";
 
 const FORM_STEPS = ["Foto", "Info", "Harga", "Varian", "Stok"] as const;
@@ -43,6 +44,7 @@ export default function TambahProdukPage() {
   const router = useRouter();
   const { editId } = useLocalSearchParams<{ editId?: string }>();
   const [userProducts, setUserProducts] = useAtom(userProductsAtom);
+  const { isTablet } = useDeviceLayout();
 
   // If editing, find the existing product
   const editingProduct = editId
@@ -171,43 +173,139 @@ export default function TambahProdukPage() {
     }
   }
 
+  // Shared header used by both layouts
+  const formHeader = (
+    <XStack
+      paddingHorizontal="$4"
+      paddingVertical="$3"
+      alignItems="center"
+      backgroundColor={ColorBase.white}
+      borderBottomWidth={1}
+      borderBottomColor={ColorNeutral.neutral200}
+    >
+      <TouchableOpacity
+        onPress={() => router.back()}
+        style={styles.batalBtn}
+        activeOpacity={0.7}
+      >
+        <Ionicons
+          name="close"
+          size={18}
+          color={ColorNeutral.neutral700 ?? ColorNeutral.neutral500}
+        />
+        <TextBodySm fontWeight="500" color={ColorNeutral.neutral700}>
+          Batal
+        </TextBodySm>
+      </TouchableOpacity>
+
+      <TextH3 fontWeight="700" flex={1} textAlign="center">
+        {isEditMode ? "Edit Produk" : "Tambah Produk"}
+      </TextH3>
+
+      <AppButton
+        variant="primary"
+        size="sm"
+        title="Simpan"
+        onPress={handleSimpan}
+      />
+    </XStack>
+  );
+
+  // ── Tablet: two-column split layout ───────────────────────────────────────
+  if (isTablet) {
+    return (
+      <SafeAreaView style={styles.container}>
+        {formHeader}
+
+        <View style={styles.tabletBody}>
+          {/* Left column wrapper: Photo + Info Dasar + Variant */}
+          <View style={styles.tabletColLeft}>
+            <ScrollView
+              style={styles.scrollView}
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={styles.tabletColContent}
+            >
+              <FotoProdukSection photos={photos} onRemovePhoto={removePhoto} />
+
+              <InformasiDasarSection
+                namaProduk={namaProduk}
+                setNamaProduk={setNamaProduk}
+                sku={sku}
+                setSku={setSku}
+                barcode={barcode}
+                setBarcode={setBarcode}
+                kategori={kategori}
+                setKategori={setKategori}
+                deskripsi={deskripsi}
+                setDeskripsi={setDeskripsi}
+              />
+
+              <VariantProdukSection
+                hasVariant={hasVariant}
+                setHasVariant={setHasVariant}
+                variantGroups={variantGroups}
+                onRemoveVariantValue={removeVariantValue}
+                onAddVariantValue={addVariantValue}
+                onAddGroup={addVariantGroup}
+                onRemoveGroup={removeVariantGroup}
+              />
+            </ScrollView>
+          </View>
+
+          {/* Divider */}
+          <View style={styles.tabletDivider} />
+
+          {/* Right column wrapper: Harga + Stok + Status */}
+          <View style={styles.tabletColRight}>
+            <ScrollView
+              style={styles.scrollView}
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={styles.tabletColContent}
+            >
+              <HargaSection
+                hargaModal={hargaModal}
+                setHargaModal={setHargaModal}
+                hargaJual={hargaJual}
+                setHargaJual={setHargaJual}
+              />
+
+              <StokSection
+                stokAwal={stokAwal}
+                setStokAwal={setStokAwal}
+                minAlert={minAlert}
+                setMinAlert={setMinAlert}
+                satuan={satuan}
+                setSatuan={setSatuan}
+              />
+
+              <StatusProdukSection isActive={isActive} setIsActive={setIsActive} />
+
+              <AppButton
+                variant="primary"
+                size="lg"
+                fullWidth
+                title={isEditMode ? "Simpan Perubahan" : "Simpan Produk"}
+                onPress={handleSimpan}
+              />
+              <TextCaption
+                color={ColorNeutral.neutral400}
+                textAlign="center"
+                marginTop={6}
+                marginBottom={8}
+              >
+                Semua perubahan akan langsung tersimpan ke inventori setelah dipublikasikan
+              </TextCaption>
+            </ScrollView>
+          </View>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
+  // ── Phone layout ───────────────────────────────────────────────────────────
   return (
     <SafeAreaView style={styles.container}>
-      {/* Header */}
-      <XStack
-        paddingHorizontal="$4"
-        paddingVertical="$3"
-        alignItems="center"
-        backgroundColor={ColorBase.white}
-        borderBottomWidth={1}
-        borderBottomColor={ColorNeutral.neutral200}
-      >
-        <TouchableOpacity
-          onPress={() => router.back()}
-          style={styles.batalBtn}
-          activeOpacity={0.7}
-        >
-          <Ionicons
-            name="close"
-            size={18}
-            color={ColorNeutral.neutral700 ?? ColorNeutral.neutral500}
-          />
-          <TextBodySm fontWeight="500" color={ColorNeutral.neutral700}>
-            Batal
-          </TextBodySm>
-        </TouchableOpacity>
-
-        <TextH3 fontWeight="700" flex={1} textAlign="center">
-          {isEditMode ? "Edit Produk" : "Tambah Produk"}
-        </TextH3>
-
-        <AppButton
-          variant="primary"
-          size="sm"
-          title="Simpan"
-          onPress={handleSimpan}
-        />
-      </XStack>
+      {formHeader}
 
       {/* Step indicator strip */}
       <XStack
@@ -245,6 +343,7 @@ export default function TambahProdukPage() {
       </XStack>
 
       <ScrollView
+        style={styles.scrollView}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
       >
@@ -319,10 +418,13 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: ColorBase.bgScreen,
   },
+  scrollView: {
+    flex: 1,
+  },
   scrollContent: {
     gap: 12,
     padding: 16,
-    paddingBottom: 32,
+    paddingBottom: 48,
   },
   batalBtn: {
     flexDirection: "row",
@@ -336,6 +438,27 @@ const styles = StyleSheet.create({
     paddingBottom: 24,
     borderTopWidth: StyleSheet.hairlineWidth,
     borderTopColor: ColorNeutral.neutral200,
+  },
+  // Tablet
+  tabletBody: {
+    flex: 1,
+    flexDirection: "row",
+    backgroundColor: ColorBase.bgScreen,
+  },
+  tabletColLeft: {
+    flex: 3,
+  },
+  tabletColRight: {
+    flex: 2,
+  },
+  tabletColContent: {
+    gap: 12,
+    padding: 16,
+    paddingBottom: 48,
+  },
+  tabletDivider: {
+    width: 1,
+    backgroundColor: ColorNeutral.neutral100,
   },
 });
 
