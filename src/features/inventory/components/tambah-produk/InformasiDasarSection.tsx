@@ -11,7 +11,11 @@ import { SectionHeader } from "./SectionHeader";
 import { StyledInput } from "./StyledInput";
 import type { TambahProdukCategory } from "./tambah-produk.types";
 
-const CATEGORIES: TambahProdukCategory[] = ["Makanan", "Minuman", "Snack"];
+const CATEGORIES: { label: TambahProdukCategory; icon: string }[] = [
+  { label: "Makanan", icon: "restaurant-outline" },
+  { label: "Minuman", icon: "cafe-outline" },
+  { label: "Snack", icon: "fast-food-outline" },
+];
 
 interface InformasiDasarSectionProps {
   namaProduk: string;
@@ -47,7 +51,7 @@ export function InformasiDasarSection({
     >
       <SectionHeader title="Informasi Dasar" />
 
-      <FormField label="Nama Produk" required>
+      <FormField label="Nama Produk" required hint="Nama yang muncul di kasir dan laporan">
         <StyledInput
           value={namaProduk}
           onChangeText={setNamaProduk}
@@ -55,7 +59,7 @@ export function InformasiDasarSection({
         />
       </FormField>
 
-      <FormField label="SKU">
+      <FormField label="SKU" hint="Kode unik untuk identifikasi produk">
         <StyledInput
           value={sku}
           onChangeText={setSku}
@@ -73,7 +77,7 @@ export function InformasiDasarSection({
         />
       </FormField>
 
-      <FormField label="Barcode">
+      <FormField label="Barcode" hint="Scan barcode produk atau ketik manual">
         <StyledInput
           value={barcode}
           onChangeText={setBarcode}
@@ -88,44 +92,56 @@ export function InformasiDasarSection({
         />
       </FormField>
 
-      <FormField label="Kategori" required>
+      <FormField label="Kategori" required hint="Pilih kategori agar produk mudah dicari">
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           <XStack gap="$2">
-            {CATEGORIES.map((cat) => (
-              <TouchableOpacity
-                key={cat}
-                onPress={() => setKategori(cat)}
-                activeOpacity={0.7}
-              >
-                <YStack
-                  paddingHorizontal={16}
-                  paddingVertical={8}
-                  borderRadius={20}
-                  borderWidth={1.5}
-                  borderColor={
-                    kategori === cat
-                      ? ColorPrimary.primary600
-                      : ColorNeutral.neutral200
-                  }
-                  backgroundColor={
-                    kategori === cat
-                      ? (ColorPrimary.primary50 ?? ColorPrimary.primary25)
-                      : ColorBase.white
-                  }
+            {CATEGORIES.map(({ label, icon }) => {
+              const active = kategori === label;
+              return (
+                <TouchableOpacity
+                  key={label}
+                  onPress={() => setKategori(label)}
+                  activeOpacity={0.7}
                 >
-                  <TextBodySm
-                    fontWeight="600"
-                    color={
-                      kategori === cat
-                        ? ColorPrimary.primary600
-                        : ColorNeutral.neutral500
+                  <XStack
+                    paddingHorizontal={14}
+                    paddingVertical={8}
+                    borderRadius={20}
+                    borderWidth={1.5}
+                    borderColor={
+                      active ? ColorPrimary.primary600 : ColorNeutral.neutral200
                     }
+                    backgroundColor={
+                      active
+                        ? (ColorPrimary.primary50 ?? ColorPrimary.primary25)
+                        : ColorBase.white
+                    }
+                    alignItems="center"
+                    gap={6}
                   >
-                    {cat}
-                  </TextBodySm>
-                </YStack>
-              </TouchableOpacity>
-            ))}
+                    <Ionicons
+                      name={icon as any}
+                      size={14}
+                      color={
+                        active
+                          ? ColorPrimary.primary600
+                          : ColorNeutral.neutral400
+                      }
+                    />
+                    <TextBodySm
+                      fontWeight="600"
+                      color={
+                        active
+                          ? ColorPrimary.primary600
+                          : ColorNeutral.neutral500
+                      }
+                    >
+                      {label}
+                    </TextBodySm>
+                  </XStack>
+                </TouchableOpacity>
+              );
+            })}
           </XStack>
         </ScrollView>
       </FormField>

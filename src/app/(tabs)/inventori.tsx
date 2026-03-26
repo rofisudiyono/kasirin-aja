@@ -16,7 +16,6 @@ import { Separator, XStack, YStack } from "tamagui";
 import {
   AppButton,
   FilterChip,
-  IconButton,
   PageHeader,
   SearchBar,
   ShadowCard,
@@ -84,89 +83,91 @@ function ProductRow({
         activeOpacity={0.7}
         onPress={() => router.push(`/inventory/${product.id}`)}
       >
-      <XStack
-        paddingHorizontal="$3"
-        paddingVertical="$3"
-        alignItems="center"
-        gap="$3"
-        backgroundColor={
-          product.stockStatus === "empty" ? ColorDanger.danger25 : "$background"
-        }
-      >
-        <YStack
-          width={56}
-          height={56}
-          borderRadius={10}
-          backgroundColor="$backgroundSecondary"
+        <XStack
+          paddingHorizontal="$3"
+          paddingVertical="$3"
           alignItems="center"
-          justifyContent="center"
-          overflow="hidden"
+          gap="$3"
+          backgroundColor={
+            product.stockStatus === "empty"
+              ? ColorDanger.danger25
+              : "$background"
+          }
         >
-          <Ionicons
-            name={CATEGORY_ICONS[product.category] ?? "cube-outline"}
-            size={26}
-            color={ColorNeutral.neutral400}
-          />
-        </YStack>
-        <YStack flex={1} gap={4}>
-          <XStack alignItems="center" gap="$2">
-            <TextBodyLg fontWeight="700">{product.name}</TextBodyLg>
-            {product.hasVariant && (
-              <View style={styles.variantBadge}>
-                <TextMicro fontWeight="600" color={ColorPrimary.primary600}>
-                  Variant
+          <YStack
+            width={56}
+            height={56}
+            borderRadius={10}
+            backgroundColor="$backgroundSecondary"
+            alignItems="center"
+            justifyContent="center"
+            overflow="hidden"
+          >
+            <Ionicons
+              name={CATEGORY_ICONS[product.category] ?? "cube-outline"}
+              size={26}
+              color={ColorNeutral.neutral400}
+            />
+          </YStack>
+          <YStack flex={1} gap={4}>
+            <XStack alignItems="center" gap="$2">
+              <TextBodyLg fontWeight="700">{product.name}</TextBodyLg>
+              {product.hasVariant && (
+                <View style={styles.variantBadge}>
+                  <TextMicro fontWeight="600" color={ColorPrimary.primary600}>
+                    Variant
+                  </TextMicro>
+                </View>
+              )}
+            </XStack>
+            <CategoryBadge category={product.category} />
+            <TextCaption color="$colorTertiary">SKU: {product.sku}</TextCaption>
+            <TextBodySm
+              fontWeight="700"
+              color={
+                product.stockStatus === "empty" ? "$colorTertiary" : "$primary"
+              }
+              textDecorationLine={
+                product.stockStatus === "empty" ? "line-through" : "none"
+              }
+            >
+              {product.price}
+            </TextBodySm>
+          </YStack>
+          <YStack alignItems="flex-end" gap="$1">
+            {product.stockStatus !== "inactive" &&
+              product.stockStatus !== "empty" && (
+                <TextBodySm
+                  fontWeight="700"
+                  color={
+                    product.stockStatus === "low"
+                      ? ColorWarning.warning600
+                      : ColorGreen.green600
+                  }
+                >
+                  Stok: {product.stock}
+                </TextBodySm>
+              )}
+            {product.stockStatus === "empty" && (
+              <TextBodySm fontWeight="700" color={ColorDanger.danger600}>
+                Stok: 0
+              </TextBodySm>
+            )}
+            <StockBadge stockStatus={product.stockStatus} />
+            {product.isNew && (
+              <View style={styles.newBadge}>
+                <TextMicro fontWeight="700" color={ColorYellow.yellow600}>
+                  Produk Baru
                 </TextMicro>
               </View>
             )}
-          </XStack>
-          <CategoryBadge category={product.category} />
-          <TextCaption color="$colorTertiary">SKU: {product.sku}</TextCaption>
-          <TextBodySm
-            fontWeight="700"
-            color={
-              product.stockStatus === "empty" ? "$colorTertiary" : "$primary"
-            }
-            textDecorationLine={
-              product.stockStatus === "empty" ? "line-through" : "none"
-            }
-          >
-            {product.price}
-          </TextBodySm>
-        </YStack>
-        <YStack alignItems="flex-end" gap="$1">
-          {product.stockStatus !== "inactive" &&
-            product.stockStatus !== "empty" && (
-              <TextBodySm
-                fontWeight="700"
-                color={
-                  product.stockStatus === "low"
-                    ? ColorWarning.warning600
-                    : ColorGreen.green600
-                }
-              >
-                Stok: {product.stock}
-              </TextBodySm>
-            )}
-          {product.stockStatus === "empty" && (
-            <TextBodySm fontWeight="700" color={ColorDanger.danger600}>
-              Stok: 0
-            </TextBodySm>
-          )}
-          <StockBadge stockStatus={product.stockStatus} />
-          {product.isNew && (
-            <View style={styles.newBadge}>
-              <TextMicro fontWeight="700" color={ColorYellow.yellow600}>
-                Produk Baru
-              </TextMicro>
-            </View>
-          )}
-          <Ionicons
-            name="chevron-forward"
-            size={16}
-            color={ColorNeutral.neutral400}
-          />
-        </YStack>
-      </XStack>
+            <Ionicons
+              name="chevron-forward"
+              size={16}
+              color={ColorNeutral.neutral400}
+            />
+          </YStack>
+        </XStack>
       </TouchableOpacity>
     </>
   );
@@ -177,14 +178,19 @@ const MemoProductRow = React.memo(ProductRow);
 export default function InventoriPage() {
   const [categoryFilter, setCategoryFilter] = useState<CategoryFilter>("Semua");
   const [sortOption, setSortOption] = useState<SortOption>("Nama A-Z");
+  const [searchQuery, setSearchQuery] = useState("");
   const userProducts = useAtomValue(userProductsAtom);
 
   const allProducts = [...userProducts, ...mockProducts];
 
-  const filtered =
-    categoryFilter === "Semua"
-      ? allProducts
-      : allProducts.filter((p) => p.category === categoryFilter);
+  const filtered = allProducts.filter((p) => {
+    const matchCategory =
+      categoryFilter === "Semua" || p.category === categoryFilter;
+    const q = searchQuery.trim().toLowerCase();
+    const matchSearch =
+      !q || p.name.toLowerCase().includes(q) || p.sku.toLowerCase().includes(q);
+    return matchCategory && matchSearch;
+  });
 
   const renderItem = useCallback<ListRenderItem<Product>>(
     ({ item, index }) => (
@@ -198,7 +204,12 @@ export default function InventoriPage() {
   const ListHeader = (
     <YStack gap="$3">
       {/* ── Search ── */}
-      <SearchBar placeholder="Cari nama, SKU, atau barcode..." showFilterIcon />
+      <SearchBar
+        placeholder="Cari nama, SKU, atau barcode..."
+        showFilterIcon
+        value={searchQuery}
+        onChangeText={setSearchQuery}
+      />
 
       {/* ── Category Filters ── */}
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
@@ -277,18 +288,15 @@ export default function InventoriPage() {
       {/* ── Header ── */}
       <PageHeader
         title="Produk"
-        showBack
+        onBack={() => router.back()}
         actions={
-          <>
-            <IconButton iconName="search-outline" />
-            <AppButton
-              variant="primary"
-              size="sm"
-              onPress={() => router.push("/inventory/tambah-produk")}
-            >
-              + Tambah
-            </AppButton>
-          </>
+          <AppButton
+            variant="primary"
+            size="sm"
+            onPress={() => router.push("/inventory/tambah-produk")}
+          >
+            + Tambah
+          </AppButton>
         }
       />
 
@@ -304,7 +312,11 @@ export default function InventoriPage() {
       />
 
       {/* ── FAB ── */}
-      <TouchableOpacity style={styles.fab} activeOpacity={0.8}>
+      <TouchableOpacity
+        style={styles.fab}
+        activeOpacity={0.8}
+        onPress={() => router.push("/inventory/tambah-produk")}
+      >
         <YStack
           width={56}
           height={56}

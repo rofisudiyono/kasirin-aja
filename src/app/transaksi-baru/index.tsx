@@ -112,7 +112,7 @@ export default function TransaksiBaruPage() {
               onPress={() => router.push("/barcode-scanner" as never)}
             />
             <IconButton
-              iconName="time-outline"
+              iconName="pause-circle-outline"
               onPress={() => router.push("/pesanan-ditahan" as never)}
               badge={heldOrders.length > 0 ? heldOrders.length : undefined}
             />

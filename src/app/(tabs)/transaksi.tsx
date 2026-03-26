@@ -267,6 +267,7 @@ function VoidRefundModal({
 
 export default function TransaksiPage() {
   const [activeFilter, setActiveFilter] = useState<FilterTab>("Semua");
+  const [searchQuery, setSearchQuery] = useState("");
   const [selectedTx, setSelectedTx] = useState<Transaction | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [storedTxs, setStoredTxs] = useAtom(transactionsAtom);
@@ -274,10 +275,17 @@ export default function TransaksiPage() {
   // Combine mock + real stored transactions
   const allTransactions: Transaction[] = [...storedTxs, ...transactionListMock];
 
-  const filtered =
-    activeFilter === "Semua"
-      ? allTransactions
-      : allTransactions.filter((t) => t.status === activeFilter);
+  const filtered = allTransactions
+    .filter((t) => activeFilter === "Semua" || t.status === activeFilter)
+    .filter((t) => {
+      if (!searchQuery.trim()) return true;
+      const q = searchQuery.toLowerCase();
+      return (
+        t.id.toLowerCase().includes(q) ||
+        (t.table ?? "").toLowerCase().includes(q) ||
+        (t.items ?? "").toLowerCase().includes(q)
+      );
+    });
 
   const totalPendapatan = allTransactions
     .filter((t) => t.status === "Lunas")
@@ -311,7 +319,11 @@ export default function TransaksiPage() {
   const ListHeader = (
     <YStack gap="$3">
       {/* ── Search ── */}
-      <SearchBar placeholder="Cari nomor order atau pelanggan..." />
+      <SearchBar
+        placeholder="Cari nomor order atau pelanggan..."
+        value={searchQuery}
+        onChangeText={setSearchQuery}
+      />
 
       {/* ── Filters ── */}
       <XStack alignItems="center" gap="$2">
@@ -401,10 +413,8 @@ export default function TransaksiPage() {
       {/* ── Header ── */}
       <PageHeader
         title="Riwayat Transaksi"
-        showBack
         actions={
           <>
-            <IconButton iconName="search-outline" />
             <IconButton iconName="options-outline" />
           </>
         }

@@ -51,21 +51,20 @@ export default function HomePage() {
               onPress={() => router.push("/transaksi-baru")}
             />
           ) : (
-            <XStack
-              alignItems="center"
-              justifyContent="center"
-              gap="$2"
-              paddingVertical="$2"
-            >
-              <Ionicons
-                name="cart-outline"
-                size={18}
-                color={ColorNeutral.neutral400}
-              />
-              <TextBodySm color={ColorNeutral.neutral400} fontWeight="500">
-                Mulai Transaksi setelah shift dibuka
-              </TextBodySm>
-            </XStack>
+            <AppButton
+              variant="outline"
+              size="lg"
+              fullWidth
+              title="Buka Shift untuk Mulai Transaksi"
+              icon={
+                <Ionicons
+                  name="sunny-outline"
+                  size={20}
+                  color={ColorNeutral.neutral500}
+                />
+              }
+              onPress={() => router.push("/buka-shift")}
+            />
           )}
 
           <QuickActions isShiftStarted={isShiftStarted} />

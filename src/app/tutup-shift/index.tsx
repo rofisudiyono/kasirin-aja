@@ -83,22 +83,28 @@ export default function TutupShiftPage() {
   }
 
   function handleTutupShift() {
-    Alert.alert(
-      "Tutup Shift",
-      "Yakin ingin menutup shift sekarang? Data shift akan disimpan.",
-      [
-        { text: "Batal", style: "cancel" },
-        {
-          text: "Tutup Shift",
-          style: "destructive",
-          onPress: () => {
-            setIsShiftStarted(false);
-            setShiftData(null);
-            router.replace("/(tabs)/index");
-          },
+    const hasDiscrepancy = selisih !== 0;
+    const title = hasDiscrepancy ? "Perhatian: Ada Selisih Kas!" : "Tutup Shift";
+    const message = hasDiscrepancy
+      ? `Selisih kas: ${selisih >= 0 ? "+" : ""}${formatPrice(selisih)}\n\n${
+          selisih > 0
+            ? "Kas lebih — periksa kembalian yang diberikan ke pelanggan."
+            : "Kas kurang — periksa apakah ada transaksi yang belum tercatat."
+        }\n\nTetap tutup shift?`
+      : "Yakin ingin menutup shift sekarang? Data shift akan disimpan.";
+
+    Alert.alert(title, message, [
+      { text: "Batal", style: "cancel" },
+      {
+        text: hasDiscrepancy ? "Tetap Tutup" : "Tutup Shift",
+        style: "destructive",
+        onPress: () => {
+          setIsShiftStarted(false);
+          setShiftData(null);
+          router.replace("/(tabs)/index");
         },
-      ],
-    );
+      },
+    ]);
   }
 
   return (

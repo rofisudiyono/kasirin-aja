@@ -18,24 +18,42 @@ export function StatusProdukSection({
 }: StatusProdukSectionProps) {
   return (
     <YStack
-      backgroundColor={ColorBase.white}
+      backgroundColor={isActive ? ColorSuccess.success50 : ColorBase.white}
       borderRadius={12}
       padding="$4"
       gap="$3"
+      borderWidth={1.5}
+      borderColor={isActive ? ColorSuccess.success200 : ColorNeutral.neutral200}
     >
       <SectionHeader title="Status Produk" />
 
-      <XStack alignItems="center" justifyContent="space-between">
-        <YStack flex={1} gap={2}>
-          <TextBodyLg
-            fontWeight="700"
-            color={isActive ? ColorSuccess.success600 : ColorNeutral.neutral500}
+      <XStack alignItems="center" justifyContent="space-between" gap="$3">
+        <YStack flex={1} gap={4}>
+          <XStack alignItems="center" gap={6}>
+            <YStack
+              width={8}
+              height={8}
+              borderRadius={4}
+              backgroundColor={
+                isActive ? ColorSuccess.success500 : ColorNeutral.neutral400
+              }
+            />
+            <TextBodyLg
+              fontWeight="700"
+              color={
+                isActive ? ColorSuccess.success600 : ColorNeutral.neutral500
+              }
+            >
+              {isActive ? "Produk Aktif" : "Produk Nonaktif"}
+            </TextBodyLg>
+          </XStack>
+          <TextCaption
+            color={
+              isActive ? ColorSuccess.success700 : ColorNeutral.neutral400
+            }
           >
-            {isActive ? "Produk Aktif" : "Produk Nonaktif"}
-          </TextBodyLg>
-          <TextCaption color={ColorNeutral.neutral400}>
             {isActive
-              ? "Produk akan tampil di kasir"
+              ? "Produk akan tampil di menu kasir"
               : "Produk tidak akan tampil di kasir"}
           </TextCaption>
         </YStack>

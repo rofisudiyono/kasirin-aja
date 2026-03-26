@@ -17,10 +17,7 @@ import { XStack, YStack } from "tamagui";
 
 import { cartAtom, cartSnapshotAtom } from "@/features/cart/store/cart.store";
 import { catalogStockAtom } from "@/features/catalog/store/catalog.store";
-import {
-  mockReceiptItems,
-  storeInfo,
-} from "@/features/payment/api/receipt.data";
+import { storeInfo } from "@/features/payment/api/receipt.data";
 import {
   buildTransaction,
   transactionsAtom,
@@ -100,22 +97,30 @@ export default function PembayaranSuksesPage() {
     }
   }, []);
 
-  // Calculate subtotal from total (reverse: total = (subtotal - discount) * 1.11)
-  const subtotal = mockReceiptItems.reduce((s, item) => s + item.price, 0);
+  // Build receipt items from cart snapshot (real items from the transaction)
+  const receiptItems = cartSnapshot.map((item) => ({
+    name: item.variantLabel
+      ? `${item.productName} (${item.variantLabel})`
+      : item.productName,
+    qty: item.quantity,
+    price: item.unitPrice * item.quantity,
+  }));
+
+  const subtotal = receiptItems.reduce((s, item) => s + item.price, 0);
   const ppn = Math.round((subtotal - discount) * 0.11);
 
   function handleNewTransaction() {
     setCart([]);
-    router.dismissAll();
+    router.replace("/transaksi-baru" as never);
   }
 
   function handleGoHome() {
     setCart([]);
-    router.dismissAll();
+    router.replace("/(tabs)" as never);
   }
 
   function buildReceiptHtml() {
-    const itemsHtml = mockReceiptItems
+    const itemsHtml = receiptItems
       .map(
         (item) =>
           `<tr><td>${item.name} x${item.qty}</td><td style="text-align:right">${formatPrice(item.price)}</td></tr>`,
@@ -185,7 +190,7 @@ export default function PembayaranSuksesPage() {
   }
 
   async function handleShare() {
-    const itemsText = mockReceiptItems
+    const itemsText = receiptItems
       .map((i) => `${i.name} x${i.qty}  ${formatPrice(i.price)}`)
       .join("\n");
     const text = `🧾 STRUK PEMBAYARAN\n${storeInfo.name}\n${storeInfo.address}\n\nNo. Order: ${orderNumber}\n\n${itemsText}\n\nSubtotal: ${formatPrice(subtotal)}\nPPN 11%: ${formatPrice(ppn)}\nTOTAL: ${formatPrice(total)}\nMetode: ${method}\n\nTerima kasih!`;
@@ -272,7 +277,7 @@ export default function PembayaranSuksesPage() {
 
             {/* Items */}
             <YStack gap={8}>
-              {mockReceiptItems.map((item, index) => (
+              {receiptItems.map((item, index) => (
                 <XStack key={index} justifyContent="space-between">
                   <TextBodySm color="$colorSecondary" flex={1}>
                     {item.name} x{item.qty}

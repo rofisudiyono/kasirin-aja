@@ -114,19 +114,14 @@ export default function PilihPembayaranPage() {
           ? "Transfer Bank"
           : "EDC / Kartu";
 
-    const instructionMap: Record<string, string> = {
-      qris: "Minta pelanggan scan QR di atas, lalu konfirmasi pembayaran diterima.",
-      transfer: "Minta pelanggan transfer ke rekening toko, lalu konfirmasi.",
-      edc: "Minta pelanggan tap/gesek kartu di mesin EDC, lalu konfirmasi.",
-    };
-
+    // Confirm payment received — same pattern as cash but without separate page
     Alert.alert(
-      `Konfirmasi ${methodLabel}`,
-      `Total: ${formatPrice(total)}\n\n${instructionMap[selectedMethod] ?? ""}`,
+      "Konfirmasi Pembayaran",
+      `Pastikan pembayaran ${methodLabel} sebesar ${formatPrice(total)} sudah diterima.`,
       [
         { text: "Batal", style: "cancel" },
         {
-          text: "Pembayaran Diterima",
+          text: "Sudah Diterima",
           onPress: () => {
             router.push({
               pathname: "/pembayaran-sukses",

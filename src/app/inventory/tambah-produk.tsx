@@ -10,7 +10,7 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { XStack } from "tamagui";
+import { XStack, YStack } from "tamagui";
 
 import {
   buildProduct,
@@ -22,7 +22,9 @@ import {
   TextCaption,
   TextH3,
 } from "@/components";
-import { ColorBase, ColorNeutral } from "@/themes/Colors";
+import { ColorBase, ColorNeutral, ColorPrimary } from "@/themes/Colors";
+
+const FORM_STEPS = ["Foto", "Info", "Harga", "Varian", "Stok"] as const;
 
 import type {
   TambahProdukCategory,
@@ -207,6 +209,41 @@ export default function TambahProdukPage() {
         />
       </XStack>
 
+      {/* Step indicator strip */}
+      <XStack
+        paddingHorizontal="$4"
+        paddingVertical="$2"
+        gap="$1"
+        backgroundColor={ColorBase.white}
+        borderBottomWidth={StyleSheet.hairlineWidth}
+        borderBottomColor={ColorNeutral.neutral200}
+      >
+        {FORM_STEPS.map((step, idx) => (
+          <YStack key={step} flex={1} alignItems="center" gap={3}>
+            <View
+              style={[
+                stepStyles.dot,
+                {
+                  backgroundColor:
+                    idx === 0
+                      ? ColorPrimary.primary600
+                      : ColorNeutral.neutral200,
+                },
+              ]}
+            />
+            <TextCaption
+              fontSize={9}
+              color={
+                idx === 0 ? ColorPrimary.primary600 : ColorNeutral.neutral400
+              }
+              fontWeight={idx === 0 ? "700" : "400"}
+            >
+              {step}
+            </TextCaption>
+          </YStack>
+        ))}
+      </XStack>
+
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
@@ -299,5 +336,13 @@ const styles = StyleSheet.create({
     paddingBottom: 24,
     borderTopWidth: StyleSheet.hairlineWidth,
     borderTopColor: ColorNeutral.neutral200,
+  },
+});
+
+const stepStyles = StyleSheet.create({
+  dot: {
+    width: "100%",
+    height: 3,
+    borderRadius: 2,
   },
 });

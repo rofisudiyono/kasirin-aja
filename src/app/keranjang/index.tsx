@@ -42,11 +42,8 @@ export default function KeranjangPage() {
   const [orderType, setOrderType] = useState<OrderType>("Dine In");
 
   const [promoCode, setPromoCode] = useState("");
-  const [appliedPromo, setAppliedPromo] = useState<AppliedPromo | null>({
-    code: "DISKON10",
-    ...promoDefinitions.DISKON10,
-  });
-  const [promoEnabled, setPromoEnabled] = useState(true);
+  const [appliedPromo, setAppliedPromo] = useState<AppliedPromo | null>(null);
+  const [promoEnabled, setPromoEnabled] = useState(false);
 
   const totalItems = cart.reduce((s, c) => s + c.quantity, 0);
   const subtotal = cart.reduce((s, c) => s + c.unitPrice * c.quantity, 0);
@@ -125,6 +122,13 @@ export default function KeranjangPage() {
         contentContainerStyle={{ paddingBottom: 120 }}
       >
         <YStack paddingHorizontal={16} gap={12} paddingTop={8}>
+          <CartItemsCard
+            cart={cart}
+            onUpdateQty={handleUpdateQty}
+            onRemove={handleRemove}
+            onUpdateNote={handleUpdateNote}
+          />
+
           <CustomerInfoCard
             customerName={customerName}
             onCustomerNameChange={setCustomerName}
@@ -132,13 +136,6 @@ export default function KeranjangPage() {
             onTableNumberChange={setTableNumber}
             orderType={orderType}
             onOrderTypeChange={setOrderType}
-          />
-
-          <CartItemsCard
-            cart={cart}
-            onUpdateQty={handleUpdateQty}
-            onRemove={handleRemove}
-            onUpdateNote={handleUpdateNote}
           />
 
           <PromoCard

@@ -6,7 +6,9 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Separator, XStack, YStack } from "tamagui";
 
 import { SettingRow } from "@/features/settings/components/SettingRow";
+import { isShiftStartedAtom } from "@/features/shift/store/shift.store";
 import { useAuth } from "@/lib/auth";
+import { useAtomValue } from "jotai";
 import {
   AppButton,
   IconButton,
@@ -31,6 +33,7 @@ import type { IoniconName } from "@/types";
 export default function PengaturanPage() {
   const { logout } = useAuth();
   const router = useRouter();
+  const isShiftStarted = useAtomValue(isShiftStartedAtom);
   const [scannerEnabled, setScannerEnabled] = React.useState(true);
   const [autoPrint, setAutoPrint] = React.useState(false);
 
@@ -105,8 +108,8 @@ export default function PengaturanPage() {
               paddingVertical="$2"
             >
               {[
-                { label: "Shift Hari Ini", value: "Belum d..." },
-                { label: "Printer", value: "Terhub..." },
+                { label: "Shift Hari Ini", value: isShiftStarted ? "Berjalan" : "Belum Dibuka" },
+                { label: "Printer", value: "Terhubung" },
                 { label: "Versi App", value: "v2.4.1" },
               ].map((item, idx) => (
                 <React.Fragment key={item.label}>
@@ -121,7 +124,7 @@ export default function PengaturanPage() {
                     <TextMicro color={ColorPrimary.primary200}>
                       {item.label}
                     </TextMicro>
-                    <TextBodySm fontWeight="700" color={ColorBase.white}>
+                    <TextBodySm fontWeight="700" color={ColorBase.white} numberOfLines={1}>
                       {item.value}
                     </TextBodySm>
                   </YStack>

@@ -43,6 +43,14 @@ export default function BukaShiftPage() {
   const router = useRouter();
   const [inputValue, setInputValue] = useState("500000");
   const [note, setNote] = useState("");
+
+  const now = new Date();
+  const currentDateTime = now.toLocaleDateString("id-ID", {
+    weekday: "long",
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  }) + " • " + now.toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" }) + " WIB";
   const [, setIsShiftStarted] = useAtom(isShiftStartedAtom);
   const [, setShiftData] = useAtom(shiftDataAtom);
 
@@ -115,7 +123,7 @@ export default function BukaShiftPage() {
                 Toko Makmur
               </TextBodySm>
               <TextBodySm color={ColorNeutral.neutral400}>
-                Senin, 24 Mar 2025 • 08:00 WIB
+                {currentDateTime}
               </TextBodySm>
             </YStack>
           </YStack>
