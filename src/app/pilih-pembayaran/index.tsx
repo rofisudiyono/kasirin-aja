@@ -15,6 +15,7 @@ import { XStack, YStack } from "tamagui";
 import { paymentMethodOptions } from "@/features/payment/api/payment.data";
 import { PaymentMethodCard } from "@/features/payment/components/PaymentMethodCard";
 import {
+  AppButton,
   PageHeader,
   QRCodePlaceholder,
   TextBodyLg,
@@ -257,15 +258,13 @@ export default function PilihPembayaranPage() {
 
   // ── Process button ────────────────────────────────────────────────────────
   const processButton = (
-    <TouchableOpacity
-      activeOpacity={0.85}
-      style={styles.processBtn}
+    <AppButton
+      variant="primary"
+      size="lg"
+      fullWidth
+      title="Proses Pembayaran"
       onPress={handleProcess}
-    >
-      <TextBodyLg fontWeight="700" color={ColorBase.white}>
-        Proses Pembayaran
-      </TextBodyLg>
-    </TouchableOpacity>
+    />
   );
 
   // ── Tablet: 2-column layout ────────────────────────────────────────────────
@@ -445,13 +444,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginTop: 1,
-  },
-  processBtn: {
-    backgroundColor: ColorPrimary.primary600,
-    borderRadius: 14,
-    height: 52,
-    alignItems: "center",
-    justifyContent: "center",
   },
   bottomBar: {
     position: "absolute",

@@ -6,7 +6,6 @@ export function useDeviceLayout() {
   const { width, height } = useWindowDimensions();
   const isTablet = height >= TABLET_BREAKPOINT;
   const isLandscape = width > height;
-  console.log(width, height, isTablet, isLandscape, "<<<<<");
   return {
     isTablet,
     isPhone: !isTablet,

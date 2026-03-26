@@ -1,14 +1,11 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
+import { useAtomValue } from "jotai";
 import React from "react";
-import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
+import { ScrollView, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Separator, XStack, YStack } from "tamagui";
 
-import { SettingRow } from "@/features/settings/components/SettingRow";
-import { isShiftStartedAtom } from "@/features/shift/store/shift.store";
-import { useAuth } from "@/lib/auth";
-import { useAtomValue } from "jotai";
 import {
   AppButton,
   IconButton,
@@ -19,6 +16,10 @@ import {
   TextH3,
   TextMicro,
 } from "@/components";
+import { SettingRow } from "@/features/settings/components/SettingRow";
+import { isShiftStartedAtom } from "@/features/shift/store/shift.store";
+import { useAuth } from "@/lib/auth";
+import { useDeviceLayout } from "@/hooks/useDeviceLayout";
 import {
   ColorAccentOrange,
   ColorAccentPurple,
@@ -28,7 +29,6 @@ import {
   ColorPrimary,
   ColorWarning,
 } from "@/themes/Colors";
-import { useDeviceLayout } from "@/hooks/useDeviceLayout";
 import type { IoniconName } from "@/types";
 
 export default function PengaturanPage() {
@@ -44,7 +44,27 @@ export default function PengaturanPage() {
     router.replace("/login");
   };
 
-  // ── Shared: User profile card ──────────────────────────────────────────────
+  // ── Shared: page header ────────────────────────────────────────────────────
+  const pageHeader = (
+    <XStack
+      paddingHorizontal="$4"
+      paddingTop="$3"
+      paddingBottom="$3"
+      alignItems="center"
+    >
+      <YStack flex={1} gap={2}>
+        <TextBodyLg fontWeight="700" fontSize={18}>
+          Pengaturan
+        </TextBodyLg>
+        <TextBodySm color="$colorSecondary">
+          Kelola toko, perangkat, dan preferensi aplikasi kasir
+        </TextBodySm>
+      </YStack>
+      <IconButton iconName="notifications-outline" size={40} />
+    </XStack>
+  );
+
+  // ── Shared: user profile card ──────────────────────────────────────────────
   const userProfileCard = (
     <YStack
       backgroundColor={ColorPrimary.primary600}
@@ -86,7 +106,10 @@ export default function PengaturanPage() {
         paddingVertical="$2"
       >
         {[
-          { label: "Shift Hari Ini", value: isShiftStarted ? "Berjalan" : "Belum Dibuka" },
+          {
+            label: "Shift Hari Ini",
+            value: isShiftStarted ? "Berjalan" : "Belum Dibuka",
+          },
           { label: "Printer", value: "Terhubung" },
           { label: "Versi App", value: "v2.4.1" },
         ].map((item, idx) => (
@@ -99,10 +122,12 @@ export default function PengaturanPage() {
               />
             )}
             <YStack flex={1} gap={2}>
-              <TextMicro color={ColorPrimary.primary200}>
-                {item.label}
-              </TextMicro>
-              <TextBodySm fontWeight="700" color={ColorBase.white} numberOfLines={1}>
+              <TextMicro color={ColorPrimary.primary200}>{item.label}</TextMicro>
+              <TextBodySm
+                fontWeight="700"
+                color={ColorBase.white}
+                numberOfLines={1}
+              >
                 {item.value}
               </TextBodySm>
             </YStack>
@@ -300,6 +325,17 @@ export default function PengaturanPage() {
     </SectionCard>
   );
 
+  const logoutFooter = (
+    <>
+      <AppButton variant="danger" fullWidth onPress={handleLogout}>
+        Keluar dari akun
+      </AppButton>
+      <TextBodySm color="$colorTertiary" textAlign="center">
+        Aplikasi Kasir • Versi 2.4.1
+      </TextBodySm>
+    </>
+  );
+
   // ── Tablet: 2-column layout ────────────────────────────────────────────────
   if (isTablet) {
     return (
@@ -307,24 +343,7 @@ export default function PengaturanPage() {
         edges={["top"]}
         style={{ flex: 1, backgroundColor: ColorBase.bgScreen }}
       >
-        {/* Header */}
-        <XStack
-          paddingHorizontal="$4"
-          paddingTop="$3"
-          paddingBottom="$3"
-          alignItems="center"
-        >
-          <YStack flex={1} gap={2}>
-            <TextBodyLg fontWeight="700" fontSize={18}>
-              Pengaturan
-            </TextBodyLg>
-            <TextBodySm color="$colorSecondary">
-              Kelola toko, perangkat, dan preferensi aplikasi kasir
-            </TextBodySm>
-          </YStack>
-          <IconButton iconName="notifications-outline" size={40} />
-        </XStack>
-
+        {pageHeader}
         <ScrollView showsVerticalScrollIndicator={false}>
           <XStack
             gap="$4"
@@ -332,21 +351,13 @@ export default function PengaturanPage() {
             paddingBottom="$6"
             alignItems="flex-start"
           >
-            {/* Left column: profile + quick access + operasional + lainnya */}
             <YStack flex={1} gap="$4">
               {userProfileCard}
               {quickAccessCards}
               {settingsOperasional}
               {settingsLainnya}
-              <AppButton variant="danger" fullWidth onPress={handleLogout}>
-                Keluar dari akun
-              </AppButton>
-              <TextBodySm color="$colorTertiary" textAlign="center">
-                Aplikasi Kasir • Versi 2.4.1
-              </TextBodySm>
+              {logoutFooter}
             </YStack>
-
-            {/* Right column: umum + perangkat */}
             <YStack flex={1} gap="$4">
               {settingsUmum}
               {settingsPerangkat}
@@ -363,24 +374,7 @@ export default function PengaturanPage() {
       edges={["top"]}
       style={{ flex: 1, backgroundColor: ColorBase.bgScreen }}
     >
-      {/* ── Header ── */}
-      <XStack
-        paddingHorizontal="$4"
-        paddingTop="$3"
-        paddingBottom="$3"
-        alignItems="center"
-      >
-        <YStack flex={1} gap={2}>
-          <TextBodyLg fontWeight="700" fontSize={18}>
-            Pengaturan
-          </TextBodyLg>
-          <TextBodySm color="$colorSecondary">
-            Kelola toko, perangkat, dan preferensi aplikasi kasir
-          </TextBodySm>
-        </YStack>
-        <IconButton iconName="notifications-outline" size={40} />
-      </XStack>
-
+      {pageHeader}
       <ScrollView showsVerticalScrollIndicator={false}>
         <YStack gap="$4" paddingHorizontal="$4" paddingBottom="$6">
           {userProfileCard}
@@ -389,16 +383,9 @@ export default function PengaturanPage() {
           {settingsPerangkat}
           {settingsOperasional}
           {settingsLainnya}
-          <AppButton variant="danger" fullWidth onPress={handleLogout}>
-            Keluar dari akun
-          </AppButton>
-          <TextBodySm color="$colorTertiary" textAlign="center">
-            Aplikasi Kasir • Versi 2.4.1
-          </TextBodySm>
+          {logoutFooter}
         </YStack>
       </ScrollView>
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({});

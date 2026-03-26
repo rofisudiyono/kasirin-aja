@@ -2,19 +2,15 @@ import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useAtom, useAtomValue } from "jotai";
 import React, { useState } from "react";
-import { Alert, ScrollView, StyleSheet, View } from "react-native";
+import { Alert, ScrollView, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { XStack, YStack } from "tamagui";
 
 import {
-  isShiftStartedAtom,
-  shiftDataAtom,
-} from "@/features/shift/store/shift.store";
-import { transactionsAtom } from "@/features/transactions/store/transaction.store";
-import {
   AppButton,
+  BottomBar,
   DottedSeparator,
-  NumpadButton,
+  NumpadGrid,
   PageHeader,
   TextBodyLg,
   TextBodySm,
@@ -22,6 +18,12 @@ import {
   TextH1,
   TextH3,
 } from "@/components";
+import { ShiftInfoBox } from "@/features/shift/components/ShiftInfoBox";
+import {
+  isShiftStartedAtom,
+  shiftDataAtom,
+} from "@/features/shift/store/shift.store";
+import { transactionsAtom } from "@/features/transactions/store/transaction.store";
 import {
   ColorBase,
   ColorDanger,
@@ -32,13 +34,6 @@ import {
   ColorWarning,
 } from "@/themes/Colors";
 import { formatPrice } from "@/utils";
-
-const NUMPAD_ROWS = [
-  ["1", "2", "3"],
-  ["4", "5", "6"],
-  ["7", "8", "9"],
-  ["000", "0", "DEL"],
-];
 
 export default function TutupShiftPage() {
   const router = useRouter();
@@ -51,11 +46,10 @@ export default function TutupShiftPage() {
 
   const kasAkhir = Number(inputValue);
 
-  // Compute shift stats from store
+  // Compute shift stats
   const shiftTxs = transactions.filter((t) => t.status === "Lunas");
   const totalPendapatan = shiftTxs.reduce((sum, t) => {
-    const raw = t.amount.replace(/[^0-9]/g, "");
-    return sum + Number(raw);
+    return sum + Number(t.amount.replace(/[^0-9]/g, ""));
   }, 0);
   const totalTransaksi = transactions.length;
   const totalVoid = transactions.filter((t) => t.status === "Void").length;
@@ -135,16 +129,19 @@ export default function TutupShiftPage() {
               </TextBodyLg>
             </XStack>
             <XStack gap={8}>
-              <InfoBox label="Mulai" value={shiftData?.startTime ?? "-"} />
-              <InfoBox label="Kasir" value={shiftData?.cashierName ?? "-"} />
+              <ShiftInfoBox label="Mulai" value={shiftData?.startTime ?? "-"} />
+              <ShiftInfoBox label="Kasir" value={shiftData?.cashierName ?? "-"} />
             </XStack>
             <XStack gap={8}>
-              <InfoBox label="Total Transaksi" value={String(totalTransaksi)} />
-              <InfoBox
+              <ShiftInfoBox
+                label="Total Transaksi"
+                value={String(totalTransaksi)}
+              />
+              <ShiftInfoBox
                 label="Pendapatan"
                 value={`Rp ${totalPendapatan.toLocaleString("id-ID")}`}
               />
-              <InfoBox
+              <ShiftInfoBox
                 label="Void"
                 value={String(totalVoid)}
                 valueColor={ColorDanger.danger400}
@@ -173,38 +170,7 @@ export default function TutupShiftPage() {
               </TextH1>
             </YStack>
 
-            {/* Numpad */}
-            <YStack gap={8}>
-              {NUMPAD_ROWS.map((row, rowIndex) => (
-                <View key={rowIndex} style={styles.numpadRow}>
-                  {row.map((key) =>
-                    key === "DEL" ? (
-                      <NumpadButton
-                        key="DEL"
-                        label=""
-                        bgColor={ColorDanger.danger75}
-                        onPress={() => handleNumpad("DEL")}
-                        isIcon
-                      />
-                    ) : key === "000" ? (
-                      <NumpadButton
-                        key="000"
-                        label="000"
-                        bgColor="#EEF2FF"
-                        textColor={ColorPrimary.primary600}
-                        onPress={() => handleNumpad("000")}
-                      />
-                    ) : (
-                      <NumpadButton
-                        key={key}
-                        label={key}
-                        onPress={() => handleNumpad(key)}
-                      />
-                    ),
-                  )}
-                </View>
-              ))}
-            </YStack>
+            <NumpadGrid onPress={handleNumpad} />
           </YStack>
 
           {/* Rekonsiliasi */}
@@ -218,12 +184,8 @@ export default function TutupShiftPage() {
           >
             <TextH3 fontWeight="700">Rekonsiliasi Kas</TextH3>
             <XStack justifyContent="space-between">
-              <TextBodySm color={ColorNeutral.neutral600}>
-                Modal Awal
-              </TextBodySm>
-              <TextBodySm fontWeight="600">
-                {formatPrice(openingCash)}
-              </TextBodySm>
+              <TextBodySm color={ColorNeutral.neutral600}>Modal Awal</TextBodySm>
+              <TextBodySm fontWeight="600">{formatPrice(openingCash)}</TextBodySm>
             </XStack>
             <XStack justifyContent="space-between">
               <TextBodySm color={ColorNeutral.neutral600}>
@@ -238,14 +200,10 @@ export default function TutupShiftPage() {
               <TextBodySm color={ColorNeutral.neutral600}>
                 Kas Seharusnya
               </TextBodySm>
-              <TextBodySm fontWeight="700">
-                {formatPrice(expectedCash)}
-              </TextBodySm>
+              <TextBodySm fontWeight="700">{formatPrice(expectedCash)}</TextBodySm>
             </XStack>
             <XStack justifyContent="space-between">
-              <TextBodySm color={ColorNeutral.neutral600}>
-                Kas Aktual
-              </TextBodySm>
+              <TextBodySm color={ColorNeutral.neutral600}>Kas Aktual</TextBodySm>
               <TextBodySm fontWeight="700">{formatPrice(kasAkhir)}</TextBodySm>
             </XStack>
             <XStack
@@ -307,8 +265,7 @@ export default function TutupShiftPage() {
         </YStack>
       </ScrollView>
 
-      {/* Bottom CTA */}
-      <View style={styles.bottomBar}>
+      <BottomBar absolute paddingBottom={28}>
         <AppButton
           variant="danger"
           size="lg"
@@ -326,37 +283,8 @@ export default function TutupShiftPage() {
         >
           Laporan shift akan tersimpan otomatis
         </TextCaption>
-      </View>
+      </BottomBar>
     </SafeAreaView>
-  );
-}
-
-function InfoBox({
-  label,
-  value,
-  valueColor,
-}: {
-  label: string;
-  value: string;
-  valueColor?: string;
-}) {
-  return (
-    <YStack
-      flex={1}
-      backgroundColor="rgba(255,255,255,0.15)"
-      borderRadius={10}
-      padding={12}
-      gap={4}
-    >
-      <TextBodySm color={ColorPrimary.primary200}>{label}</TextBodySm>
-      <TextBodyLg
-        fontWeight="700"
-        color={(valueColor as string) ?? ColorBase.white}
-        numberOfLines={1}
-      >
-        {value}
-      </TextBodyLg>
-    </YStack>
   );
 }
 
@@ -364,22 +292,5 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: ColorBase.bgScreen,
-  },
-  numpadRow: {
-    height: 54,
-    flexDirection: "row",
-    gap: 8,
-  },
-  bottomBar: {
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-    right: 0,
-    backgroundColor: ColorBase.white,
-    paddingHorizontal: 16,
-    paddingTop: 14,
-    paddingBottom: 28,
-    borderTopWidth: StyleSheet.hairlineWidth,
-    borderTopColor: ColorNeutral.neutral200,
   },
 });

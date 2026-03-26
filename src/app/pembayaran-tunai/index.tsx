@@ -7,7 +7,7 @@ import { XStack, YStack } from "tamagui";
 
 import {
   AppButton,
-  NumpadButton,
+  NumpadGrid,
   PageHeader,
   SuggestionChip,
   TextBody,
@@ -15,15 +15,12 @@ import {
   TextCaption,
   TextH1,
 } from "@/components";
-import { cashNumpadRows } from "@/features/payment/api/payment.data";
 import { useDeviceLayout } from "@/hooks/useDeviceLayout";
 import {
   ColorBase,
-  ColorDanger,
   ColorGreen,
   ColorNeutral,
   ColorPrimary,
-  ColorSky,
 } from "@/themes/Colors";
 import { formatPrice, getCashSuggestions } from "@/utils";
 
@@ -88,43 +85,6 @@ export default function PembayaranTunaiPage() {
       },
     });
   }
-
-  // ── Shared: numpad section ─────────────────────────────────────────────────
-  const numpadSection = (
-    <View>
-      <View style={styles.numpad}>
-        {cashNumpadRows.map((row, rowIndex) => (
-          <View key={rowIndex} style={styles.numpadRow}>
-            {row.map((key) =>
-              key === "DEL" ? (
-                <NumpadButton
-                  key="DEL"
-                  label=""
-                  bgColor={ColorDanger.danger75}
-                  onPress={() => handleNumpad("DEL")}
-                  isIcon
-                />
-              ) : key === "000" ? (
-                <NumpadButton
-                  key="000"
-                  label="000"
-                  bgColor={ColorSky.indigo50}
-                  textColor={ColorPrimary.primary600}
-                  onPress={() => handleNumpad("000")}
-                />
-              ) : (
-                <NumpadButton
-                  key={key}
-                  label={key}
-                  onPress={() => handleNumpad(key)}
-                />
-              ),
-            )}
-          </View>
-        ))}
-      </View>
-    </View>
-  );
 
   // ── Shared: info section ───────────────────────────────────────────────────
   const infoSection = (
@@ -212,6 +172,34 @@ export default function PembayaranTunaiPage() {
     </YStack>
   );
 
+  // ── Shared: bottom action ──────────────────────────────────────────────────
+  const bottomAction = (
+    <>
+      <AppButton
+        title="Konfirmasi Pembayaran"
+        variant="success"
+        onPress={handleConfirm}
+        disabled={!isEnough}
+      />
+      <TextCaption
+        color={ColorNeutral.neutral500}
+        textAlign="center"
+        marginTop={6}
+      >
+        Kembalian akan otomatis tercatat
+      </TextCaption>
+      <TouchableOpacity
+        onPress={() => router.back()}
+        style={styles.batalBtn}
+        activeOpacity={0.7}
+      >
+        <TextBody fontWeight="700" color={ColorNeutral.neutral700} letterSpacing={1}>
+          BATAL
+        </TextBody>
+      </TouchableOpacity>
+    </>
+  );
+
   // ── Tablet: 2-column layout ────────────────────────────────────────────────
   if (isTablet) {
     return (
@@ -223,8 +211,7 @@ export default function PembayaranTunaiPage() {
         />
 
         <XStack flex={1}>
-          {/* Left: numpad */}
-
+          {/* Left: info */}
           <ScrollView
             style={styles.tabletInfoPanel}
             showsVerticalScrollIndicator={false}
@@ -235,37 +222,13 @@ export default function PembayaranTunaiPage() {
 
           {/* Divider */}
           <View style={styles.tabletDivider} />
-          {/* Right: info */}
+
+          {/* Right: numpad + action */}
           <View style={styles.tabletNumpadPanel}>
-            <View style={styles.tabletNumpadContent}>{numpadSection}</View>
-            <View style={styles.tabletBottomBar}>
-              <AppButton
-                title="Konfirmasi Pembayaran"
-                variant="success"
-                onPress={handleConfirm}
-                disabled={!isEnough}
-              />
-              <TextCaption
-                color={ColorNeutral.neutral500}
-                textAlign="center"
-                marginTop={6}
-              >
-                Kembalian akan otomatis tercatat
-              </TextCaption>
-              <TouchableOpacity
-                onPress={() => router.back()}
-                style={styles.batalBtn}
-                activeOpacity={0.7}
-              >
-                <TextBody
-                  fontWeight="700"
-                  color={ColorNeutral.neutral700}
-                  letterSpacing={1}
-                >
-                  BATAL
-                </TextBody>
-              </TouchableOpacity>
+            <View style={styles.tabletNumpadContent}>
+              <NumpadGrid onPress={handleNumpad} />
             </View>
+            <View style={styles.bottomBar}>{bottomAction}</View>
           </View>
         </XStack>
       </SafeAreaView>
@@ -282,132 +245,11 @@ export default function PembayaranTunaiPage() {
       />
 
       <View style={styles.content}>
-        {/* Total display */}
-        <YStack alignItems="center" gap={2}>
-          <TextBodySm
-            color={ColorNeutral.neutral500}
-            fontWeight="600"
-            letterSpacing={0.5}
-          >
-            TOTAL YANG HARUS DIBAYAR
-          </TextBodySm>
-          <TextH1
-            fontWeight="700"
-            color={ColorPrimary.primary600}
-            fontSize={26}
-          >
-            {formatPrice(total)}
-          </TextH1>
-        </YStack>
-
-        {/* Received amount display */}
-        <YStack alignItems="center" marginTop={8}>
-          <TextBodySm color={ColorNeutral.neutral500} fontWeight="500">
-            Uang Diterima
-          </TextBodySm>
-          <TextH1
-            fontWeight="800"
-            marginTop={2}
-            color={ColorNeutral.neutral900}
-          >
-            {formatPrice(receivedAmount)}
-          </TextH1>
-          <View style={styles.inputUnderline} />
-        </YStack>
-
-        {/* Suggestion chips */}
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          style={{ marginTop: 10 }}
-          contentContainerStyle={styles.chipsContainer}
-        >
-          {suggestions.map((amount) => (
-            <SuggestionChip
-              key={amount}
-              amount={amount}
-              selected={receivedAmount === amount}
-              onPress={() => handleSuggestion(amount)}
-            />
-          ))}
-        </ScrollView>
-
-        {/* Info card */}
-        <View style={styles.infoCard}>
-          <XStack justifyContent="space-between" alignItems="center">
-            <TextBodySm color={ColorNeutral.neutral700}>
-              Total Tagihan
-            </TextBodySm>
-            <TextBodySm fontWeight="600" color={ColorNeutral.neutral700}>
-              {formatPrice(total)}
-            </TextBodySm>
-          </XStack>
-          <XStack
-            justifyContent="space-between"
-            alignItems="center"
-            marginTop={6}
-          >
-            <TextBodySm color={ColorNeutral.neutral700}>
-              Uang Diterima
-            </TextBodySm>
-            <TextBodySm fontWeight="600" color={ColorNeutral.neutral700}>
-              {formatPrice(receivedAmount)}
-            </TextBodySm>
-          </XStack>
-          <View style={styles.divider} />
-          <XStack justifyContent="space-between" alignItems="center">
-            <TextBody fontWeight="700" color={ColorGreen.green600}>
-              Kembalian
-            </TextBody>
-            <XStack alignItems="center" gap={6}>
-              {isEnough && (
-                <View style={styles.checkBadge}>
-                  <Ionicons
-                    name="checkmark"
-                    size={12}
-                    color={ColorGreen.green600}
-                  />
-                </View>
-              )}
-              <TextBody fontWeight="800" color={ColorGreen.green600}>
-                {isEnough ? formatPrice(change) : "Rp 0"}
-              </TextBody>
-            </XStack>
-          </XStack>
-        </View>
-
-        {numpadSection}
+        {infoSection}
+        <NumpadGrid onPress={handleNumpad} />
       </View>
 
-      {/* Bottom action */}
-      <View style={styles.bottomBar}>
-        <AppButton
-          title="Konfirmasi Pembayaran"
-          variant="success"
-          onPress={handleConfirm}
-          disabled={!isEnough}
-        />
-        <TextCaption
-          color={ColorNeutral.neutral500}
-          textAlign="center"
-          marginTop={6}
-        >
-          Kembalian akan otomatis tercatat
-        </TextCaption>
-        <TouchableOpacity
-          onPress={() => router.back()}
-          style={styles.batalBtn}
-          activeOpacity={0.7}
-        >
-          <TextBody
-            fontWeight="700"
-            color={ColorNeutral.neutral700}
-            letterSpacing={1}
-          >
-            BATAL
-          </TextBody>
-        </TouchableOpacity>
-      </View>
+      <View style={styles.bottomBar}>{bottomAction}</View>
     </SafeAreaView>
   );
 }
@@ -421,6 +263,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 16,
     paddingTop: 12,
+    gap: 10,
   },
   inputUnderline: {
     width: 220,
@@ -437,7 +280,6 @@ const styles = StyleSheet.create({
     backgroundColor: ColorGreen.green75,
     borderRadius: 16,
     padding: 12,
-    marginTop: 10,
   },
   divider: {
     height: 1,
@@ -453,15 +295,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderWidth: 1,
     borderColor: ColorGreen.green600,
-  },
-  numpad: {
-    marginVertical: 10,
-    gap: 8,
-  },
-  numpadRow: {
-    height: 54,
-    flexDirection: "row",
-    gap: 8,
   },
   bottomBar: {
     backgroundColor: ColorBase.white,
@@ -484,14 +317,6 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 16,
     paddingTop: 12,
-  },
-  tabletBottomBar: {
-    backgroundColor: ColorBase.white,
-    paddingHorizontal: 16,
-    paddingTop: 14,
-    paddingBottom: 24,
-    borderTopWidth: StyleSheet.hairlineWidth,
-    borderTopColor: ColorNeutral.neutral200,
   },
   tabletDivider: {
     width: 1,

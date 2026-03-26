@@ -1,10 +1,16 @@
 import { useRouter } from "expo-router";
 import { useAtom } from "jotai";
 import React, { useEffect, useState } from "react";
-import { ScrollView, StyleSheet, View, useWindowDimensions } from "react-native";
+import {
+  ScrollView,
+  StyleSheet,
+  View,
+  useWindowDimensions,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { YStack } from "tamagui";
 
+import { IconButton, PageHeader } from "@/components";
 import {
   cartAtom,
   heldOrdersAtom,
@@ -22,7 +28,6 @@ import {
   VariantSheet,
 } from "@/features/transactions/components/transaksi-baru";
 import { useDeviceLayout } from "@/hooks/useDeviceLayout";
-import { IconButton, PageHeader } from "@/components";
 import { ColorBase, ColorNeutral } from "@/themes/Colors";
 import type { CatalogProduct, CategoryFilter } from "@/types";
 
@@ -110,7 +115,7 @@ export default function TransaksiBaruPage() {
       <PageHeader
         title="Transaksi Baru"
         showBack
-        onBack={() => router.back()}
+        onBack={() => router.push("/(tabs)")}
         actions={
           <>
             <IconButton

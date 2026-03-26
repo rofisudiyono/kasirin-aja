@@ -41,3 +41,6 @@ export {
   TextH3,
   TextMicro,
 } from "./Typography";
+
+export { NumpadGrid } from "./NumpadGrid";
+export type { } from "./NumpadGrid";

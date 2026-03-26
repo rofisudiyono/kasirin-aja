@@ -2,17 +2,14 @@ import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useAtom } from "jotai";
 import React, { useState } from "react";
-import { StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
+import { StyleSheet, TextInput, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ScrollView, XStack, YStack } from "tamagui";
 
 import {
-  isShiftStartedAtom,
-  shiftDataAtom,
-} from "@/features/shift/store/shift.store";
-import {
   AppButton,
-  NumpadButton,
+  BottomBar,
+  NumpadGrid,
   PageHeader,
   TextBodySm,
   TextCaption,
@@ -20,39 +17,37 @@ import {
   TextH3,
 } from "@/components";
 import {
+  isShiftStartedAtom,
+  shiftDataAtom,
+} from "@/features/shift/store/shift.store";
+import {
   ColorBase,
-  ColorDanger,
-  ColorIconGradient,
   ColorNeutral,
   ColorPrimary,
-  ColorSky,
   ColorWarning,
 } from "@/themes/Colors";
 import { formatPrice } from "@/utils";
 
 const PRESET_AMOUNTS = [200_000, 500_000, 1_000_000];
 
-const NUMPAD_ROWS = [
-  ["1", "2", "3"],
-  ["4", "5", "6"],
-  ["7", "8", "9"],
-  ["000", "0", "DEL"],
-];
-
 export default function BukaShiftPage() {
   const router = useRouter();
   const [inputValue, setInputValue] = useState("500000");
   const [note, setNote] = useState("");
-
-  const now = new Date();
-  const currentDateTime = now.toLocaleDateString("id-ID", {
-    weekday: "long",
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-  }) + " • " + now.toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" }) + " WIB";
   const [, setIsShiftStarted] = useAtom(isShiftStartedAtom);
   const [, setShiftData] = useAtom(shiftDataAtom);
+
+  const now = new Date();
+  const currentDateTime =
+    now.toLocaleDateString("id-ID", {
+      weekday: "long",
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    }) +
+    " • " +
+    now.toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" }) +
+    " WIB";
 
   const amount = Number(inputValue);
 
@@ -78,10 +73,11 @@ export default function BukaShiftPage() {
   }
 
   function handleMulaiShift() {
-    const now = new Date();
     const startTime =
-      now.toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" }) +
-      " WIB";
+      new Date().toLocaleTimeString("id-ID", {
+        hour: "2-digit",
+        minute: "2-digit",
+      }) + " WIB";
     setShiftData({
       openingCash: amount,
       startTime,
@@ -100,11 +96,14 @@ export default function BukaShiftPage() {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ flexGrow: 1 }}
       >
-        <View style={styles.content}>
-          {/* ── Icon ── */}
-          <YStack alignItems="center" gap="$3" marginBottom="$4">
+        <YStack flex={1} paddingHorizontal={16} paddingTop={8} gap="$4">
+          {/* ── Welcome ── */}
+          <YStack alignItems="center" gap="$3">
             <YStack
-              style={styles.sunCircle}
+              width={80}
+              height={80}
+              borderRadius={40}
+              backgroundColor={ColorWarning.warning100}
               alignItems="center"
               justifyContent="center"
             >
@@ -134,7 +133,6 @@ export default function BukaShiftPage() {
             borderRadius={16}
             padding="$4"
             gap="$3"
-            marginBottom="$3"
             borderWidth={1}
             borderColor={ColorNeutral.neutral200}
           >
@@ -190,41 +188,12 @@ export default function BukaShiftPage() {
           </YStack>
 
           {/* ── Numpad ── */}
-          <View style={styles.numpad}>
-            {NUMPAD_ROWS.map((row, rowIndex) => (
-              <View key={rowIndex} style={styles.numpadRow}>
-                {row.map((key) =>
-                  key === "DEL" ? (
-                    <NumpadButton
-                      key="DEL"
-                      label=""
-                      bgColor={ColorDanger.danger75}
-                      onPress={() => handleNumpad("DEL")}
-                      isIcon
-                    />
-                  ) : key === "000" ? (
-                    <NumpadButton
-                      key="000"
-                      label="000"
-                      bgColor={ColorSky.indigo50}
-                      textColor={ColorPrimary.primary600}
-                      onPress={() => handleNumpad("000")}
-                    />
-                  ) : (
-                    <NumpadButton
-                      key={key}
-                      label={key}
-                      onPress={() => handleNumpad(key)}
-                    />
-                  ),
-                )}
-              </View>
-            ))}
-          </View>
-        </View>
+          <NumpadGrid onPress={handleNumpad} />
+        </YStack>
       </ScrollView>
+
       {/* ── Bottom CTA ── */}
-      <View style={styles.bottomBar}>
+      <BottomBar>
         <AppButton
           variant="success"
           size="lg"
@@ -242,7 +211,7 @@ export default function BukaShiftPage() {
         >
           Shift akan tercatat otomatis
         </TextCaption>
-      </View>
+      </BottomBar>
     </SafeAreaView>
   );
 }
@@ -251,27 +220,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: ColorBase.bgScreen,
-  },
-  content: {
-    flex: 1,
-    paddingHorizontal: 16,
-    paddingTop: 8,
-  },
-  storeIconWrap: {
-    width: 48,
-    height: 48,
-    borderRadius: 14,
-    backgroundColor: ColorIconGradient.iconBg,
-    alignItems: "center",
-    justifyContent: "center",
-    alignSelf: "center",
-  },
-  sunCircle: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    backgroundColor: ColorWarning.warning100,
-    alignSelf: "center",
   },
   presetChip: {
     paddingHorizontal: 14,
@@ -295,22 +243,5 @@ const styles = StyleSheet.create({
     fontFamily: "System",
     fontSize: 14,
     color: ColorNeutral.neutral800,
-  },
-  numpad: {
-    marginVertical: 8,
-    gap: 8,
-  },
-  numpadRow: {
-    height: 54,
-    flexDirection: "row",
-    gap: 8,
-  },
-  bottomBar: {
-    backgroundColor: ColorBase.white,
-    paddingHorizontal: 16,
-    paddingTop: 14,
-    paddingBottom: 24,
-    borderTopWidth: StyleSheet.hairlineWidth,
-    borderTopColor: ColorNeutral.neutral200,
   },
 });
