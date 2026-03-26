@@ -1,10 +1,12 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Redirect, Tabs } from "expo-router";
 import React, { useCallback } from "react";
-import { Platform, useColorScheme } from "react-native";
+import { Platform, useColorScheme, View } from "react-native";
 import { Text } from "tamagui";
 
+import { SideNav } from "@/components/layout/SideNav";
 import { TAB_ICONS, TAB_LABELS } from "@/config/navigation";
+import { useDeviceLayout } from "@/hooks/useDeviceLayout";
 import { useAuth } from "@/lib/auth";
 import { ColorBase, ColorNeutral, ColorPrimary } from "@/themes/Colors";
 
@@ -12,8 +14,9 @@ export default function TabsLayout() {
   const { isLoggedIn } = useAuth();
   const scheme = useColorScheme();
   const isDark = scheme === "dark";
+  const { isTablet } = useDeviceLayout();
 
-  const tabBarStyle = {
+  const phoneTabBarStyle = {
     backgroundColor: isDark ? ColorNeutral.neutral900 : ColorBase.white,
     borderTopColor: isDark ? ColorNeutral.neutral700 : ColorNeutral.neutral200,
     borderTopWidth: 1,
@@ -26,6 +29,7 @@ export default function TabsLayout() {
     ({ route }: { route: { name: string } }) => ({
       headerShown: false,
       tabBarIcon: ({ focused }: { focused: boolean }) => {
+        if (isTablet) return null;
         const icons = TAB_ICONS[route.name];
         if (!icons) return null;
         return (
@@ -36,34 +40,51 @@ export default function TabsLayout() {
           />
         );
       },
-      tabBarLabel: ({ focused }: { focused: boolean }) => (
-        <Text
-          fontFamily="$body"
-          fontSize={10}
-          fontWeight={focused ? "700" : "400"}
-          color={focused ? "$primary" : "$colorSecondary"}
-          marginBottom={Platform.OS === "ios" ? 0 : 4}
-        >
-          {TAB_LABELS[route.name] ?? route.name}
-        </Text>
-      ),
-      tabBarStyle,
+      tabBarLabel: ({ focused }: { focused: boolean }) => {
+        if (isTablet) return null;
+        return (
+          <Text
+            fontFamily="$body"
+            fontSize={10}
+            fontWeight={focused ? "700" : "400"}
+            color={focused ? "$primary" : "$colorSecondary"}
+            marginBottom={Platform.OS === "ios" ? 0 : 4}
+          >
+            {TAB_LABELS[route.name] ?? route.name}
+          </Text>
+        );
+      },
+      tabBarStyle: isTablet ? { display: "none" as const } : phoneTabBarStyle,
       tabBarActiveTintColor: ColorPrimary.primary600,
       tabBarInactiveTintColor: isDark
         ? ColorNeutral.neutral400
         : ColorNeutral.neutral500,
     }),
-    [isDark, tabBarStyle],
+    [isDark, isTablet, phoneTabBarStyle],
   );
 
   if (!isLoggedIn) return <Redirect href="/login" />;
 
-  return (
-    <Tabs screenOptions={screenOptions}>
+  const tabs = (
+    <Tabs
+      screenOptions={screenOptions}
+      tabBar={isTablet ? () => null : undefined}
+    >
       <Tabs.Screen name="index" />
       <Tabs.Screen name="transaksi" />
       <Tabs.Screen name="inventori" />
       <Tabs.Screen name="pengaturan" />
     </Tabs>
   );
+
+  if (isTablet) {
+    return (
+      <View style={{ flex: 1, flexDirection: "row" }}>
+        <SideNav />
+        <View style={{ flex: 1 }}>{tabs}</View>
+      </View>
+    );
+  }
+
+  return tabs;
 }

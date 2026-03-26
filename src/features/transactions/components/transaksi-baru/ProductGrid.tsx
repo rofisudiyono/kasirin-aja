@@ -1,21 +1,23 @@
 import React, { useCallback } from "react";
-import { Dimensions, FlatList, ListRenderItem, ScrollView } from "react-native";
+import { FlatList, ListRenderItem, ScrollView, useWindowDimensions } from "react-native";
 import { XStack } from "tamagui";
 
 import { CATEGORY_COLORS, CATEGORY_ICONS } from "@/config/categoryStyles";
 import { categoryFilters } from "@/features/catalog/api/category.data";
 import { ProductCard } from "@/features/catalog/components/ProductCard";
+import { useDeviceLayout } from "@/hooks/useDeviceLayout";
 import { FilterChip } from "@/components";
 import type { CatalogProduct, CategoryFilter } from "@/types";
 
-const { width: SCREEN_WIDTH } = Dimensions.get("window");
-const CARD_WIDTH = (SCREEN_WIDTH - 16 * 2 - 12) / 2;
+const PADDING = 16 * 2;
+const GAP = 12;
 
 type Props = {
   products: CatalogProduct[];
   categoryFilter: CategoryFilter;
   onCategoryChange: (category: CategoryFilter) => void;
   onAddProduct: (product: CatalogProduct) => void;
+  availableWidth?: number;
 };
 
 export function ProductGrid({
@@ -23,7 +25,15 @@ export function ProductGrid({
   categoryFilter,
   onCategoryChange,
   onAddProduct,
+  availableWidth,
 }: Props) {
+  const { width: screenWidth } = useWindowDimensions();
+  const { catalogCols } = useDeviceLayout();
+
+  const containerWidth = availableWidth ?? screenWidth;
+  const cardWidth =
+    (containerWidth - PADDING - GAP * (catalogCols - 1)) / catalogCols;
+
   const renderItem = useCallback<ListRenderItem<CatalogProduct>>(
     ({ item }) => (
       <ProductCard
@@ -33,11 +43,11 @@ export function ProductGrid({
         categoryIconBg={CATEGORY_COLORS[item.category].bg}
         categoryIconColor={CATEGORY_COLORS[item.category].color}
         stockStatus={item.stockStatus}
-        width={CARD_WIDTH}
+        width={cardWidth}
         onAdd={() => onAddProduct(item)}
       />
     ),
-    [onAddProduct],
+    [onAddProduct, cardWidth],
   );
 
   const keyExtractor = useCallback((item: CatalogProduct) => item.id, []);
@@ -62,9 +72,10 @@ export function ProductGrid({
         data={products}
         keyExtractor={keyExtractor}
         renderItem={renderItem}
-        numColumns={2}
-        columnWrapperStyle={{ gap: 12 }}
-        contentContainerStyle={{ gap: 12 }}
+        numColumns={catalogCols}
+        key={catalogCols}
+        columnWrapperStyle={catalogCols > 1 ? { gap: GAP } : undefined}
+        contentContainerStyle={{ gap: GAP }}
         scrollEnabled={false}
       />
     </>

@@ -159,7 +159,7 @@ export function ShiftCard({
             color={ColorBase.white}
             numberOfLines={1}
           >
-            Budi Santo...
+            Budi Santoso
           </TextBodyLg>
         </YStack>
       </XStack>

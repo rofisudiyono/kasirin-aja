@@ -1,7 +1,7 @@
 import { useRouter } from "expo-router";
 import { useAtom } from "jotai";
 import React, { useEffect, useState } from "react";
-import { ScrollView, StyleSheet } from "react-native";
+import { ScrollView, StyleSheet, View, useWindowDimensions } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { YStack } from "tamagui";
 
@@ -16,16 +16,20 @@ import { catalogStockAtom } from "@/features/catalog/store/catalog.store";
 import {
   CartBar,
   CartIconButton,
+  CartPanel,
   ProductGrid,
   SearchBar,
   VariantSheet,
 } from "@/features/transactions/components/transaksi-baru";
+import { useDeviceLayout } from "@/hooks/useDeviceLayout";
 import { IconButton, PageHeader } from "@/components";
-import { ColorBase } from "@/themes/Colors";
+import { ColorBase, ColorNeutral } from "@/themes/Colors";
 import type { CatalogProduct, CategoryFilter } from "@/types";
 
 export default function TransaksiBaruPage() {
   const router = useRouter();
+  const { isTablet } = useDeviceLayout();
+  const { width: screenWidth } = useWindowDimensions();
   const [categoryFilter, setCategoryFilter] = useState<CategoryFilter>("Semua");
   const [cart, setCart] = useAtom(cartAtom);
   const [scannedBarcode, setScannedBarcode] = useAtom(scannedBarcodeAtom);
@@ -99,8 +103,10 @@ export default function TransaksiBaruPage() {
     }
   }
 
-  return (
-    <SafeAreaView style={styles.container}>
+  const catalogPanelWidth = screenWidth * 0.65;
+
+  const catalogContent = (
+    <>
       <PageHeader
         title="Transaksi Baru"
         showBack
@@ -116,14 +122,15 @@ export default function TransaksiBaruPage() {
               onPress={() => router.push("/pesanan-ditahan" as never)}
               badge={heldOrders.length > 0 ? heldOrders.length : undefined}
             />
-            <CartIconButton totalItems={totalItems} />
+            {!isTablet && <CartIconButton totalItems={totalItems} />}
           </>
         }
       />
-
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: totalItems > 0 ? 120 : 32 }}
+        contentContainerStyle={{
+          paddingBottom: isTablet ? 32 : totalItems > 0 ? 120 : 32,
+        }}
       >
         <YStack paddingHorizontal="$4" gap="$3">
           <SearchBar />
@@ -132,9 +139,42 @@ export default function TransaksiBaruPage() {
             categoryFilter={categoryFilter}
             onCategoryChange={setCategoryFilter}
             onAddProduct={handleAddProduct}
+            availableWidth={isTablet ? catalogPanelWidth : undefined}
           />
         </YStack>
       </ScrollView>
+    </>
+  );
+
+  if (isTablet) {
+    return (
+      <SafeAreaView style={styles.container} edges={["top"]}>
+        <View style={styles.splitLayout}>
+          {/* Left: Catalog (65%) */}
+          <View style={styles.catalogPanel}>{catalogContent}</View>
+
+          {/* Divider */}
+          <View style={styles.divider} />
+
+          {/* Right: Cart (35%) */}
+          <View style={styles.cartPanel}>
+            <CartPanel />
+          </View>
+        </View>
+
+        <VariantSheet
+          product={variantProduct}
+          visible={sheetVisible}
+          onClose={() => setSheetVisible(false)}
+          onAddToCart={addToCart}
+        />
+      </SafeAreaView>
+    );
+  }
+
+  return (
+    <SafeAreaView style={styles.container}>
+      {catalogContent}
 
       <CartBar
         totalItems={totalItems}
@@ -155,6 +195,22 @@ export default function TransaksiBaruPage() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: ColorBase.bgScreen,
+  },
+  splitLayout: {
+    flex: 1,
+    flexDirection: "row",
+  },
+  catalogPanel: {
+    flex: 0.65,
+    backgroundColor: ColorBase.bgScreen,
+  },
+  divider: {
+    width: 1,
+    backgroundColor: ColorNeutral.neutral200,
+  },
+  cartPanel: {
+    flex: 0.35,
     backgroundColor: ColorBase.bgScreen,
   },
 });

@@ -174,9 +174,11 @@ export function AppButton({
             <Text
               fontFamily="$body"
               fontSize={dimensions.fontSize}
-              fontWeight="700" // Disesuaikan dengan kebutuhan Anda sebelumnya (semula 600)
+              fontWeight="700"
               color={styles.labelColor as any}
               numberOfLines={1}
+              flex={1}
+              textAlign="center"
             >
               {title}
             </Text>
@@ -195,6 +197,8 @@ export function AppButton({
           fontWeight="600"
           color={styles.labelColor as any}
           numberOfLines={1}
+          flex={1}
+          textAlign="center"
         >
           {children}
         </Text>

@@ -13,12 +13,76 @@ import { ShiftCard } from "@/features/shift/components/ShiftCard";
 import { ShiftPreparation } from "@/features/shift/components/ShiftPreparation";
 import { isShiftStartedAtom } from "@/features/shift/store/shift.store";
 import { RecentTransactions } from "@/features/transactions/components/RecentTransactions";
-import { AppButton, TextBodySm } from "@/components";
+import { AppButton } from "@/components";
+import { useDeviceLayout } from "@/hooks/useDeviceLayout";
 import { ColorBase, ColorNeutral } from "@/themes/Colors";
 
 export default function HomePage() {
   const router = useRouter();
   const [isShiftStarted] = useAtom(isShiftStartedAtom);
+  const { isTablet } = useDeviceLayout();
+
+  const mainCta = isShiftStarted ? (
+    <AppButton
+      variant="primary"
+      size="lg"
+      fullWidth
+      title="Mulai Transaksi"
+      icon={
+        <Ionicons name="cart-outline" size={20} color={ColorBase.white} />
+      }
+      onPress={() => router.push("/transaksi-baru")}
+    />
+  ) : (
+    <AppButton
+      variant="outline"
+      size="lg"
+      fullWidth
+      title="Buka Shift untuk Mulai Transaksi"
+      icon={
+        <Ionicons
+          name="sunny-outline"
+          size={20}
+          color={ColorNeutral.neutral500}
+        />
+      }
+      onPress={() => router.push("/buka-shift")}
+    />
+  );
+
+  if (isTablet) {
+    return (
+      <SafeAreaView
+        edges={["top"]}
+        style={{ flex: 1, backgroundColor: ColorBase.bgScreen }}
+      >
+        <HomeHeader />
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <XStack gap="$4" paddingHorizontal="$4" paddingBottom="$6" alignItems="flex-start">
+            {/* Left column: ShiftCard + CTA */}
+            <YStack flex={1} gap="$3">
+              <ShiftCard
+                isShiftStarted={isShiftStarted}
+                onClose={() => router.push("/tutup-shift")}
+                onStart={() => router.push("/buka-shift")}
+              />
+              {mainCta}
+              <QuickActions isShiftStarted={isShiftStarted} />
+            </YStack>
+
+            {/* Right column: Warning + Recent/Preparation */}
+            <YStack flex={1} gap="$3">
+              <WarningBanner
+                isShiftStarted={isShiftStarted}
+                onViewInventory={() => router.push("/(tabs)/inventory" as never)}
+              />
+              {isShiftStarted ? <RecentTransactions /> : <ShiftPreparation />}
+            </YStack>
+          </XStack>
+        </ScrollView>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView
@@ -35,37 +99,7 @@ export default function HomePage() {
             onStart={() => router.push("/buka-shift")}
           />
 
-          {isShiftStarted ? (
-            <AppButton
-              variant="primary"
-              size="lg"
-              fullWidth
-              title="Mulai Transaksi"
-              icon={
-                <Ionicons
-                  name="cart-outline"
-                  size={20}
-                  color={ColorBase.white}
-                />
-              }
-              onPress={() => router.push("/transaksi-baru")}
-            />
-          ) : (
-            <AppButton
-              variant="outline"
-              size="lg"
-              fullWidth
-              title="Buka Shift untuk Mulai Transaksi"
-              icon={
-                <Ionicons
-                  name="sunny-outline"
-                  size={20}
-                  color={ColorNeutral.neutral500}
-                />
-              }
-              onPress={() => router.push("/buka-shift")}
-            />
-          )}
+          {mainCta}
 
           <QuickActions isShiftStarted={isShiftStarted} />
 
