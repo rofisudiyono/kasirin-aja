@@ -8,10 +8,12 @@ import { ColorNeutral } from "@/themes/Colors";
 
 interface VariantTagProps {
   label: string;
+  price?: string;
   onRemove: () => void;
 }
 
-export function VariantTag({ label, onRemove }: VariantTagProps) {
+export function VariantTag({ label, price, onRemove }: VariantTagProps) {
+  const hasPrice = !!price && parseInt(price, 10) > 0;
   return (
     <XStack
       backgroundColor={ColorNeutral.neutral100}
@@ -24,6 +26,11 @@ export function VariantTag({ label, onRemove }: VariantTagProps) {
       <TextBodySm fontWeight="500" color={ColorNeutral.neutral700}>
         {label}
       </TextBodySm>
+      {hasPrice && (
+        <TextBodySm fontWeight="600" color="#16A34A" fontSize={11}>
+          +Rp {parseInt(price!, 10).toLocaleString("id-ID")}
+        </TextBodySm>
+      )}
       <TouchableOpacity onPress={onRemove} hitSlop={8}>
         <Ionicons name="close" size={14} color={ColorNeutral.neutral500} />
       </TouchableOpacity>

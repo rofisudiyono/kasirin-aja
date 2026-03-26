@@ -5,6 +5,7 @@ export default function InventoryLayout() {
     <Stack screenOptions={{ headerShown: false }}>
       <Stack.Screen name="[id]" />
       <Stack.Screen name="tambah-produk" />
+      <Stack.Screen name="sesuaikan-stok" />
     </Stack>
   );
 }

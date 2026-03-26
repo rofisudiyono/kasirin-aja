@@ -13,10 +13,6 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { XStack, YStack } from "tamagui";
 
-import { StatsRow } from "@/features/shift/components/StatsRow";
-import { transactionListMock } from "@/features/transactions/api/transactions.data";
-import { StatusBadge } from "@/features/transactions/components/StatusBadge";
-import { transactionsAtom } from "@/features/transactions/store/transaction.store";
 import {
   AppButton,
   FilterChip,
@@ -30,6 +26,10 @@ import {
   TextCaption,
   TextH3,
 } from "@/components";
+import { StatsRow } from "@/features/shift/components/StatsRow";
+import { transactionListMock } from "@/features/transactions/api/transactions.data";
+import { StatusBadge } from "@/features/transactions/components/StatusBadge";
+import { transactionsAtom } from "@/features/transactions/store/transaction.store";
 import {
   ColorBase,
   ColorDanger,
@@ -309,7 +309,7 @@ export default function TransaksiPage() {
   const keyExtractor = useCallback((item: Transaction) => item.id, []);
 
   const ListHeader = (
-    <YStack gap="$3" paddingHorizontal="$4" paddingTop="$3">
+    <YStack gap="$3">
       {/* ── Search ── */}
       <SearchBar placeholder="Cari nomor order atau pelanggan..." />
 

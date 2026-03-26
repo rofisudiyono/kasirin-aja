@@ -12,6 +12,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { XStack, YStack } from "tamagui";
 
+import { AppButton, TextBodyLg, TextBodySm } from "@/components";
 import { productDetails } from "@/features/inventory/api/inventory.data";
 import {
   ProductDetailHeader,
@@ -21,7 +22,6 @@ import {
   ProductVariants,
 } from "@/features/inventory/components/product-detail";
 import { userProductsAtom } from "@/features/inventory/store/inventory.store";
-import { AppButton, TextBodyLg, TextBodySm } from "@/components";
 import { ColorBase, ColorDanger, ColorNeutral } from "@/themes/Colors";
 
 export default function ProductDetailPage() {
@@ -119,11 +119,8 @@ export default function ProductDetailPage() {
   }
 
   return (
-    <SafeAreaView
-      style={{ flex: 1, backgroundColor: ColorBase.bgScreen }}
-      edges={["top"]}
-    >
-      <ProductDetailHeader />
+    <SafeAreaView style={{ flex: 1, backgroundColor: "white" }} edges={["top"]}>
+      <ProductDetailHeader onEdit={handleEdit} />
 
       <ScrollView showsVerticalScrollIndicator={false}>
         <ProductHero
@@ -140,6 +137,7 @@ export default function ProductDetailPage() {
             totalStock={product.totalStock}
             sellPrice={product.sellPrice}
             lowStockThreshold={product.lowStockThreshold}
+            productId={id}
           />
         )}
 
@@ -155,6 +153,22 @@ export default function ProductDetailPage() {
 
       {/* ── Bottom Buttons ── */}
       <View style={styles.bottomBar}>
+        <AppButton
+          variant="outline"
+          size="md"
+          fullWidth
+          title="Sesuaikan Stok"
+          onPress={() =>
+            router.push({
+              pathname: "/inventory/sesuaikan-stok",
+              params: {
+                productName: product.name,
+                productSku: product.sku,
+                productCategory: product.category,
+              },
+            })
+          }
+        />
         <XStack gap={12}>
           {isUserProduct && (
             <TouchableOpacity style={styles.deleteBtn} onPress={handleDelete}>
@@ -195,6 +209,7 @@ const styles = StyleSheet.create({
     backgroundColor: ColorBase.white,
     borderTopWidth: 1,
     borderTopColor: ColorNeutral.neutral200,
+    gap: 12,
   },
   deleteBtn: {
     flexDirection: "row",

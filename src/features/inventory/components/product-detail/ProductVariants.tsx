@@ -1,6 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 import React from "react";
-import { TouchableOpacity } from "react-native";
+import { TouchableOpacity, View } from "react-native";
 import { Separator, XStack, YStack } from "tamagui";
 
 import { ShadowCard, TextBodyLg, TextBodySm } from "@/components";
@@ -20,6 +21,7 @@ type Props = {
   totalStock: number;
   sellPrice: number;
   lowStockThreshold: number;
+  productId?: string;
 };
 
 function VariantOptionRow({
@@ -75,17 +77,11 @@ function VariantOptionRow({
           {[priceText, `Stok: ${opt.stock}`].filter(Boolean).join(" • ")}
         </TextBodySm>
 
-        {isLow ? (
+        {isLow && (
           <Ionicons
             name="warning-outline"
             size={16}
             color={ColorWarning.warning500}
-          />
-        ) : (
-          <Ionicons
-            name="chevron-forward"
-            size={16}
-            color={ColorNeutral.neutral400}
           />
         )}
       </XStack>
@@ -98,7 +94,17 @@ export function ProductVariants({
   totalStock,
   sellPrice,
   lowStockThreshold,
+  productId,
 }: Props) {
+  const router = useRouter();
+
+  function handleKelola() {
+    router.push({
+      pathname: "/inventory/tambah-produk",
+      params: { editId: productId },
+    });
+  }
+
   return (
     <YStack
       backgroundColor={ColorBase.white}
@@ -109,10 +115,13 @@ export function ProductVariants({
     >
       <XStack alignItems="center" justifyContent="space-between">
         <TextBodyLg fontWeight="700">Variant Produk</TextBodyLg>
-        <TouchableOpacity>
-          <TextBodySm fontWeight="600" color={ColorPrimary.primary600}>
-            Kelola →
-          </TextBodySm>
+        <TouchableOpacity onPress={handleKelola} activeOpacity={0.7}>
+          <XStack alignItems="center" gap={4}>
+            <Ionicons name="pencil-outline" size={14} color={ColorPrimary.primary600} />
+            <TextBodySm fontWeight="600" color={ColorPrimary.primary600}>
+              Kelola
+            </TextBodySm>
+          </XStack>
         </TouchableOpacity>
       </XStack>
 

@@ -69,7 +69,16 @@ export default function TambahProdukPage() {
   );
   const [variantGroups, setVariantGroups] = useState<
     TambahProdukVariantGroup[]
-  >([{ name: "Ukuran", values: ["Small", "Medium", "Large"] }]);
+  >([
+    {
+      name: "Ukuran",
+      values: [
+        { name: "Small", price: "0" },
+        { name: "Medium", price: "5000" },
+        { name: "Large", price: "10000" },
+      ],
+    },
+  ]);
   const [stokAwal, setStokAwal] = useState(
     editingProduct ? String(editingProduct.stock) : "100",
   );
@@ -87,6 +96,22 @@ export default function TambahProdukPage() {
           : g,
       ),
     );
+  }
+
+  function addVariantValue(groupIdx: number, value: { name: string; price: string }) {
+    setVariantGroups((prev) =>
+      prev.map((g, gi) =>
+        gi === groupIdx ? { ...g, values: [...g.values, value] } : g,
+      ),
+    );
+  }
+
+  function addVariantGroup(name: string) {
+    setVariantGroups((prev) => [...prev, { name, values: [] }]);
+  }
+
+  function removeVariantGroup(groupIdx: number) {
+    setVariantGroups((prev) => prev.filter((_, gi) => gi !== groupIdx));
   }
 
   function removePhoto(idx: number) {
@@ -213,6 +238,9 @@ export default function TambahProdukPage() {
           setHasVariant={setHasVariant}
           variantGroups={variantGroups}
           onRemoveVariantValue={removeVariantValue}
+          onAddVariantValue={addVariantValue}
+          onAddGroup={addVariantGroup}
+          onRemoveGroup={removeVariantGroup}
         />
 
         <StokSection

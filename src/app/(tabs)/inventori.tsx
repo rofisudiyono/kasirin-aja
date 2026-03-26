@@ -13,16 +13,6 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Separator, XStack, YStack } from "tamagui";
 
-import { CATEGORY_ICONS } from "@/config/categoryStyles";
-import { categoryFilters } from "@/features/catalog/api/category.data";
-import { CategoryBadge } from "@/features/catalog/components/CategoryBadge";
-import {
-  inventorySortOptions,
-  products as mockProducts,
-} from "@/features/inventory/api/inventory.data";
-import { StockBadge } from "@/features/inventory/components/StockBadge";
-import { userProductsAtom } from "@/features/inventory/store/inventory.store";
-import { StatsRow } from "@/features/shift/components/StatsRow";
 import {
   AppButton,
   FilterChip,
@@ -33,8 +23,19 @@ import {
   TextBodyLg,
   TextBodySm,
   TextCaption,
+  TextH1,
   TextMicro,
 } from "@/components";
+import { CATEGORY_ICONS } from "@/config/categoryStyles";
+import { categoryFilters } from "@/features/catalog/api/category.data";
+import { CategoryBadge } from "@/features/catalog/components/CategoryBadge";
+import {
+  inventorySortOptions,
+  products as mockProducts,
+} from "@/features/inventory/api/inventory.data";
+import { StockBadge } from "@/features/inventory/components/StockBadge";
+import { userProductsAtom } from "@/features/inventory/store/inventory.store";
+import { StatsRow } from "@/features/shift/components/StatsRow";
 import {
   ColorBase,
   ColorDanger,
@@ -79,6 +80,10 @@ function ProductRow({
       {!isFirst && (
         <Separator borderColor="$borderColor" marginHorizontal="$3" />
       )}
+      <TouchableOpacity
+        activeOpacity={0.7}
+        onPress={() => router.push(`/inventory/${product.id}`)}
+      >
       <XStack
         paddingHorizontal="$3"
         paddingVertical="$3"
@@ -162,6 +167,7 @@ function ProductRow({
           />
         </YStack>
       </XStack>
+      </TouchableOpacity>
     </>
   );
 }
@@ -190,7 +196,7 @@ export default function InventoriPage() {
   const keyExtractor = useCallback((item: Product) => item.id, []);
 
   const ListHeader = (
-    <YStack gap="$3" paddingHorizontal="$4" paddingTop="$3">
+    <YStack gap="$3">
       {/* ── Search ── */}
       <SearchBar placeholder="Cari nama, SKU, atau barcode..." showFilterIcon />
 
@@ -231,7 +237,7 @@ export default function InventoriPage() {
       </XStack>
 
       {/* ── Summary ── */}
-      <ShadowCard paddingVertical="$3">
+      <ShadowCard paddingVertical="$3" marginHorizontal="$1">
         <StatsRow
           variant="light"
           items={[
@@ -298,7 +304,7 @@ export default function InventoriPage() {
       />
 
       {/* ── FAB ── */}
-      <TouchableOpacity style={styles.fab}>
+      <TouchableOpacity style={styles.fab} activeOpacity={0.8}>
         <YStack
           width={56}
           height={56}
@@ -311,9 +317,9 @@ export default function InventoriPage() {
           shadowRadius={12}
           elevation={8}
         >
-          <TextBodyLg color={ColorBase.white} fontWeight="300" fontSize={28}>
+          <TextH1 color={ColorBase.white} fontWeight="300" fontSize={20}>
             +
-          </TextBodyLg>
+          </TextH1>
         </YStack>
       </TouchableOpacity>
     </SafeAreaView>
