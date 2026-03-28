@@ -21,15 +21,16 @@ import { formatRupiah } from "./utils";
 type Props = {
   product: ProductDetail;
   margin: number;
+  isTablet?: boolean;
 };
 
-export function ProductInfoCard({ product, margin }: Props) {
+export function ProductInfoCard({ product, margin, isTablet }: Props) {
   return (
     <YStack
       backgroundColor={ColorBase.white}
-      borderTopLeftRadius={20}
-      borderTopRightRadius={20}
-      marginTop={-20}
+      borderTopLeftRadius={isTablet ? 0 : 20}
+      borderTopRightRadius={isTablet ? 0 : 20}
+      marginTop={isTablet ? 0 : -20}
       paddingTop="$4"
       paddingHorizontal="$4"
       paddingBottom="$4"

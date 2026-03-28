@@ -4,7 +4,7 @@ const TABLET_BREAKPOINT = 600;
 
 export function useDeviceLayout() {
   const { width, height } = useWindowDimensions();
-  const isTablet = height >= TABLET_BREAKPOINT;
+  const isTablet = width >= TABLET_BREAKPOINT;
   const isLandscape = width > height;
   return {
     isTablet,

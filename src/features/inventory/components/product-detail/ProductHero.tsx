@@ -17,19 +17,21 @@ type Props = {
   category: ProductCategory;
   status: "active" | "inactive";
   hasVariants: boolean;
+  isTablet?: boolean;
 };
 
-export function ProductHero({ category, status, hasVariants }: Props) {
+export function ProductHero({ category, status, hasVariants, isTablet }: Props) {
   return (
     <YStack
-      height={220}
+      height={isTablet ? undefined : 220}
+      flex={isTablet ? 1 : undefined}
       backgroundColor={heroBgColor(category)}
       alignItems="center"
       justifyContent="center"
     >
       <Ionicons
         name={CATEGORY_ICONS[category] ?? "cube-outline"}
-        size={88}
+        size={isTablet ? 120 : 88}
         color={heroBgIconColor(category)}
       />
 

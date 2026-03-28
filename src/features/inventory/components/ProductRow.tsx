@@ -4,15 +4,11 @@ import React from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { Separator, XStack, YStack } from "tamagui";
 
-import {
-  TextBodyLg,
-  TextBodySm,
-  TextH3,
-  TextMicro,
-} from "@/components";
+import { TextBodyLg, TextBodySm, TextH3, TextMicro } from "@/components";
 import { CATEGORY_ICONS } from "@/config/categoryStyles";
 import { CategoryBadge } from "@/features/catalog/components/CategoryBadge";
 import { StockBadge } from "@/features/inventory/components/StockBadge";
+import tw from "@/lib/tw";
 import {
   ColorBase,
   ColorDanger,
@@ -53,27 +49,63 @@ const styles = StyleSheet.create({
     elevation: 1,
   },
   cardIcon: {
-    width: 56,
-    height: 56,
-    borderRadius: 14,
+    width: 72,
+    height: 72,
+    borderRadius: 12,
     alignItems: "center",
     justifyContent: "center",
+  },
+  cardTopRow: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    gap: 12,
     marginBottom: 12,
   },
-  cardFooter: {
+  cardMeta: {
+    flex: 1,
+    gap: 4,
+  },
+  cardBadgeRow: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
-    marginTop: 8,
+    gap: 6,
+    flexWrap: "wrap",
+  },
+  normalBadge: {
+    backgroundColor: ColorGreen.green100,
+    borderRadius: 20,
+    paddingHorizontal: 9,
+    paddingVertical: 4,
+  },
+  cardDivider: {
     borderTopWidth: 1,
     borderTopColor: ColorNeutral.neutral100,
-    paddingTop: 8,
+    marginBottom: 10,
+  },
+  cardStatsRow: {
+    flexDirection: "row",
+    gap: 12,
+    marginBottom: 12,
+  },
+  cardStatItem: {
+    flex: 1,
+    gap: 2,
+  },
+  manageButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 6,
+    backgroundColor: ColorPrimary.primary100,
+    borderRadius: 8,
+    paddingVertical: 9,
   },
 });
 
 // ── Card variant for tablet 2-column grid ─────────────────────────────────────
 function ProductCardGrid({ product }: { product: Product }) {
   const isEmpty = product.stockStatus === "empty";
+  const isInactive = product.stockStatus === "inactive";
   return (
     <TouchableOpacity
       activeOpacity={0.7}
@@ -85,81 +117,131 @@ function ProductCardGrid({ product }: { product: Product }) {
           styles.card,
           {
             backgroundColor: isEmpty ? ColorDanger.danger25 : ColorBase.white,
-            borderColor: isEmpty ? ColorDanger.danger200 : ColorNeutral.neutral200,
+            borderColor: isEmpty
+              ? ColorDanger.danger200
+              : ColorNeutral.neutral200,
           },
         ]}
       >
-        {/* Icon */}
-        <View
-          style={[
-            styles.cardIcon,
-            { backgroundColor: isEmpty ? ColorDanger.danger100 : ColorNeutral.neutral100 },
-          ]}
-        >
-          <Ionicons
-            name={CATEGORY_ICONS[product.category] ?? "cube-outline"}
-            size={28}
-            color={isEmpty ? ColorDanger.danger600 : ColorNeutral.neutral500}
-          />
+        {/* Top row: icon + meta */}
+        <View style={styles.cardTopRow}>
+          {/* Icon */}
+          <View
+            style={[
+              styles.cardIcon,
+              {
+                backgroundColor: isEmpty
+                  ? ColorDanger.danger100
+                  : ColorNeutral.neutral100,
+              },
+            ]}
+          >
+            <Ionicons
+              name={CATEGORY_ICONS[product.category] ?? "cube-outline"}
+              size={30}
+              color={isEmpty ? ColorDanger.danger600 : ColorNeutral.neutral500}
+            />
+          </View>
+
+          {/* Meta */}
+          <View style={styles.cardMeta}>
+            {/* Status badge + SKU */}
+            <View style={styles.cardBadgeRow}>
+              {product.stockStatus === "normal" ? (
+                <View style={styles.normalBadge}>
+                  <TextBodySm fontWeight="600" color={ColorGreen.green600}>
+                    Tersedia
+                  </TextBodySm>
+                </View>
+              ) : (
+                <StockBadge stockStatus={product.stockStatus} />
+              )}
+              <TextBodySm color={ColorNeutral.neutral400}>
+                SKU-{product.sku}
+              </TextBodySm>
+              {product.hasVariant && (
+                <View style={styles.variantBadge}>
+                  <TextMicro fontWeight="600" color={ColorPrimary.primary600}>
+                    Var
+                  </TextMicro>
+                </View>
+              )}
+              {product.isNew && (
+                <View style={styles.newBadge}>
+                  <TextMicro fontWeight="700" color={ColorYellow.yellow600}>
+                    Baru
+                  </TextMicro>
+                </View>
+              )}
+            </View>
+
+            {/* Name */}
+            <TextH3 fontWeight="700" numberOfLines={2}>
+              {product.name}
+            </TextH3>
+
+            {/* Category */}
+            <View style={tw`flex-row`}>
+              <CategoryBadge category={product.category} />
+            </View>
+          </View>
         </View>
 
-        {/* Name + Variant badge */}
-        <XStack alignItems="flex-start" gap={6} marginBottom={4}>
-          <TextH3 fontWeight="700" flex={1} numberOfLines={2}>
-            {product.name}
-          </TextH3>
-          {product.hasVariant && (
-            <View style={styles.variantBadge}>
-              <TextMicro fontWeight="600" color={ColorPrimary.primary600}>
-                Var
-              </TextMicro>
-            </View>
-          )}
-        </XStack>
+        {/* Divider */}
+        <View style={styles.cardDivider} />
 
-        {/* Category + New badge */}
-        <XStack gap={4} alignItems="center" marginBottom={4}>
-          <CategoryBadge category={product.category} />
-          {product.isNew && (
-            <View style={styles.newBadge}>
-              <TextMicro fontWeight="700" color={ColorYellow.yellow600}>
-                Baru
-              </TextMicro>
-            </View>
-          )}
-        </XStack>
-
-        <TextBodySm color="$colorTertiary" marginBottom={2}>
-          {product.sku}
-        </TextBodySm>
-
-        {/* Footer: price + stock */}
-        <View style={styles.cardFooter}>
-          <YStack flex={1} gap={2}>
+        {/* Stats: quantity + price */}
+        <View style={styles.cardStatsRow}>
+          <View style={styles.cardStatItem}>
+            <TextBodySm
+              color={ColorNeutral.neutral500}
+              fontWeight="600"
+              style={{
+                textTransform: "uppercase",
+                fontSize: 10,
+                letterSpacing: 0.5,
+              }}
+            >
+              Kuantitas
+            </TextBodySm>
             <TextBodyLg
               fontWeight="700"
-              color={isEmpty ? "$colorTertiary" : "$primary"}
+              color={
+                isEmpty
+                  ? ColorDanger.danger600
+                  : product.stockStatus === "low"
+                    ? ColorWarning.warning600
+                    : isInactive
+                      ? ColorNeutral.neutral400
+                      : ColorGreen.green600
+              }
+            >
+              {isInactive ? "—" : `${product.stock} unit`}
+            </TextBodyLg>
+          </View>
+          <View style={styles.cardStatItem}>
+            <TextBodySm
+              color={ColorNeutral.neutral500}
+              fontWeight="600"
+              style={{
+                textTransform: "uppercase",
+                fontSize: 10,
+                letterSpacing: 0.5,
+              }}
+            >
+              Harga Satuan
+            </TextBodySm>
+            <TextBodyLg
+              fontWeight="700"
+              color={
+                isEmpty || isInactive ? ColorNeutral.neutral400 : "$primary"
+              }
               textDecorationLine={isEmpty ? "line-through" : "none"}
-              numberOfLines={1}
+              numberOfLines={2}
             >
               {product.price}
             </TextBodyLg>
-            {product.stockStatus !== "inactive" && (
-              <TextBodySm
-                fontWeight="600"
-                color={
-                  isEmpty
-                    ? ColorDanger.danger600
-                    : product.stockStatus === "low"
-                      ? ColorWarning.warning600
-                      : ColorGreen.green600
-                }
-              >
-                Stok: {product.stock}
-              </TextBodySm>
-            )}
-          </YStack>
-          <StockBadge stockStatus={product.stockStatus} />
+          </View>
         </View>
       </View>
     </TouchableOpacity>

@@ -7,6 +7,7 @@ import {
   ScrollView,
   StyleSheet,
   TouchableOpacity,
+  useWindowDimensions,
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -28,6 +29,8 @@ export default function ProductDetailPage() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const [userProducts, setUserProducts] = useAtom(userProductsAtom);
+  const { width } = useWindowDimensions();
+  const isTablet = width >= 768;
 
   // Look up in user-added products first, then fall back to static product details
   const userProduct = userProducts.find((p) => p.id === id);
@@ -118,6 +121,98 @@ export default function ProductDetailPage() {
     );
   }
 
+  const bottomButtons = (
+    <View style={isTablet ? styles.bottomBarTablet : styles.bottomBar}>
+      <AppButton
+        variant="outline"
+        size="md"
+        fullWidth
+        title="Sesuaikan Stok"
+        onPress={() =>
+          router.push({
+            pathname: "/inventory/sesuaikan-stok",
+            params: {
+              productName: product.name,
+              productSku: product.sku,
+              productCategory: product.category,
+            },
+          })
+        }
+      />
+      <XStack gap={12}>
+        {isUserProduct && (
+          <TouchableOpacity style={styles.deleteBtn} onPress={handleDelete}>
+            <Ionicons
+              name="trash-outline"
+              size={18}
+              color={ColorDanger.danger600}
+            />
+            <TextBodySm fontWeight="700" color={ColorDanger.danger600}>
+              Hapus
+            </TextBodySm>
+          </TouchableOpacity>
+        )}
+        <View style={{ flex: 1 }}>
+          <AppButton
+            variant="primary"
+            size="lg"
+            fullWidth
+            title="Edit Produk"
+            onPress={handleEdit}
+          />
+        </View>
+      </XStack>
+    </View>
+  );
+
+  if (isTablet) {
+    return (
+      <SafeAreaView style={{ flex: 1, backgroundColor: ColorBase.bgScreen }} edges={["top"]}>
+        <ProductDetailHeader onEdit={handleEdit} />
+
+        <View style={styles.tabletBody}>
+          {/* Left panel: Hero (sticky) */}
+          <View style={styles.tabletLeft}>
+            <ProductHero
+              category={product.category}
+              status={product.status}
+              hasVariants={!!product.variants}
+              isTablet
+            />
+          </View>
+
+          {/* Right panel: Scrollable content */}
+          <ScrollView
+            style={styles.tabletRight}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={styles.tabletRightContent}
+          >
+            <ProductInfoCard product={product} margin={margin} isTablet />
+
+            {product.variants && (
+              <ProductVariants
+                variants={product.variants}
+                totalStock={product.totalStock}
+                sellPrice={product.sellPrice}
+                lowStockThreshold={product.lowStockThreshold}
+                productId={id}
+              />
+            )}
+
+            <ProductOtherInfo
+              createdAt={product.createdAt}
+              updatedAt={product.updatedAt}
+              totalSold={product.totalSold}
+            />
+
+            {bottomButtons}
+            <YStack height={32} />
+          </ScrollView>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "white" }} edges={["top"]}>
       <ProductDetailHeader onEdit={handleEdit} />
@@ -152,47 +247,7 @@ export default function ProductDetailPage() {
       </ScrollView>
 
       {/* ── Bottom Buttons ── */}
-      <View style={styles.bottomBar}>
-        <AppButton
-          variant="outline"
-          size="md"
-          fullWidth
-          title="Sesuaikan Stok"
-          onPress={() =>
-            router.push({
-              pathname: "/inventory/sesuaikan-stok",
-              params: {
-                productName: product.name,
-                productSku: product.sku,
-                productCategory: product.category,
-              },
-            })
-          }
-        />
-        <XStack gap={12}>
-          {isUserProduct && (
-            <TouchableOpacity style={styles.deleteBtn} onPress={handleDelete}>
-              <Ionicons
-                name="trash-outline"
-                size={18}
-                color={ColorDanger.danger600}
-              />
-              <TextBodySm fontWeight="700" color={ColorDanger.danger600}>
-                Hapus
-              </TextBodySm>
-            </TouchableOpacity>
-          )}
-          <View style={{ flex: 1 }}>
-            <AppButton
-              variant="primary"
-              size="lg"
-              fullWidth
-              title="Edit Produk"
-              onPress={handleEdit}
-            />
-          </View>
-        </XStack>
-      </View>
+      {bottomButtons}
     </SafeAreaView>
   );
 }
@@ -211,6 +266,15 @@ const styles = StyleSheet.create({
     borderTopColor: ColorNeutral.neutral200,
     gap: 12,
   },
+  bottomBarTablet: {
+    paddingHorizontal: 16,
+    paddingVertical: 16,
+    marginTop: 8,
+    backgroundColor: ColorBase.white,
+    borderTopWidth: 1,
+    borderTopColor: ColorNeutral.neutral200,
+    gap: 12,
+  },
   deleteBtn: {
     flexDirection: "row",
     alignItems: "center",
@@ -221,5 +285,19 @@ const styles = StyleSheet.create({
     borderWidth: 1.5,
     borderColor: ColorDanger.danger200,
     backgroundColor: ColorDanger.danger50,
+  },
+  tabletBody: {
+    flex: 1,
+    flexDirection: "row",
+  },
+  tabletLeft: {
+    width: "38%",
+  },
+  tabletRight: {
+    flex: 1,
+    backgroundColor: ColorBase.bgScreen,
+  },
+  tabletRightContent: {
+    gap: 8,
   },
 });
